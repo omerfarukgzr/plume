@@ -1,0 +1,9 @@
+export { PlumeEditor } from './PlumeEditor'
+export { Toolbar } from './Toolbar'
+export { ToolbarDropdown } from './ToolbarDropdown'
+export { ToolbarLink } from './ToolbarLink'
+export { usePlumeEditor } from './usePlumeEditor'
+
+export { EditorContent } from '@tiptap/vue-3'
+export type { Editor } from '@tiptap/vue-3'
+export type { PlumeOptions, ToolbarConfig, ToolbarItem, ToolbarItemName } from '@plume/core'

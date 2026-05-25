@@ -1,0 +1,814 @@
+/*
+ * Plume — base theme, inspired by tiptap's "Simple Editor".
+ *
+ * Every visual value is a `--plume-*` custom property, so apps can override
+ * any of them. Element rules use `:where()` to keep specificity at zero, so
+ * your own styles always win. Import this file to opt in; skip it for a fully
+ * unstyled editor. Toggle dark mode with `data-theme="dark"` on the `.plume`
+ * element (or any ancestor).
+ */
+
+.plume {
+  /* Typography */
+  --plume-font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --plume-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --plume-font-size: 1rem;
+  --plume-line-height: 1.7;
+  --plume-content-max-width: 680px;
+
+  /* Light palette */
+  --plume-color-bg: #ffffff;
+  --plume-color-text: #1a1a1a;
+  --plume-color-muted: #6b7280;
+  --plume-color-border: #e6e6e8;
+  --plume-color-primary: #6c5ce7;
+  --plume-color-toolbar-bg: #ffffff;
+  --plume-color-button: #5c5c66;
+  --plume-color-button-hover-bg: #f1f1f3;
+  --plume-color-button-hover: #1a1a1a;
+  --plume-color-active-bg: #eef0ff;
+  --plume-color-active-text: #5b4ddb;
+  --plume-color-code-bg: #f6f6f7;
+  --plume-color-code-border: #ececee;
+  --plume-color-highlight-bg: #fef3a3;
+  --plume-color-highlight-text: #1a1a1a;
+  --plume-color-selection: rgb(108 92 231 / 18%);
+  --plume-color-tooltip-bg: #1a1a1a;
+  --plume-color-tooltip-text: #ffffff;
+
+  --plume-radius: 16px;
+  --plume-radius-sm: 8px;
+  --plume-gap: 2px;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  font-family: var(--plume-font);
+  color: var(--plume-color-text);
+  background: var(--plume-color-bg);
+  border: 1px solid var(--plume-color-border);
+  border-radius: var(--plume-radius);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+}
+
+/* ---------- Toolbar ---------- */
+
+.plume-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--plume-gap);
+  padding: 8px 10px;
+  background: var(--plume-color-toolbar-bg);
+  border-bottom: 1px solid var(--plume-color-border);
+}
+
+/* When the editor is locked (read-only) the whole toolbar dims and stops
+   responding to input — the unlock control lives outside the toolbar. */
+.plume-toolbar[data-disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.plume-toolbar__separator {
+  width: 1px;
+  align-self: center;
+  height: 20px;
+  margin: 0 6px;
+  background: var(--plume-color-border);
+}
+
+.plume-toolbar__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--plume-radius-sm);
+  background: transparent;
+  color: var(--plume-color-button);
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+}
+
+.plume-toolbar__button:hover:not(:disabled) {
+  background: var(--plume-color-button-hover-bg);
+  color: var(--plume-color-button-hover);
+}
+
+.plume-toolbar__button:focus-visible {
+  outline: 2px solid var(--plume-color-primary);
+  outline-offset: -2px;
+}
+
+.plume-toolbar__button[data-active] {
+  background: var(--plume-color-active-bg);
+  color: var(--plume-color-active-text);
+}
+
+.plume-toolbar__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.plume-toolbar__button svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* ---------- Toolbar tooltips ---------- */
+
+/*
+ * A CSS-only tooltip driven by the button's `data-tooltip` text. It replaces
+ * the native `title` so we can control the reveal delay: hidden by default,
+ * shown after a short delay on hover/focus.
+ */
+.plume-toolbar__button[data-tooltip] {
+  position: relative;
+}
+
+.plume-toolbar__button[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  z-index: 30;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--plume-color-tooltip-bg);
+  color: var(--plume-color-tooltip-text);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(-2px);
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+  transition-delay: 0s;
+}
+
+.plume-toolbar__button[data-tooltip]:hover:not(:disabled)::after,
+.plume-toolbar__button[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  /* Short delay so tooltips don't flash while sweeping across the toolbar. */
+  transition-delay: 0.45s;
+}
+
+/* ---------- Toolbar dropdowns (font, color, case) ---------- */
+
+.plume-toolbar__dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.plume-toolbar__menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 20;
+  min-width: 168px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--plume-color-bg);
+  border: 1px solid var(--plume-color-border);
+  border-radius: var(--plume-radius-sm);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.plume-toolbar__menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--plume-color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.plume-toolbar__menu-item:hover {
+  background: var(--plume-color-button-hover-bg);
+}
+
+.plume-toolbar__menu-item[data-active] {
+  background: var(--plume-color-active-bg);
+  color: var(--plume-color-active-text);
+}
+
+.plume-toolbar__menu--swatch {
+  min-width: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 152px;
+}
+
+.plume-toolbar__swatch {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--plume-color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.plume-toolbar__swatch:hover {
+  transform: scale(1.08);
+}
+
+.plume-toolbar__swatch[data-active] {
+  outline: 2px solid var(--plume-color-primary);
+  outline-offset: 1px;
+}
+
+/* The font picker's trigger: a text field showing the active font's name. */
+.plume-toolbar__select {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 116px;
+  max-width: 168px;
+  padding: 0 8px;
+  border: 1px solid var(--plume-color-border);
+  border-radius: var(--plume-radius-sm);
+  background: var(--plume-color-bg);
+  color: var(--plume-color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.plume-toolbar__select:hover {
+  background: var(--plume-color-button-hover-bg);
+}
+
+.plume-toolbar__select:focus-visible {
+  outline: 2px solid var(--plume-color-primary);
+  outline-offset: -1px;
+}
+
+.plume-toolbar__select[aria-expanded='true'] {
+  border-color: var(--plume-color-primary);
+}
+
+.plume-toolbar__select-label {
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plume-toolbar__select-caret {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--plume-color-button);
+}
+
+.plume-toolbar__select-caret svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- Link popover ---------- */
+
+/*
+ * Anchored to the link button (inside `.plume-toolbar__dropdown`). A compact
+ * form: an optional "visible text" field, the URL field, then the actions row.
+ */
+.plume-toolbar__link-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  /* The link control sits in the toolbar's right-hand cluster, so the panel
+     opens leftward from the button to stay clear of the viewport edge. */
+  right: 0;
+  left: auto;
+  z-index: 20;
+  width: 264px;
+  max-width: calc(100vw - 24px);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--plume-color-bg);
+  border: 1px solid var(--plume-color-border);
+  border-radius: var(--plume-radius-sm);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.plume-toolbar__link-input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--plume-color-border);
+  border-radius: 6px;
+  background: var(--plume-color-bg);
+  color: var(--plume-color-text);
+  font: inherit;
+  font-size: 0.875rem;
+}
+
+.plume-toolbar__link-input::placeholder {
+  color: var(--plume-color-muted);
+}
+
+.plume-toolbar__link-input:focus-visible {
+  outline: none;
+  border-color: var(--plume-color-primary);
+}
+
+.plume-toolbar__link-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.plume-toolbar__link-apply,
+.plume-toolbar__link-remove {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.plume-toolbar__link-apply {
+  border: 1px solid transparent;
+  background: var(--plume-color-primary);
+  color: #ffffff;
+}
+
+.plume-toolbar__link-apply:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.plume-toolbar__link-apply:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.plume-toolbar__link-remove {
+  /* Push Remove to the left so Apply stays the rightmost (primary) action. */
+  margin-right: auto;
+  border: 1px solid var(--plume-color-border);
+  background: transparent;
+  color: var(--plume-color-text);
+}
+
+.plume-toolbar__link-remove:hover {
+  background: var(--plume-color-button-hover-bg);
+}
+
+/* ---------- Editable content ---------- */
+
+.plume-editor {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.plume-editor__content {
+  max-width: var(--plume-content-max-width);
+  margin-inline: auto;
+  padding: 3rem 1.5rem 6rem;
+  font-size: var(--plume-font-size);
+  line-height: var(--plume-line-height);
+  outline: none;
+}
+
+/* Locked / read-only: tiptap sets contenteditable="false". Fade the content
+   and show a "not-allowed" cursor when hovering the editing surface. */
+.plume-editor__content[contenteditable='false'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.plume-editor__content :where(> :first-child) {
+  margin-top: 0;
+}
+
+.plume-editor__content :where(p) {
+  margin: 0 0 1em;
+}
+
+.plume-editor__content :where(h1, h2, h3) {
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 1.6em 0 0.6em;
+}
+.plume-editor__content :where(h1) {
+  font-size: 1.9em;
+}
+.plume-editor__content :where(h2) {
+  font-size: 1.5em;
+}
+.plume-editor__content :where(h3) {
+  font-size: 1.2em;
+}
+
+.plume-editor__content :where(ul, ol) {
+  margin: 0 0 1em;
+  padding-left: 1.5em;
+}
+.plume-editor__content :where(li) {
+  margin: 0.25em 0;
+}
+.plume-editor__content :where(li p) {
+  margin: 0;
+}
+
+.plume-editor__content :where(blockquote) {
+  margin: 1.2em 0;
+  padding-left: 1.1em;
+  border-left: 3px solid var(--plume-color-border);
+  color: var(--plume-color-muted);
+  font-style: italic;
+}
+
+/*
+ * Custom blockquote variants (Plume's `blockquotes` option). The accent color
+ * comes from each variant's spec, set inline as `--plume-quote-color`; it tints
+ * the left border and a faint background while keeping the text upright.
+ */
+.plume-editor__content :where(blockquote.plume-blockquote) {
+  padding: 0.6em 1.1em;
+  border-left: 3px solid var(--plume-quote-color, var(--plume-color-border));
+  border-radius: 0 6px 6px 0;
+  background: color-mix(in srgb, var(--plume-quote-color, transparent) 8%, transparent);
+  color: var(--plume-color-text);
+  font-style: normal;
+}
+
+.plume-editor__content :where(blockquote.plume-blockquote > :first-child) {
+  margin-top: 0;
+}
+
+.plume-editor__content :where(blockquote.plume-blockquote > :last-child) {
+  margin-bottom: 0;
+}
+
+.plume-editor__content :where(code) {
+  font-family: var(--plume-font-mono);
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+  background: var(--plume-color-code-bg);
+  border: 1px solid var(--plume-color-code-border);
+}
+
+.plume-editor__content :where(pre) {
+  font-family: var(--plume-font-mono);
+  font-size: 0.88em;
+  line-height: 1.6;
+  margin: 1.2em 0;
+  padding: 1em 1.2em;
+  border-radius: var(--plume-radius-sm);
+  background: var(--plume-color-code-bg);
+  border: 1px solid var(--plume-color-code-border);
+  overflow-x: auto;
+}
+.plume-editor__content :where(pre code) {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 1em;
+}
+
+.plume-editor__content :where(hr) {
+  border: none;
+  border-top: 1px solid var(--plume-color-border);
+  margin: 1.5em 0;
+}
+
+.plume-editor__content :where(a) {
+  color: var(--plume-color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.plume-editor__content :where(mark) {
+  background: var(--plume-color-highlight-bg);
+  color: var(--plume-color-highlight-text);
+  padding: 0.05em 0.15em;
+  border-radius: 3px;
+  box-decoration-break: clone;
+}
+
+.plume-editor__content :where(sup),
+.plume-editor__content :where(sub) {
+  font-size: 0.72em;
+}
+
+.plume-editor__content :where(kbd) {
+  font-family: var(--plume-font-mono);
+  font-size: 0.8em;
+  padding: 0.1em 0.45em;
+  border-radius: 5px;
+  background: var(--plume-color-code-bg);
+  border: 1px solid var(--plume-color-border);
+  box-shadow: 0 1px 0 var(--plume-color-border);
+}
+
+.plume-editor__content :where(::selection) {
+  background: var(--plume-color-selection);
+}
+
+/* ---------- Resizable image ---------- */
+
+.plume-editor__content :where(figure.plume-image) {
+  margin: 1.4em 0;
+  width: fit-content;
+  max-width: 100%;
+}
+.plume-editor__content :where(figure.plume-image[data-align='center']) {
+  margin-inline: auto;
+}
+.plume-editor__content :where(figure.plume-image[data-align='right']) {
+  margin-inline: auto 0;
+}
+.plume-editor__content :where(figure.plume-image[data-align='left']) {
+  margin-inline: 0 auto;
+}
+
+.plume-image__frame {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+}
+
+.plume-editor__content :where(figure.plume-image img) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--plume-radius-sm);
+}
+
+.plume-image__handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--plume-color-bg);
+  border-radius: 50%;
+  background: var(--plume-color-primary);
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.plume-image__handle[data-corner='nw'] {
+  top: -5px;
+  left: -5px;
+  cursor: nwse-resize;
+}
+.plume-image__handle[data-corner='ne'] {
+  top: -5px;
+  right: -5px;
+  cursor: nesw-resize;
+}
+.plume-image__handle[data-corner='sw'] {
+  bottom: -5px;
+  left: -5px;
+  cursor: nesw-resize;
+}
+.plume-image__handle[data-corner='se'] {
+  bottom: -5px;
+  right: -5px;
+  cursor: nwse-resize;
+}
+
+.ProseMirror-selectednode .plume-image__handle {
+  opacity: 1;
+}
+
+.plume-editor__content :where(figure.plume-image figcaption) {
+  margin-top: 0.5em;
+  font-size: 0.85em;
+  line-height: 1.4;
+  color: var(--plume-color-muted);
+  text-align: center;
+  outline: none;
+}
+/* The caption stays hidden until it has text or the user opens it from the
+ * menu (the NodeView toggles `data-caption-open` on the figure). */
+.plume-editor__content :where(figure.plume-image:not([data-caption-open='true']) figcaption) {
+  display: none;
+}
+/* When open but still empty, show the placeholder so it's clear where to type. */
+.plume-editor__content
+  figure.plume-image[data-caption-open='true']
+  figcaption[contenteditable='true'][data-empty='true']::before {
+  content: attr(data-placeholder);
+  color: var(--plume-color-muted);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Upload in progress: dim the optimistic preview. */
+.plume-editor__content figure.plume-image[data-uploading='true'] img {
+  opacity: 0.55;
+  filter: grayscale(0.2);
+}
+
+/* ---------- Image bubble menu ---------- */
+
+/* Fallback values keep the menu visible even if it ever mounts outside a
+ * `.plume` root (where the theme variables are defined). */
+.plume-image-menu {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: var(--plume-color-bg, #fff);
+  border: 1px solid var(--plume-color-border, #e6e6e8);
+  border-radius: var(--plume-radius-sm, 8px);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 12%);
+  animation: plume-image-menu-in 120ms ease-out;
+}
+.plume-image-menu[data-visible='false'] {
+  display: none;
+}
+@keyframes plume-image-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plume-image-menu {
+    animation: none;
+  }
+}
+.plume-image-menu__sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 2px;
+  background: var(--plume-color-border, #e6e6e8);
+}
+.plume-image-menu__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--plume-color-button, #5c5c66);
+  cursor: pointer;
+}
+.plume-image-menu__btn svg {
+  width: 18px;
+  height: 18px;
+}
+.plume-image-menu__btn:hover {
+  background: var(--plume-color-button-hover-bg);
+  color: var(--plume-color-button-hover);
+}
+.plume-image-menu__btn[data-active='true'] {
+  background: var(--plume-color-active-bg, #e6e6ea);
+  color: var(--plume-color-button-hover, #1a1a1a);
+}
+.plume-image-menu__btn[data-active='true']:hover {
+  background: var(--plume-color-active-bg, #dedee3);
+  color: var(--plume-color-button-hover, #1a1a1a);
+}
+.plume-image-menu__btn[data-variant='danger'] {
+  color: var(--plume-color-danger, #e5484d);
+}
+.plume-image-menu__btn[data-variant='danger']:hover {
+  background: var(--plume-color-danger-bg, rgb(229 72 77 / 12%));
+  color: var(--plume-color-danger, #e5484d);
+}
+
+.ProseMirror-selectednode :where(.plume-image__frame img),
+.plume-editor__content :where(figure.plume-image.ProseMirror-selectednode img) {
+  outline: 2px solid var(--plume-color-primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Footnotes ---------- */
+
+.plume-editor__content :where(sup.footnote-ref) {
+  font-size: 0.72em;
+  line-height: 0;
+}
+.plume-editor__content :where(sup.footnote-ref a) {
+  padding: 0 0.15em;
+  color: var(--plume-color-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+.plume-editor__content :where(sup.footnote-ref a)::before {
+  content: '[';
+}
+.plume-editor__content :where(sup.footnote-ref a)::after {
+  content: ']';
+}
+
+.plume-editor__content :where(.plume-footnotes) {
+  margin-top: 2.5em;
+  padding-top: 1em;
+  border-top: 1px solid var(--plume-color-border);
+}
+
+.plume-footnotes__label {
+  margin-bottom: 0.4em;
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--plume-color-muted);
+  user-select: none;
+}
+
+.plume-editor__content :where(ol.footnotes) {
+  margin: 0;
+  padding-left: 1.5em;
+  font-size: 0.9em;
+  color: var(--plume-color-muted);
+}
+/* When the number is a clickable back-link, hide the native list marker. */
+.plume-editor__content :where(ol.footnotes.footnotes--linked) {
+  list-style: none;
+  padding-left: 0;
+}
+.plume-editor__content :where(ol.footnotes > li.footnote) {
+  margin: 0.3em 0;
+}
+.plume-editor__content :where(ol.footnotes p) {
+  margin: 0;
+}
+
+/* The footnote's number doubles as a back-link to its marker in the body. */
+.plume-editor__content :where(a.footnote-backref) {
+  margin-right: 0.5em;
+  color: var(--plume-color-primary);
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+}
+.plume-editor__content :where(a.footnote-backref:hover) {
+  text-decoration: underline;
+}
+
+/* Placeholder, provided by @tiptap/extensions' Placeholder extension. */
+.plume-editor__content :where(p.is-editor-empty:first-child)::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--plume-color-muted);
+}
+
+/* ---------- Dark theme ---------- */
+
+:where([data-theme='dark']) .plume,
+.plume[data-theme='dark'] {
+  --plume-color-bg: #0d0d0d;
+  --plume-color-text: #ededed;
+  --plume-color-muted: #8a8a93;
+  --plume-color-border: #232326;
+  --plume-color-primary: #9b8cff;
+  --plume-color-toolbar-bg: #0d0d0d;
+  --plume-color-button: #a1a1aa;
+  --plume-color-button-hover-bg: #1d1d20;
+  --plume-color-button-hover: #fafafa;
+  --plume-color-active-bg: #26233a;
+  --plume-color-active-text: #b9adff;
+  --plume-color-code-bg: #161618;
+  --plume-color-code-border: #26262a;
+  --plume-color-highlight-bg: rgb(250 204 21 / 28%);
+  --plume-color-highlight-text: #f5f0d8;
+  --plume-color-selection: rgb(155 140 255 / 32%);
+  --plume-color-tooltip-bg: #ededed;
+  --plume-color-tooltip-text: #0d0d0d;
+}
