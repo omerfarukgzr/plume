@@ -1,0 +1,35 @@
+/* ---------------------------------------------------------------------------
+ * Language switcher: make the currently selected language obvious — minimally.
+ *
+ * VitePress renders the active locale as a non-clickable `.title` header and
+ * lists only the *other* locales below it as switch links. By default both
+ * look alike, so it's unclear which language is active.
+ *
+ * Fix: the current language gets the brand color; the switch options are
+ * dimmed. The contrast alone makes the active language read at a glance — no
+ * extra icons or dividers.
+ * ------------------------------------------------------------------------- */
+
+.VPNavBarTranslations .items .title,
+.VPNavScreenTranslations .title {
+  color: var(--vp-c-brand-1);
+}
+
+.VPNavBarTranslations .items .VPMenuLink .link {
+  color: var(--vp-c-text-2);
+}
+
+.VPNavBarTranslations .items .VPMenuLink .link:hover {
+  color: var(--vp-c-brand-1);
+}
+
+/* ---------------------------------------------------------------------------
+ * Home feature cards: tint the icons with the brand color and add a subtle
+ * brand-tinted background so they read as accents rather than plain glyphs.
+ * ------------------------------------------------------------------------- */
+
+.VPFeature .icon {
+  color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-soft);
+}
+

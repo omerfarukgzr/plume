@@ -44,6 +44,34 @@ describe('createUploadHandler', () => {
     expect((init?.body as FormData).get('file')).toBeInstanceOf(File)
   })
 
+  it('sends the assetId from the upload context in the form', async () => {
+    const fetchMock = vi.fn(
+      async (_url: string, _init?: RequestInit) =>
+        new Response(JSON.stringify({ src: 'https://cdn/x.png' }), { status: 200 }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const upload = createUploadHandler({ url: '/api/upload' })
+    await upload(png(), { assetId: 'asset-123' })
+
+    const body = fetchMock.mock.calls[0]![1]?.body as FormData
+    expect(body.get('assetId')).toBe('asset-123')
+  })
+
+  it('omits the assetId field when assetIdFieldName is null', async () => {
+    const fetchMock = vi.fn(
+      async (_url: string, _init?: RequestInit) =>
+        new Response(JSON.stringify({ src: 'https://cdn/x.png' }), { status: 200 }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const upload = createUploadHandler({ url: '/api/upload', assetIdFieldName: null })
+    await upload(png(), { assetId: 'asset-123' })
+
+    const body = fetchMock.mock.calls[0]![1]?.body as FormData
+    expect(body.has('assetId')).toBe(false)
+  })
+
   it('maps the response when parseResponse is provided', async () => {
     vi.stubGlobal(
       'fetch',

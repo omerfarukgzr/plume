@@ -46,4 +46,29 @@ describe('footnote caret placement', () => {
     const { from } = editor.state.selection
     expect(inFootnote(editor.state.doc, from)).toBe(true)
   })
+
+  it('clicking a marker cancels the native anchor jump and navigates smoothly', () => {
+    const element = document.createElement('div')
+    document.body.appendChild(element)
+    editor = new Editor({ element, ...resolveEditorOptions({ content: '<p>Hello</p>' }) })
+
+    editor.commands.setTextSelection(3)
+    editor.commands.addFootnote()
+    // Put the caret back in the body so we can prove the click moves it.
+    editor.commands.setTextSelection(2)
+
+    // The marker renders as `<a class="footnote-ref" href="#fn:N">`; a real click
+    // would trigger the browser's instant anchor jump. Our plugin must cancel it.
+    const marker = element.querySelector<HTMLAnchorElement>('a.footnote-ref')
+    expect(marker).toBeTruthy()
+
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true })
+    marker!.dispatchEvent(event)
+
+    // Default prevented (no native #fn jump) and the caret landed in the footnote.
+    expect(event.defaultPrevented).toBe(true)
+    expect(inFootnote(editor.state.doc, editor.state.selection.from)).toBe(true)
+
+    element.remove()
+  })
 })
