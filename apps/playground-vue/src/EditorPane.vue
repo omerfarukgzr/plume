@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { EditorContent, Toolbar, usePlumeEditor } from '@plume/vue'
 import { resolveToolbarItems, type CustomBlockquoteSpec, type ToolbarConfig } from '@plume/core'
 
@@ -22,8 +22,14 @@ const placeholders: Record<'tr' | 'en', string> = {
   en: 'Start typing…',
 }
 
+const html = ref(props.initialHtml)
+
 // The composable API: drive the editor yourself. `<PlumeEditor />` wraps all of
 // this in a single component if you don't need the editor instance.
+//
+// `onUpdate` is debounced by Plume (default 300ms), so the live preview
+// serializes the document only after you pause typing — no hand-rolled timer.
+// Each refresh is lifted up so <App> can re-seed the editor on a language switch.
 const editor = usePlumeEditor({
   content: props.initialHtml,
   placeholder: placeholders[props.lang],
@@ -32,36 +38,15 @@ const editor = usePlumeEditor({
   blockquotes: props.blockquotes,
   // No `uploadHandler` → images embed as base64 (zero config). The bubble-menu/
   // caption labels follow `locale` automatically.
+  onUpdate: (instance) => {
+    html.value = instance.getHTML()
+    emit('update:html', html.value)
+  },
 })
 
 const items = computed(() =>
   resolveToolbarItems(props.toolbar, { locale: props.lang, blockquotes: props.blockquotes }),
 )
-
-const html = ref('')
-
-// Debounced so the live preview never serializes the document on every
-// keystroke — it refreshes ~200ms after you pause typing. Each refresh is also
-// lifted up so <App> can re-seed the editor when the language changes.
-watchEffect((onCleanup) => {
-  const instance = editor.value
-  if (!instance) return
-  html.value = instance.getHTML()
-  emit('update:html', html.value)
-  let timer: ReturnType<typeof setTimeout> | undefined
-  const sync = () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      html.value = instance.getHTML()
-      emit('update:html', html.value)
-    }, 200)
-  }
-  instance.on('update', sync)
-  onCleanup(() => {
-    clearTimeout(timer)
-    instance.off('update', sync)
-  })
-})
 </script>
 
 <template>

@@ -60,6 +60,11 @@ export const PlumeEditor = defineComponent({
       type: Array as PropType<PlumeOptions['toolbarItems']>,
       default: undefined,
     },
+    onUpdate: {
+      type: Function as PropType<PlumeOptions['onUpdate']>,
+      default: undefined,
+    },
+    updateDelay: { type: Number as PropType<number | undefined>, default: undefined },
   },
   setup(props) {
     const editor = usePlumeEditor({
@@ -76,6 +81,8 @@ export const PlumeEditor = defineComponent({
       autoCapitalize: props.autoCapitalize,
       image: props.image,
       blockquotes: props.blockquotes,
+      onUpdate: props.onUpdate,
+      updateDelay: props.updateDelay,
     })
 
     onMounted(() => injectFontFaces(props.fonts))

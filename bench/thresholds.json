@@ -1,0 +1,7 @@
+{
+  "comment": "CI regression ceilings for bench/check.mjs. Run UNTHROTTLED. Ceilings are deliberately generous (several times the observed numbers) so they catch order-of-magnitude regressions — e.g. typing that re-renders the whole tree, or O(n^2) serialization — without flaking on slower/variable CI runners. Tighten only if CI proves stable. Local reference (unthrottled, fast Mac): 10k getHTML ~2.5ms / type p50 ~0.6ms; 50k getHTML ~11ms / type p50 ~2ms.",
+  "guards": [
+    { "words": 10000, "images": 5, "maxGetHtmlMs": 60, "maxTypeP50Ms": 20 },
+    { "words": 50000, "images": 20, "maxGetHtmlMs": 200, "maxTypeP50Ms": 60 }
+  ]
+}
