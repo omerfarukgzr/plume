@@ -101,6 +101,8 @@ function focusAndScroll(editor: Editor, targetPos: number): void {
     return
   }
   requestAnimationFrame(() => {
+    // The editor may have unmounted between scheduling and this frame.
+    if (editor.isDestroyed) return
     const { view } = editor
     view.focus()
     const dom = view.nodeDOM(targetPos)
@@ -247,6 +249,32 @@ export function footnoteExtensions(options: FootnoteExtensionOptions = {}): Exte
     addProseMirrorPlugins() {
       const editor = this.editor
       const plugins = [...(this.parent?.() ?? [])]
+
+      // Marker (reference) → footnote navigation. The package renders each marker
+      // as `<a href="#fn:N">`, so a plain click triggers the browser's *native*
+      // anchor jump — an instant scroll that bypasses our smooth `focusFootnote`
+      // (which is why forward navigation looked like a hard jump while the
+      // back-link, having no `href`, scrolled smoothly). Intercept the click,
+      // cancel the native jump, and route through the same smooth path.
+      plugins.push(
+        new Plugin({
+          key: new PluginKey('plumeFootnoteMarkerNav'),
+          props: {
+            handleDOMEvents: {
+              click(_view, event) {
+                const target = event.target as HTMLElement | null
+                const link = target?.closest('a.footnote-ref') as HTMLElement | null
+                const id = link?.getAttribute('data-id')
+                if (!id) return false
+                // Cancel the `href="#fn:N"` jump, then smooth-scroll to the footnote.
+                event.preventDefault()
+                return navigateDirect(editor, 'footnote', id, 'caret')
+              },
+            },
+          },
+        }),
+      )
+
       if (backref) {
         const key = new PluginKey('plumeFootnoteBackref')
         plugins.push(

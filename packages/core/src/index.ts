@@ -42,13 +42,14 @@ export {
 export type { CustomBlockquoteOptions, CustomBlockquoteSpec } from './custom-blockquote'
 export { footnoteExtensions, PlumeDocument } from './footnotes'
 export type { FootnoteExtensionOptions } from './footnotes'
-export { ResizableImage, insertImageFromFile } from './resizable-image'
+export { ResizableImage, insertImageFromFile, collectImageAssetIds } from './resizable-image'
 export type {
   ImageAlign,
   ImageLabels,
   ImageUploadResult,
   ResizableImageOptions,
   SetImageOptions,
+  UploadContext,
 } from './resizable-image'
 export { base64UploadHandler, createUploadHandler, validateImageFile } from './upload'
 export type { FileValidationOptions, UploadHandlerConfig } from './upload'

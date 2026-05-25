@@ -1,6 +1,13 @@
-# Plume
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/public/logo-dark.svg" />
+    <img src="./docs/public/logo.svg" alt="Plume" width="96" height="96" />
+  </picture>
+</p>
 
-> Customizable, framework-agnostic rich text editor built on [tiptap](https://tiptap.dev).
+<h1 align="center">Plume</h1>
+
+<p align="center">Customizable, framework-agnostic rich text editor built on <a href="https://tiptap.dev">tiptap</a>.</p>
 
 Plume keeps all editor logic in one place (`@plume/core`) and ships thin
 adapters for each UI framework. Today: **React** and **Vue 3**. Tomorrow:
@@ -8,11 +15,11 @@ Svelte, Solid, vanilla — without rewriting the editor.
 
 ## Packages
 
-| Package         | Description                                                       |
-| --------------- | ----------------------------------------------------------------- |
-| `@plume/core`   | Framework-agnostic core: tiptap config, extensions, toolbar, CSS. |
-| `@plume/react`  | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
-| `@plume/vue`    | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
+| Package        | Description                                                       |
+| -------------- | ----------------------------------------------------------------- |
+| `@plume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS. |
+| `@plume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
+| `@plume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
 
 ## Quick start (React)
 
@@ -52,6 +59,7 @@ import '@plume/core/styles.css'
     ]}
   />
   ```
+
 - **Theme** — every value is a `--plume-*` CSS variable; set `data-theme="dark"` on any ancestor for dark mode, or skip the stylesheet entirely for an unstyled editor.
 - **Extensions** — append your own tiptap extensions: `extensions={[MyExtension]}`, and toggle the defaults with `defaultExtensions={false}`.
 
@@ -65,8 +73,7 @@ By default — with no `uploadHandler` — picked, pasted and dropped images are
 
 ```tsx
 import { createUploadHandler } from '@plume/core'
-
-<PlumeEditor
+;<PlumeEditor
   image={{
     uploadHandler: createUploadHandler({
       url: '/api/upload',
@@ -86,8 +93,8 @@ For full control (S3 presigned URLs, tRPC, …), pass any async `uploadHandler: 
 
 Whoever builds the backend only needs to satisfy this:
 
-- **Request:** `POST <url>`, `Content-Type: multipart/form-data`, the file in the `file` field (configurable via `fieldName`).
-- **Response:** `200` with JSON `{ "src": "https://…", "width"?: number, "alt"?: string }`.
+- **Request:** `POST <url>`, `Content-Type: multipart/form-data`, the file in the `file` field (configurable via `fieldName`), plus a client-generated id in the `assetId` field (see [cleanup](#cleaning-up-orphaned-uploads) below).
+- **Response:** `200` with JSON `{ "src": "https://…", "width"?: number, "alt"?: string }`. You may echo back `{ "id": "…" }` to override the client id.
 - **Error:** any non-2xx status; optionally `{ "error": "message" }` so the message surfaces in `onError`.
 
 **Express** (with [`multer`](https://github.com/expressjs/multer)):
@@ -158,6 +165,22 @@ func main() {
 	http.ListenAndServe(":3000", nil)
 }
 ```
+
+### Cleaning up orphaned uploads
+
+When an image is uploaded but then deleted from the document (or the document is never saved), the file is left orphaned on your server. Plume helps you reconcile this **at save time** rather than tracking deletes live (which breaks on undo, cut/paste, shared references and closed tabs).
+
+Every server upload gets a client-generated id (`crypto.randomUUID()`). It's sent to your endpoint in the `assetId` form field, and written onto the saved HTML as `data-asset-id` on the `<figure>`:
+
+```html
+<figure data-type="plume-image" data-asset-id="9f1c…"><img src="https://cdn/9f1c….jpg" /></figure>
+```
+
+So your backend: **(1)** stores each file under its `assetId`, and **(2)** on save, parses the `data-asset-id` values out of the saved HTML and treats any stored-but-absent asset as an orphan to sweep (e.g. flag it and let a cron delete it). Because it only looks at the document's final state, undo/cut-paste/duplicate references all stay correct automatically.
+
+Prefer not to parse HTML server-side? `collectImageAssetIds(editor)` returns the used ids directly (de-duplicated, id-less images skipped) so you can send them with your save request.
+
+> Don't care about cleanup? Ignore the `assetId` — uploads work the same. Full walkthrough with edge-case table: **[docs › Images & uploads](./docs/guide/images.md#cleaning-up-orphaned-uploads)**.
 
 ## Development
 

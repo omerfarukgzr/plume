@@ -12,6 +12,26 @@ export interface ImageUploadResult {
   src: string
   alt?: string
   width?: number
+  /**
+   * Stable identifier for the stored asset. Usually you let Plume generate it
+   * (see {@link UploadContext.assetId}) and just persist the file under it, but
+   * if the server mints its own id, return it here and it overrides the
+   * client-generated one. Either way it is serialized as `data-asset-id` on the
+   * figure so a save-time reconciliation can find which assets are still used.
+   */
+  id?: string
+}
+
+/**
+ * Extra information passed to an `uploadHandler` alongside the file. The
+ * `assetId` is generated client-side (a UUID) *before* the request, so the
+ * server can store the file under it and a later reconciliation can match the
+ * document's `data-asset-id` values against stored assets. Handlers that don't
+ * care about cleanup can ignore this argument entirely.
+ */
+export interface UploadContext {
+  /** Client-generated id Plume will stamp onto the image as `data-asset-id`. */
+  assetId: string
 }
 
 /** Labels for the image bubble menu and caption, so apps can localize them. */
@@ -41,8 +61,13 @@ export interface ResizableImageOptions {
    * Async handler that uploads a picked `File` and returns its URL. When
    * omitted, files are embedded inline as base64 data URLs (zero-config
    * default). Use `createUploadHandler` to POST to your own server instead.
+   *
+   * Receives an {@link UploadContext} whose `assetId` Plume generated for this
+   * image; store the file under it if you plan to reconcile orphaned uploads
+   * later. The second argument is optional to implement — single-argument
+   * handlers still satisfy this type.
    */
-  uploadHandler?: (file: File) => Promise<ImageUploadResult>
+  uploadHandler?: (file: File, context: UploadContext) => Promise<ImageUploadResult>
   /** Accepted file types (the `<input accept>` syntax). Defaults to `'image/*'`. */
   accept: string
   /** Maximum file size in bytes. Files above this are rejected before upload. */
@@ -64,6 +89,8 @@ export interface SetImageOptions {
   width?: number | null
   align?: ImageAlign
   caption?: string | null
+  /** Stored-asset id, serialized as `data-asset-id` for save-time reconciliation. */
+  assetId?: string | null
 }
 
 declare module '@tiptap/core' {
@@ -88,6 +115,17 @@ function pxAttr(value: unknown): number | null {
 let uploadCounter = 0
 
 /**
+ * A client-side id for a freshly uploaded asset. Prefers `crypto.randomUUID()`
+ * (every modern browser, Node 19+) and falls back to a random string where it
+ * isn't available, so this never throws in older runtimes.
+ */
+function createAssetId(): string {
+  const c = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto
+  if (c?.randomUUID) return c.randomUUID()
+  return `asset-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+/**
  * Validates, inserts an optimistic placeholder, then resolves the upload and
  * swaps in the final URL — shared by the toolbar button, paste and drop. The
  * placeholder is located by its `uploadId` so the right node is updated even if
@@ -108,7 +146,11 @@ export function insertImageFromFile(editor: Editor, file: File): boolean {
     return false
   }
 
-  const upload = options.uploadHandler ?? base64UploadHandler
+  const handler = options.uploadHandler
+  const upload = handler ?? base64UploadHandler
+  // An asset id is only meaningful when the file lives on a server; base64
+  // images carry their data inline, so there is nothing on a server to clean up.
+  const assetId = handler ? createAssetId() : null
   const uploadId = `plume-upload-${++uploadCounter}`
   const preview = URL.createObjectURL(file)
 
@@ -117,7 +159,7 @@ export function insertImageFromFile(editor: Editor, file: File): boolean {
     .focus()
     .insertContent({
       type: 'image',
-      attrs: { src: preview, uploadId, uploading: true },
+      attrs: { src: preview, uploadId, uploading: true, assetId },
     })
     .run()
 
@@ -136,7 +178,7 @@ export function insertImageFromFile(editor: Editor, file: File): boolean {
     URL.revokeObjectURL(preview)
   }
 
-  void Promise.resolve(upload(file))
+  void Promise.resolve(upload(file, { assetId: assetId ?? '' }))
     .then((result) => {
       finish((pos, attrs) => {
         editor.view.dispatch(
@@ -145,6 +187,8 @@ export function insertImageFromFile(editor: Editor, file: File): boolean {
             src: result.src,
             alt: result.alt ?? attrs.alt ?? null,
             width: result.width ?? attrs.width ?? null,
+            // A server-minted id overrides the client one; otherwise keep ours.
+            assetId: result.id ?? attrs.assetId ?? null,
             uploadId: null,
             uploading: false,
           }),
@@ -160,6 +204,25 @@ export function insertImageFromFile(editor: Editor, file: File): boolean {
     })
 
   return true
+}
+
+/**
+ * Collects the `assetId` of every image the document currently references, as a
+ * de-duplicated array. Send it to your backend when saving so it can reconcile
+ * stored uploads against what's still in use — anything stored but absent from
+ * this list is an orphan to sweep. (See the "Cleaning up orphaned uploads"
+ * guide.) Images without an id — the base64 default, or externally pasted ones —
+ * are skipped, since the server doesn't own them.
+ */
+export function collectImageAssetIds(editor: Editor): string[] {
+  const ids = new Set<string>()
+  editor.state.doc.descendants((node) => {
+    if (node.type.name === 'image' && typeof node.attrs.assetId === 'string') {
+      ids.add(node.attrs.assetId)
+    }
+    return undefined
+  })
+  return [...ids]
 }
 
 /**
@@ -210,6 +273,12 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
         default: 'center',
         parseHTML: (element) => element.getAttribute('data-align') ?? 'center',
       },
+      // Stored-asset id, kept on the figure as `data-asset-id` so the saved HTML
+      // alone tells a backend which uploads a document still references.
+      assetId: {
+        default: null,
+        parseHTML: (element) => element.getAttribute('data-asset-id') || null,
+      },
       // Transient state while an upload is in flight; never serialized.
       uploadId: { default: null, rendered: false },
       uploading: { default: false, rendered: false },
@@ -230,6 +299,7 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
             caption: caption?.textContent || null,
             width: pxAttr(img?.getAttribute('width') ?? img?.style.width ?? null),
             align: element.getAttribute('data-align') ?? 'center',
+            assetId: element.getAttribute('data-asset-id') || null,
           }
         },
       },
@@ -238,13 +308,14 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
   },
 
   renderHTML({ node }) {
-    const { src, alt, title, caption, width, align } = node.attrs as {
+    const { src, alt, title, caption, width, align, assetId } = node.attrs as {
       src: string
       alt: string | null
       title: string | null
       caption: string | null
       width: number | null
       align: ImageAlign
+      assetId: string | null
     }
     const imgAttrs = mergeAttributes(this.options.HTMLAttributes, {
       src,
@@ -254,7 +325,12 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
     })
     const figure: [string, Record<string, string>, ...unknown[]] = [
       'figure',
-      { 'data-type': 'plume-image', 'data-align': align ?? 'center', class: 'plume-image' },
+      {
+        'data-type': 'plume-image',
+        'data-align': align ?? 'center',
+        class: 'plume-image',
+        ...(assetId ? { 'data-asset-id': assetId } : {}),
+      },
       ['img', imgAttrs],
     ]
     if (caption) figure.push(['figcaption', {}, caption])
@@ -301,6 +377,8 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
       const render = (attrs: Record<string, unknown>) => {
         figure.dataset.align = (attrs.align as string) ?? 'center'
         figure.dataset.uploading = attrs.uploading ? 'true' : 'false'
+        if (attrs.assetId) figure.dataset.assetId = attrs.assetId as string
+        else delete figure.dataset.assetId
         img.src = (attrs.src as string) ?? ''
         img.alt = (attrs.alt as string) ?? ''
         if (attrs.title) img.title = attrs.title as string

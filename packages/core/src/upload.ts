@@ -1,4 +1,4 @@
-import type { ImageUploadResult } from './resizable-image'
+import type { ImageUploadResult, UploadContext } from './resizable-image'
 
 /**
  * Reads a picked `File` into a base64 data URL and embeds it directly in the
@@ -26,6 +26,13 @@ export interface UploadHandlerConfig {
   method?: string
   /** Form field name the file is sent under. Defaults to `'file'`. */
   fieldName?: string
+  /**
+   * Form field name the client-generated asset id is sent under. Defaults to
+   * `'assetId'`. The id lets the server store the file under the same value
+   * Plume writes as `data-asset-id`, so a save-time reconciliation can find
+   * orphaned uploads. Set to `null` to omit it (servers that don't reconcile).
+   */
+  assetIdFieldName?: string | null
   /** Extra headers (e.g. `Authorization`). Do not set `Content-Type` — the
    * browser sets the multipart boundary automatically. */
   headers?: Record<string, string>
@@ -48,8 +55,12 @@ export interface UploadHandlerConfig {
  *
  * **Server contract** (document this for whoever builds the backend):
  * - **Request:** `POST <url>`, `Content-Type: multipart/form-data`, the file in
- *   the `file` field (configurable via {@link UploadHandlerConfig.fieldName}).
+ *   the `file` field (configurable via {@link UploadHandlerConfig.fieldName}),
+ *   plus the client-generated id in the `assetId` field (see
+ *   {@link UploadHandlerConfig.assetIdFieldName}). Store the file under that id
+ *   if you want to reconcile orphaned uploads later; ignore it otherwise.
  * - **Response:** `200` with JSON `{ "src": "https://…", "width"?: number, "alt"?: string }`.
+ *   You may also echo back `{ "id": "…" }` to override the client id.
  * - **Error:** any non-2xx status; optionally `{ "error": "message" }` so the
  *   message can be surfaced.
  *
@@ -65,14 +76,19 @@ export function createUploadHandler(config: UploadHandlerConfig) {
     url,
     method = 'POST',
     fieldName = 'file',
+    assetIdFieldName = 'assetId',
     headers,
     withCredentials = false,
     parseResponse = (json) => json as ImageUploadResult,
   } = config
 
-  return async function uploadHandler(file: File): Promise<ImageUploadResult> {
+  return async function uploadHandler(
+    file: File,
+    context?: UploadContext,
+  ): Promise<ImageUploadResult> {
     const body = new FormData()
     body.append(fieldName, file, file.name)
+    if (assetIdFieldName && context?.assetId) body.append(assetIdFieldName, context.assetId)
 
     const response = await fetch(url, {
       method,
