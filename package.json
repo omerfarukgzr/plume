@@ -25,7 +25,8 @@
     "play:vue": "pnpm --filter @plume/playground-vue dev",
     "bench": "node bench/run.mjs",
     "bench:micro": "pnpm --filter @plume/core bench",
-    "bench:check": "node bench/check.mjs"
+    "bench:check": "node bench/check.mjs",
+    "size": "node bench/size.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
@@ -39,6 +40,8 @@
     "typescript-eslint": "^8.59.4"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

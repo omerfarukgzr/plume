@@ -26,6 +26,10 @@ jobs:
       - name: Build
         run: pnpm build
 
+      # Keeps published packages lean: gzip ceilings + heavy deps stay external.
+      - name: Bundle size
+        run: pnpm size
+
       - name: Typecheck
         run: pnpm typecheck
 

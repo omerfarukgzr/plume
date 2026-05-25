@@ -1,7 +1,12 @@
 {
-  "comment": "CI regression ceilings for bench/check.mjs. Run UNTHROTTLED. Ceilings are deliberately generous (several times the observed numbers) so they catch order-of-magnitude regressions — e.g. typing that re-renders the whole tree, or O(n^2) serialization — without flaking on slower/variable CI runners. Tighten only if CI proves stable. Local reference (unthrottled, fast Mac): 10k getHTML ~2.5ms / type p50 ~0.6ms; 50k getHTML ~11ms / type p50 ~2ms.",
+  "comment": "CI regression ceilings. `guards` drive bench/check.mjs (runtime, UNTHROTTLED); `bundle` drives bench/size.mjs (build output). Ceilings are deliberately generous (several times observed) so they catch order-of-magnitude regressions — typing that re-renders the whole tree, O(n^2) serialization, or a heavy dep getting bundled into a package — without flaking. Local reference (unthrottled, fast Mac): 10k getHTML ~2.5ms / type p50 ~0.6ms; 50k getHTML ~11ms / type p50 ~2ms. Bundle gzip: core ~15KB, react ~3KB, vue ~3KB (tiptap/prosemirror/framework are external, not counted).",
   "guards": [
     { "words": 10000, "images": 5, "maxGetHtmlMs": 60, "maxTypeP50Ms": 20 },
     { "words": 50000, "images": 20, "maxGetHtmlMs": 200, "maxTypeP50Ms": 60 }
+  ],
+  "bundle": [
+    { "pkg": "core", "maxGzipKB": 22, "mustExternalize": ["@tiptap/", "tiptap-footnotes"] },
+    { "pkg": "react", "maxGzipKB": 5, "mustExternalize": ["@tiptap/", "@plume/core", "react"] },
+    { "pkg": "vue", "maxGzipKB": 6, "mustExternalize": ["@tiptap/", "@plume/core", "vue"] }
   ]
 }
