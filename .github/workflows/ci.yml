@@ -34,3 +34,27 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+  bench:
+    name: Performance guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Chromium (+ its system libs) for the Playwright-driven bench harness.
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Deterministic invariants (resize coalescing) + generous typing/getHTML
+      # ceilings from bench/thresholds.json. Catches order-of-magnitude regressions.
+      - name: Performance guard
+        run: pnpm bench:check

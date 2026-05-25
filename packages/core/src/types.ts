@@ -197,4 +197,18 @@ export interface PlumeOptions {
    * to render a matching button.
    */
   blockquotes?: CustomBlockquoteSpec[]
+  /**
+   * Called after the document changes. Debounced by {@link PlumeOptions.updateDelay}
+   * (default `300`ms) so handlers that serialize the document — `editor.getHTML()`
+   * or `editor.getJSON()` — don't run on every keystroke. That serialization is the
+   * dominant per-edit cost on large documents (tens of ms at 50k+ words), so
+   * debouncing it is what keeps typing smooth. Pass `updateDelay: 0` to fire
+   * synchronously on every change instead.
+   */
+  onUpdate?: (editor: Editor) => void
+  /**
+   * Debounce, in milliseconds, for {@link PlumeOptions.onUpdate}. Defaults to
+   * `300`. `0` disables debouncing (fire on every change).
+   */
+  updateDelay?: number
 }

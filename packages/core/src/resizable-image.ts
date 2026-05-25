@@ -416,16 +416,28 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
             container.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
         }
 
-        const onMove = (move: PointerEvent) => {
+        // pointermove can fire several times per frame; coalesce them into one
+        // style write per animation frame so a fast drag doesn't force a layout
+        // on every event. We track the latest pointer X and flush it in a frame.
+        let pendingX = startX
+        let frame: number | null = null
+        const applyWidth = () => {
+          frame = null
           const next = Math.max(
             minWidth,
-            Math.min(maxWidth, startWidth + dir * (move.clientX - startX)),
+            Math.min(maxWidth, startWidth + dir * (pendingX - startX)),
           )
           img.style.width = `${Math.round(next)}px`
+        }
+        const onMove = (move: PointerEvent) => {
+          pendingX = move.clientX
+          if (frame == null) frame = requestAnimationFrame(applyWidth)
         }
         const stopListening = () => {
           window.removeEventListener('pointermove', onMove)
           window.removeEventListener('pointerup', onUp)
+          if (frame != null) cancelAnimationFrame(frame)
+          frame = null
           endDrag = null
         }
         const onUp = () => {
@@ -433,6 +445,9 @@ export const ResizableImage = TiptapNode.create<ResizableImageOptions>({
           figure.draggable = wasDraggable
           const pos = typeof getPos === 'function' ? getPos() : null
           if (pos == null) return
+          // Flush the final pointer position synchronously (a trailing frame may
+          // have been cancelled above) so the committed width matches the gesture.
+          applyWidth()
           const width = Math.round(img.getBoundingClientRect().width)
           editor.view.dispatch(
             editor.view.state.tr.setNodeMarkup(pos, undefined, {

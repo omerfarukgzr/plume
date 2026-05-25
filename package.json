@@ -22,7 +22,10 @@
     "version-packages": "changeset version",
     "release": "turbo run build --filter=./packages/* && changeset publish",
     "play:react": "pnpm --filter @plume/playground-react dev",
-    "play:vue": "pnpm --filter @plume/playground-vue dev"
+    "play:vue": "pnpm --filter @plume/playground-vue dev",
+    "bench": "node bench/run.mjs",
+    "bench:micro": "pnpm --filter @plume/core bench",
+    "bench:check": "node bench/check.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

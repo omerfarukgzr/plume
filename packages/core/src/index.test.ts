@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Editor } from '@tiptap/core'
 import { customBlockquoteExtensions } from './custom-blockquote'
 import { defaultExtensions } from './extensions'
 import { resolveEditorOptions } from './options'
@@ -28,6 +29,56 @@ describe('resolveEditorOptions', () => {
     const attrs = options.editorProps?.attributes as Record<string, string>
     expect(attrs.class).toContain('plume-editor__content')
     expect(attrs.class).toContain('custom')
+  })
+})
+
+describe('resolveEditorOptions onUpdate', () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  // A minimal stand-in for the tiptap editor the handler receives.
+  const fakeEditor = (isDestroyed = false) => ({ isDestroyed }) as unknown as Editor
+  // tiptap calls onUpdate with `{ editor, transaction, ... }`; we only need editor.
+  const fire = (
+    handler: NonNullable<ReturnType<typeof resolveEditorOptions>['onUpdate']>,
+    editor: Editor,
+  ) => handler({ editor } as Parameters<typeof handler>[0])
+
+  it('is omitted when no callback is provided', () => {
+    expect(resolveEditorOptions().onUpdate).toBeUndefined()
+  })
+
+  it('fires synchronously on every change when updateDelay is 0', () => {
+    const onUpdate = vi.fn()
+    const handler = resolveEditorOptions({ onUpdate, updateDelay: 0 }).onUpdate!
+    const editor = fakeEditor()
+    fire(handler, editor)
+    fire(handler, editor)
+    expect(onUpdate).toHaveBeenCalledTimes(2)
+    expect(onUpdate).toHaveBeenLastCalledWith(editor)
+  })
+
+  it('debounces rapid changes into a single trailing call (default 300ms)', () => {
+    const onUpdate = vi.fn()
+    const handler = resolveEditorOptions({ onUpdate }).onUpdate!
+    const editor = fakeEditor()
+    fire(handler, editor)
+    vi.advanceTimersByTime(100)
+    fire(handler, editor) // resets the timer
+    vi.advanceTimersByTime(299)
+    expect(onUpdate).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1)
+    expect(onUpdate).toHaveBeenCalledTimes(1)
+    expect(onUpdate).toHaveBeenCalledWith(editor)
+  })
+
+  it('skips a trailing call once the editor is destroyed', () => {
+    const onUpdate = vi.fn()
+    const handler = resolveEditorOptions({ onUpdate }).onUpdate!
+    const editor = fakeEditor(true) // torn down before the timer fires
+    fire(handler, editor)
+    vi.advanceTimersByTime(300)
+    expect(onUpdate).not.toHaveBeenCalled()
   })
 })
 

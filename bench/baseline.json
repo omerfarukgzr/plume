@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-05-25T16:33:46.742Z",
+  "cpuThrottle": 4,
+  "results": [
+    {
+      "words": 2000,
+      "images": 0,
+      "docChars": 14863,
+      "nodeCount": 718,
+      "mountMs": 359.5,
+      "getHtmlMs": 2.1,
+      "typeMeanMs": 1.79,
+      "typeP50Ms": 1.6,
+      "typeP95Ms": 2.6,
+      "typeMaxMs": 18.1,
+      "longTasks": 0,
+      "longTaskMs": 0
+    },
+    {
+      "words": 10000,
+      "images": 5,
+      "docChars": 73029,
+      "nodeCount": 3477,
+      "mountMs": 289.9,
+      "getHtmlMs": 10.2,
+      "typeMeanMs": 2.42,
+      "typeP50Ms": 2.3,
+      "typeP95Ms": 3.3,
+      "typeMaxMs": 8.6,
+      "longTasks": 0,
+      "longTaskMs": 0
+    },
+    {
+      "words": 50000,
+      "images": 20,
+      "docChars": 366977,
+      "nodeCount": 16803,
+      "mountMs": 954.4,
+      "getHtmlMs": 43.8,
+      "typeMeanMs": 8.27,
+      "typeP50Ms": 7.9,
+      "typeP95Ms": 10.9,
+      "typeMaxMs": 19,
+      "longTasks": 0,
+      "longTaskMs": 0
+    },
+    {
+      "words": 100000,
+      "images": 40,
+      "docChars": 735307,
+      "nodeCount": 33547,
+      "mountMs": 1760.9,
+      "getHtmlMs": 84.8,
+      "typeMeanMs": 18.81,
+      "typeP50Ms": 18.2,
+      "typeP95Ms": 24,
+      "typeMaxMs": 47.4,
+      "longTasks": 0,
+      "longTaskMs": 0
+    }
+  ]
+}
