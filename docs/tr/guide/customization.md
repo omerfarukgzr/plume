@@ -80,7 +80,6 @@ varsayılanlarının ardından devreye girer.
 
 ```tsx
 import { Mention } from '@tiptap/extension-mention'
-
 ;<PlumeEditor extensions={[Mention]} />
 ```
 
@@ -142,3 +141,9 @@ davranır. Dili `locale` ile belirleyin:
 ```tsx
 <PlumeEditor locale="en" />
 ```
+
+## İlgili
+
+- [Eklentiler](/tr/guide/extensions) — Plume'un kendi eklentileri ve kendinizinkini ekleme.
+- [Editor örneği & komutlar](/tr/guide/editor-api) — editörü kodla sürün.
+- [Örnekler & tarifler](/tr/examples) — eksiksiz kopyala-yapıştır kurulumlar.

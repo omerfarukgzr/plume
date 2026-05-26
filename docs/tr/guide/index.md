@@ -38,5 +38,19 @@ yerinize vermiş ve hepsini tek bir bileşenin arkasına koymuştur:
 | `@useplume/react` | React adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.                   |
 | `@useplume/vue`   | Vue 3 adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.                   |
 
+## Kim ne yapar
+
+Plume birkaç farklı role dokunur. Dokümanlar, her birinin ihtiyacı olana hızlıca
+ulaşabilmesi için düzenlenmiştir:
+
+| Siz…                       | Şununla ilgilenirsiniz…                                          | Buradan başlayın                                                                                                      |
+| -------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Uygulama geliştiricisi** | Editörü gömmek, toolbar seçmek, içeriği kaydetmek                | [Başlangıç](/tr/guide/getting-started) · [Özelleştirme](/tr/guide/customization) · [Editor API](/tr/guide/editor-api) |
+| **Backend geliştiricisi**  | Yükleme endpoint'i, sunucu kontratı, sahipsizleri temizleme      | [Görseller & yükleme](/tr/guide/images)                                                                               |
+| **İçerik yazarı**          | Editörde yazmak: kısayollar, görseller, dipnotlar, kutular       | [Yazım](/tr/guide/editing)                                                                                            |
+| **Tasarımcı**              | Markaya uyum: renkler, köşe yarıçapı, fontlar, koyu mod, stilsiz | [Tema](/tr/guide/theming)                                                                                             |
+
+Kopyalayarak öğrenmeyi mi seversiniz? [Örnekler & tarifler](/tr/examples)'e geçin.
+
 İlk editörünüzü kurup ekrana getirmek için [Hemen başla](/tr/guide/getting-started)
 sayfasına geçin.

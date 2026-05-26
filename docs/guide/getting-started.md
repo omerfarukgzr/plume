@@ -109,4 +109,40 @@ const editor = usePlumeEditor({ content: '<p>Hello</p>' })
 
 :::
 
-Next: [customize the toolbar, fonts and extensions](/guide/customization).
+## Read-only mode
+
+To display stored content without editing, pass `editable={false}` and hide the
+toolbar. The same component renders both your editor and your published view.
+
+```tsx
+<PlumeEditor content={savedHtml} editable={false} toolbar={false} />
+```
+
+## Server-side rendering
+
+The editor mounts on the client. The two adapters differ slightly:
+
+- **React** — pass `immediatelyRender={false}` so the first paint doesn't run
+  synchronously on the server, which would cause a hydration mismatch.
+
+  ```tsx
+  // Next.js App Router — mark the file 'use client'
+  ;<PlumeEditor content="<p>…</p>" immediatelyRender={false} />
+  ```
+
+- **Vue / Nuxt** — the Vue adapter always creates the editor in `onMounted`, so
+  `immediatelyRender` is ignored. Wrap the component in `<ClientOnly>` (Nuxt) so
+  it isn't rendered during SSR.
+
+See the [SSR recipes](/examples#ssr-next-js-app-router) for full snippets.
+
+## Which API should I use?
+
+| Need                                      | Use                                                              |
+| ----------------------------------------- | ---------------------------------------------------------------- |
+| A drop-in editor with toolbar + theme     | `<PlumeEditor>`                                                  |
+| Custom layout, your own toolbar placement | `usePlumeEditor` + `<EditorContent>` + `<Toolbar>`               |
+| Read/serialize content, run commands      | the `Editor` from the hook — see [Editor API](/guide/editor-api) |
+
+Next: [customize the toolbar, fonts and extensions](/guide/customization), or
+browse [Examples & recipes](/examples).

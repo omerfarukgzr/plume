@@ -13,6 +13,64 @@ function pageToPath(page: string): string {
   return page.replace(/(^|\/)index\.md$/, '$1').replace(/\.md$/, '')
 }
 
+// Sidebars are shared between the guide pages and the (root-level) examples
+// page so navigation stays put as readers move between them.
+const enGuideSidebar = [
+  {
+    text: 'Introduction',
+    items: [
+      { text: 'What is Plume?', link: '/guide/' },
+      { text: 'Getting started', link: '/guide/getting-started' },
+    ],
+  },
+  {
+    text: 'Usage',
+    items: [
+      { text: 'Customization', link: '/guide/customization' },
+      { text: 'Extensions', link: '/guide/extensions' },
+      { text: 'Editor & commands', link: '/guide/editor-api' },
+      { text: 'Images & uploads', link: '/guide/images' },
+      { text: 'Theming', link: '/guide/theming' },
+    ],
+  },
+  {
+    text: 'For content authors',
+    items: [{ text: 'Editing', link: '/guide/editing' }],
+  },
+  {
+    text: 'Cookbook',
+    items: [{ text: 'Examples & recipes', link: '/examples' }],
+  },
+]
+
+const trGuideSidebar = [
+  {
+    text: 'Giriş',
+    items: [
+      { text: 'Plume nedir?', link: '/tr/guide/' },
+      { text: 'Başlangıç', link: '/tr/guide/getting-started' },
+    ],
+  },
+  {
+    text: 'Kullanım',
+    items: [
+      { text: 'Özelleştirme', link: '/tr/guide/customization' },
+      { text: 'Eklentiler', link: '/tr/guide/extensions' },
+      { text: 'Editor & komutlar', link: '/tr/guide/editor-api' },
+      { text: 'Görseller & yükleme', link: '/tr/guide/images' },
+      { text: 'Tema', link: '/tr/guide/theming' },
+    ],
+  },
+  {
+    text: 'İçerik yazarları için',
+    items: [{ text: 'Yazım', link: '/tr/guide/editing' }],
+  },
+  {
+    text: 'Tarifler',
+    items: [{ text: 'Örnekler & tarifler', link: '/tr/examples' }],
+  },
+]
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Plume',
@@ -122,25 +180,11 @@ export default defineConfig({
         nav: [
           { text: 'Guide', link: '/guide/getting-started' },
           { text: 'API', link: '/api/options' },
+          { text: 'Examples', link: '/examples' },
         ],
         sidebar: {
-          '/guide/': [
-            {
-              text: 'Introduction',
-              items: [
-                { text: 'What is Plume?', link: '/guide/' },
-                { text: 'Getting started', link: '/guide/getting-started' },
-              ],
-            },
-            {
-              text: 'Usage',
-              items: [
-                { text: 'Customization', link: '/guide/customization' },
-                { text: 'Images & uploads', link: '/guide/images' },
-                { text: 'Theming', link: '/guide/theming' },
-              ],
-            },
-          ],
+          '/guide/': enGuideSidebar,
+          '/examples': enGuideSidebar,
           '/api/': [
             {
               text: 'Reference',
@@ -162,25 +206,11 @@ export default defineConfig({
         nav: [
           { text: 'Rehber', link: '/tr/guide/getting-started' },
           { text: 'API', link: '/tr/api/options' },
+          { text: 'Örnekler', link: '/tr/examples' },
         ],
         sidebar: {
-          '/tr/guide/': [
-            {
-              text: 'Giriş',
-              items: [
-                { text: 'Plume nedir?', link: '/tr/guide/' },
-                { text: 'Başlangıç', link: '/tr/guide/getting-started' },
-              ],
-            },
-            {
-              text: 'Kullanım',
-              items: [
-                { text: 'Özelleştirme', link: '/tr/guide/customization' },
-                { text: 'Görseller & yükleme', link: '/tr/guide/images' },
-                { text: 'Tema', link: '/tr/guide/theming' },
-              ],
-            },
-          ],
+          '/tr/guide/': trGuideSidebar,
+          '/tr/examples': trGuideSidebar,
           '/tr/api/': [
             {
               text: 'Referans',

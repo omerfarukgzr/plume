@@ -76,7 +76,6 @@ Append your own tiptap nodes, marks or extensions. They run after Plume's defaul
 
 ```tsx
 import { Mention } from '@tiptap/extension-mention'
-
 ;<PlumeEditor extensions={[Mention]} />
 ```
 
@@ -136,3 +135,9 @@ Plume ships Turkish (`tr`, default) and English (`en`) UI strings, and case feat
 ```tsx
 <PlumeEditor locale="en" />
 ```
+
+## Related
+
+- [Extensions](/guide/extensions) — Plume's own extensions and adding your own.
+- [Editor instance & commands](/guide/editor-api) — drive the editor in code.
+- [Examples & recipes](/examples) — full copy-paste setups.

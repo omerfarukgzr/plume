@@ -36,5 +36,19 @@ decisions for you and packages them behind a single component:
 | `@useplume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
 | `@useplume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
 
+## Who does what
+
+Plume touches a few different roles. The docs are organized so each can jump
+straight to what they need:
+
+| You are…              | You care about…                                               | Start here                                                                                                          |
+| --------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **App developer**     | Embedding the editor, picking a toolbar, saving content       | [Getting started](/guide/getting-started) · [Customization](/guide/customization) · [Editor API](/guide/editor-api) |
+| **Backend developer** | The upload endpoint, the server contract, cleaning up orphans | [Images & uploads](/guide/images)                                                                                   |
+| **Content author**    | Writing in the editor: shortcuts, images, footnotes, callouts | [Editing](/guide/editing)                                                                                           |
+| **Designer**          | Matching brand: colors, radius, fonts, dark mode, unstyled    | [Theming](/guide/theming)                                                                                           |
+
+Prefer to learn by copying? Jump to [Examples & recipes](/examples).
+
 Continue to [Getting started](/guide/getting-started) to install and render your
 first editor.

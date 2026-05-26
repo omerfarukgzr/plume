@@ -110,4 +110,40 @@ const editor = usePlumeEditor({ content: '<p>Merhaba</p>' })
 
 :::
 
-Sırada: [toolbar'ı, fontları ve eklentileri özelleştirmek](/tr/guide/customization).
+## Salt-okunur mod
+
+Saklanan içeriği düzenlemeden göstermek için `editable={false}` geçin ve toolbar'ı
+gizleyin. Aynı bileşen hem editörünüzü hem de yayımlanmış görünümünüzü render eder.
+
+```tsx
+<PlumeEditor content={savedHtml} editable={false} toolbar={false} />
+```
+
+## Sunucu tarafı render (SSR)
+
+Editör istemcide mount edilir. İki adaptör biraz farklıdır:
+
+- **React** — ilk paint sunucuda senkron çalışmasın diye `immediatelyRender={false}`
+  geçin; aksi halde hidrasyon uyuşmazlığı oluşur.
+
+  ```tsx
+  // Next.js App Router — dosyayı 'use client' olarak işaretleyin
+  ;<PlumeEditor content="<p>…</p>" immediatelyRender={false} />
+  ```
+
+- **Vue / Nuxt** — Vue adaptörü editörü her zaman `onMounted` içinde oluşturur,
+  dolayısıyla `immediatelyRender` yok sayılır. Bileşeni `<ClientOnly>` ile sarın
+  (Nuxt) ki SSR sırasında render edilmesin.
+
+Tam parçacıklar için [SSR tarifleri](/tr/examples#ssr-next-js-app-router)'ne bakın.
+
+## Hangi API'yi kullanmalıyım?
+
+| İhtiyaç                                         | Kullanın                                                          |
+| ----------------------------------------------- | ----------------------------------------------------------------- |
+| Toolbar + temalı hazır editör                   | `<PlumeEditor>`                                                   |
+| Özel yerleşim, kendi toolbar konumunuz          | `usePlumeEditor` + `<EditorContent>` + `<Toolbar>`                |
+| İçeriği okumak/serileştirmek, komut çalıştırmak | hook'tan dönen `Editor` — bkz. [Editor API](/tr/guide/editor-api) |
+
+Sırada: [toolbar'ı, fontları ve eklentileri özelleştirmek](/tr/guide/customization)
+ya da [Örnekler & tarifler](/tr/examples)'e göz atın.

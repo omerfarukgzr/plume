@@ -82,3 +82,52 @@ yardımcısıyla ekleyin. İkisi de `@useplume/core`'dan dışa aktarılır.
 serileştirmek, düzenleme başına en pahalı iştir; bu yüzden onu her tuşa bastığınızda
 değil, ara ara çalıştırırız.
 :::
+
+## Tam yapılandırılmış bir editör
+
+Her seçenek bağımsız ve isteğe bağlıdır — config'in ne kadar derine indiğini tek
+yerde görün diye hepsini bir arada gösteriyoruz.
+
+```tsx
+import { PlumeEditor } from '@useplume/react'
+import { createUploadHandler } from '@useplume/core'
+;<PlumeEditor
+  // içerik & davranış
+  content="<p>Buradan başla…</p>"
+  editable
+  placeholder="Bir şeyler yaz…"
+  autofocus="end"
+  editorClass="my-prose"
+  immediatelyRender={false}
+  // toolbar
+  toolbar={['bold', 'italic', '|', 'note', 'image', 'footnote', 'changeCase']}
+  toolbarItems={[
+    {
+      name: 'note',
+      type: 'button',
+      title: 'Biçimlendirmeyi temizle',
+      run: (e) => e.chain().focus().unsetAllMarks().run(),
+    },
+  ]}
+  // özellikler
+  locale="tr"
+  autoCapitalize={{ locale: 'tr' }}
+  fonts={[
+    { label: 'Varsayılan', value: null },
+    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' },
+  ]}
+  colors={['#111827', '#dc2626', '#2563eb']}
+  image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }), maxSize: 5_000_000 }}
+  footnote={{ label: 'Notlar' }}
+  blockquotes={[{ name: 'note', label: 'Not', color: '#2563eb' }]}
+  pasteManager
+  // eklentiler
+  extensions={[]}
+  defaultExtensions
+  // değişiklik yönetimi
+  onUpdate={(editor) => console.log(editor.getHTML())}
+  updateDelay={500}
+/>
+```
+
+Göreve odaklı, kopyala-yapıştır sürümler için bkz. [Örnekler & tarifler](/tr/examples).

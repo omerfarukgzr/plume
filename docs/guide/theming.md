@@ -25,10 +25,55 @@ Set `--plume-*` variables on any ancestor of the editor (or `:root`) to retheme 
 }
 ```
 
-Common variables include `--plume-color-bg`, `--plume-color-text`,
-`--plume-color-primary`, `--plume-color-border`, `--plume-color-button`,
-`--plume-radius`, `--plume-font`, `--plume-font-mono`, `--plume-font-size` and
-`--plume-content-max-width`. See `styles.css` for the complete set.
+### Variable reference
+
+These are the variables most apps touch. See `styles.css` for the complete set
+(tooltip, selection and code-block colors are in there too).
+
+**Layout & type**
+
+| Variable                    | Default                         | Controls                        |
+| --------------------------- | ------------------------------- | ------------------------------- |
+| `--plume-font`              | Inter, system-ui, …             | Editor UI + content font stack  |
+| `--plume-font-mono`         | JetBrains Mono, ui-monospace, … | Code / code-block font          |
+| `--plume-font-size`         | `1rem`                          | Base content font size          |
+| `--plume-line-height`       | `1.7`                           | Content line height             |
+| `--plume-content-max-width` | `680px`                         | Max width of the writing column |
+| `--plume-radius`            | `16px`                          | Editor frame corner radius      |
+| `--plume-radius-sm`         | `8px`                           | Buttons, dropdowns, inputs      |
+| `--plume-gap`               | `2px`                           | Spacing between toolbar buttons |
+
+**Colors**
+
+| Variable                        | Default   | Controls                           |
+| ------------------------------- | --------- | ---------------------------------- |
+| `--plume-color-bg`              | `#ffffff` | Editor background                  |
+| `--plume-color-text`            | `#1a1a1a` | Body text                          |
+| `--plume-color-muted`           | `#6b7280` | Captions, placeholders             |
+| `--plume-color-border`          | `#e6e6e8` | Frame + separators                 |
+| `--plume-color-primary`         | `#6c5ce7` | Focus rings, accents               |
+| `--plume-color-toolbar-bg`      | `#ffffff` | Toolbar background                 |
+| `--plume-color-button`          | `#5c5c66` | Toolbar icon color                 |
+| `--plume-color-button-hover-bg` | `#f1f1f3` | Toolbar button hover background    |
+| `--plume-color-button-hover`    | `#1a1a1a` | Toolbar icon color on hover        |
+| `--plume-color-active-bg`       | `#eef0ff` | Active (toggled) button background |
+| `--plume-color-active-text`     | `#5b4ddb` | Active button icon color           |
+| `--plume-color-highlight-bg`    | `#fef3a3` | Highlight mark background          |
+
+### Brand example
+
+Retheme the whole editor by overriding a handful of variables on the `.plume`
+root:
+
+```css
+.plume {
+  --plume-color-primary: #e11d48;
+  --plume-color-active-bg: #ffe4e6;
+  --plume-color-active-text: #be123c;
+  --plume-radius: 10px;
+  --plume-font: 'Inter', system-ui, sans-serif;
+}
+```
 
 ## Dark mode
 
@@ -40,6 +85,9 @@ enable it:
   <PlumeEditor />
 </div>
 ```
+
+Wiring this to a toggle button is a few lines — see the
+[dark-mode toggle recipe](/examples#dark-mode-toggle).
 
 ## Unstyled mode
 

@@ -36,15 +36,15 @@ See [Toolbar items](/api/toolbar) for the built-in names.
 
 ## Features
 
-| Option           | Type                                        | Default | Description                                                |
-| ---------------- | ------------------------------------------- | ------- | ---------------------------------------------------------- |
-| `fonts`          | `FontOption[]`                              | —       | Fonts offered by the font-family dropdown.                 |
-| `colors`         | `string[]`                                  | —       | Hex colors offered by the text-color dropdown.             |
-| `locale`         | `string`                                    | `'tr'`  | BCP-47 locale for UI strings and case features.            |
-| `autoCapitalize` | `boolean \| { locale?: string }`            | `false` | Enable automatic sentence capitalization.                  |
-| `image`          | `boolean \| Partial<ResizableImageOptions>` | enabled | Configure the resizable image node, or `false` to omit it. |
-| `footnote`       | `boolean \| FootnoteExtensionOptions`       | enabled | Configure footnotes, or `false` to omit them.              |
-| `blockquotes`    | `CustomBlockquoteSpec[]`                    | —       | Custom blockquote variants (callouts).                     |
+| Option           | Type                                        | Default | Description                                                    |
+| ---------------- | ------------------------------------------- | ------- | -------------------------------------------------------------- |
+| `fonts`          | `FontOption[]`                              | —       | Fonts offered by the font-family dropdown.                     |
+| `colors`         | `string[]`                                  | —       | Hex colors offered by the text-color dropdown.                 |
+| `locale`         | `string`                                    | `'tr'`  | BCP-47 locale for UI strings and case features.                |
+| `autoCapitalize` | `boolean \| { locale?: string }`            | `false` | Enable automatic sentence capitalization.                      |
+| `image`          | `boolean \| Partial<ResizableImageOptions>` | enabled | Configure the resizable image node, or `false` to omit it.     |
+| `footnote`       | `boolean \| FootnoteExtensionOptions`       | enabled | Configure footnotes, or `false` to omit them.                  |
+| `blockquotes`    | `CustomBlockquoteSpec[]`                    | —       | Custom blockquote variants (callouts).                         |
 | `pasteManager`   | `boolean`                                   | `false` | Ask how to paste (plain text vs. keep formatting) via a modal. |
 
 ### Paste manager
@@ -80,3 +80,52 @@ yourself and pass an `onPaste` handler — return `true` to take over the paste,
 `editor.getHTML()` or `editor.getJSON()`. The debounce matters because that
 serialization is the dominant per-edit cost on large documents.
 :::
+
+## A fully configured editor
+
+Every option is independent and optional — this shows them together so you can
+see how far the config reaches in one place.
+
+```tsx
+import { PlumeEditor } from '@useplume/react'
+import { createUploadHandler } from '@useplume/core'
+;<PlumeEditor
+  // content & behaviour
+  content="<p>Start here…</p>"
+  editable
+  placeholder="Write something…"
+  autofocus="end"
+  editorClass="my-prose"
+  immediatelyRender={false}
+  // toolbar
+  toolbar={['bold', 'italic', '|', 'note', 'image', 'footnote', 'changeCase']}
+  toolbarItems={[
+    {
+      name: 'note', // also a custom blockquote below — could be a button instead
+      type: 'button',
+      title: 'Clear formatting',
+      run: (e) => e.chain().focus().unsetAllMarks().run(),
+    },
+  ]}
+  // features
+  locale="en"
+  autoCapitalize={{ locale: 'en' }}
+  fonts={[
+    { label: 'Default', value: null },
+    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' },
+  ]}
+  colors={['#111827', '#dc2626', '#2563eb']}
+  image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }), maxSize: 5_000_000 }}
+  footnote={{ label: 'Notes' }}
+  blockquotes={[{ name: 'note', label: 'Note', color: '#2563eb' }]}
+  pasteManager
+  // extensions
+  extensions={[]}
+  defaultExtensions
+  // change handling
+  onUpdate={(editor) => console.log(editor.getHTML())}
+  updateDelay={500}
+/>
+```
+
+See [Examples & recipes](/examples) for task-focused, copy-paste versions.
