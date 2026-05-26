@@ -1,6 +1,6 @@
 import { defineComponent, h, onBeforeUnmount, ref, type PropType } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
-import { resolveMessages, type ToolbarItem } from '@plume/core'
+import { resolveMessages, type ToolbarItem } from '@useplume/core'
 import { ToolbarDropdown } from './ToolbarDropdown'
 import { ToolbarLink } from './ToolbarLink'
 

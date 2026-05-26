@@ -6,7 +6,7 @@ kendi CSS'inizde değiştirin. Dilerseniz stil dosyasını hiç eklemeyip editö
 kendi stilinizle de giydirebilirsiniz.
 
 ```ts
-import '@plume/core/styles.css'
+import '@useplume/core/styles.css'
 ```
 
 ## Değişkenleri değiştirmek
@@ -41,6 +41,6 @@ Plume hazır bir koyu tema ile gelir. Açmak için editörün herhangi bir üst 
 
 ## Stilsiz kullanım
 
-Tüm stili kendiniz yazmak isterseniz `@plume/core/styles.css`'i hiç eklemeyin. Editör yine
+Tüm stili kendiniz yazmak isterseniz `@useplume/core/styles.css`'i hiç eklemeyin. Editör yine
 sorunsuz çalışır; sadece Plume'un hazır teması olmadan gelir. Böylece `.plume` ile
 başlayan sınıf adlarını sıfırdan kendiniz biçimlendirebilirsiniz.

@@ -31,14 +31,19 @@ describe('AutoCapitalize plugin', () => {
     return found
   }
 
-  const typeChar = (ed: Editor, from: number, text: string) =>
-    plugin(ed).props.handleTextInput!(ed.view as EditorView, from, from, text)
+  const typeChar = (ed: Editor, from: number, text: string) => {
+    const p = plugin(ed)
+    return p.props.handleTextInput!.call(p, ed.view as EditorView, from, from, text, () => ed.state.tr)
+  }
 
-  const pressBackspace = (ed: Editor) =>
-    plugin(ed).props.handleKeyDown!(
+  const pressBackspace = (ed: Editor) => {
+    const p = plugin(ed)
+    return p.props.handleKeyDown!.call(
+      p,
       ed.view as EditorView,
       new KeyboardEvent('keydown', { key: 'Backspace' }),
     )
+  }
 
   afterEach(() => {
     editor?.destroy()

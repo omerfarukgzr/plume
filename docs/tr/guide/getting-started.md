@@ -2,17 +2,17 @@
 
 ## Kurulum
 
-Kullandığınız framework'ün adaptörünü kurun. Adaptör, `@plume/core`'u ve gerekli tiptap
+Kullandığınız framework'ün adaptörünü kurun. Adaptör, `@useplume/core`'u ve gerekli tiptap
 paketlerini kendisi getirir; siz onlarla ayrıca uğraşmazsınız.
 
 ::: code-group
 
 ```sh [React]
-pnpm add @plume/react
+pnpm add @useplume/react
 ```
 
 ```sh [Vue]
-pnpm add @plume/vue
+pnpm add @useplume/vue
 ```
 
 :::
@@ -25,8 +25,8 @@ toolbar ve tema hiçbir ayar yapmadan çalışır.
 ::: code-group
 
 ```tsx [React]
-import { PlumeEditor } from '@plume/react'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/react'
+import '@useplume/core/styles.css'
 
 export function App() {
   return <PlumeEditor content="<p>Merhaba Plume 🪶</p>" />
@@ -35,8 +35,8 @@ export function App() {
 
 ```vue [Vue]
 <script setup lang="ts">
-import { PlumeEditor } from '@plume/vue'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
 </script>
 
 <template>
@@ -80,8 +80,8 @@ Her şeyi kendiniz yönetmek isterseniz editörü hook/composable ile oluşturup
 ::: code-group
 
 ```tsx [React]
-import { usePlumeEditor, EditorContent, Toolbar } from '@plume/react'
-import '@plume/core/styles.css'
+import { usePlumeEditor, EditorContent, Toolbar } from '@useplume/react'
+import '@useplume/core/styles.css'
 
 export function MyEditor() {
   const editor = usePlumeEditor({ content: '<p>Merhaba</p>' })
@@ -96,8 +96,8 @@ export function MyEditor() {
 
 ```vue [Vue]
 <script setup lang="ts">
-import { usePlumeEditor, EditorContent, Toolbar } from '@plume/vue'
-import '@plume/core/styles.css'
+import { usePlumeEditor, EditorContent, Toolbar } from '@useplume/vue'
+import '@useplume/core/styles.css'
 
 const editor = usePlumeEditor({ content: '<p>Merhaba</p>' })
 </script>

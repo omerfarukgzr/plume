@@ -103,7 +103,7 @@ async function measureGuard(page, guard) {
 async function main() {
   const vite = spawn(
     'pnpm',
-    ['--filter', '@plume/playground-react', 'exec', 'vite', '--port', String(PORT), '--strictPort'],
+    ['--filter', '@useplume/playground-react', 'exec', 'vite', '--port', String(PORT), '--strictPort'],
     { stdio: 'inherit' },
   )
   let browser

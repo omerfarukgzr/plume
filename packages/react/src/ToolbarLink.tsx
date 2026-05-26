@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Editor } from '@tiptap/react'
-import { applyLink, getLinkState, removeLink, resolveMessages, type ToolbarItem } from '@plume/core'
+import { applyLink, getLinkState, removeLink, resolveMessages, type ToolbarItem } from '@useplume/core'
 
 export interface ToolbarLinkProps {
   editor: Editor

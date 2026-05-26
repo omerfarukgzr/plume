@@ -2,7 +2,7 @@
 
 Plume is a customizable, framework-agnostic rich text (WYSIWYG) editor built on
 [tiptap](https://tiptap.dev) (which itself is built on ProseMirror). It keeps all
-editor logic in one place — `@plume/core` — and ships thin adapters for each UI
+editor logic in one place — `@useplume/core` — and ships thin adapters for each UI
 framework. Today: **React** and **Vue 3**. Tomorrow: Svelte, Solid, vanilla —
 without rewriting the editor.
 
@@ -28,9 +28,9 @@ decisions for you and packages them behind a single component:
 
 | Package        | Description                                                        |
 | -------------- | ------------------------------------------------------------------ |
-| `@plume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS.  |
-| `@plume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.            |
-| `@plume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.            |
+| `@useplume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS.  |
+| `@useplume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.            |
+| `@useplume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.            |
 
 Continue to [Getting started](/guide/getting-started) to install and render your
 first editor.

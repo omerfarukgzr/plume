@@ -4,8 +4,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "noEmit": true,
     "paths": {
-      "@plume/core": ["../../packages/core/src/index.ts"],
-      "@plume/vue": ["../../packages/vue/src/index.ts"]
+      "@useplume/core": ["../../packages/core/src/index.ts"],
+      "@useplume/vue": ["../../packages/vue/src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts"]

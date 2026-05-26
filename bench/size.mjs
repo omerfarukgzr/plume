@@ -33,7 +33,7 @@ const rows = []
 for (const cfg of bundle) {
   const dist = join(ROOT, 'packages', cfg.pkg, 'dist', 'index.js')
   if (!existsSync(dist)) {
-    failures.push(`@plume/${cfg.pkg}: dist/index.js missing — run \`pnpm build\` first`)
+    failures.push(`@useplume/${cfg.pkg}: dist/index.js missing — run \`pnpm build\` first`)
     continue
   }
   const source = readFileSync(dist, 'utf8')
@@ -47,7 +47,7 @@ for (const cfg of bundle) {
   const sizeBad = gzipKB > cfg.maxGzipKB
 
   rows.push({
-    pkg: `@plume/${cfg.pkg}`,
+    pkg: `@useplume/${cfg.pkg}`,
     'raw KB': round(rawKB),
     'gzip KB': round(gzipKB),
     'ceiling KB': cfg.maxGzipKB,
@@ -56,9 +56,9 @@ for (const cfg of bundle) {
   })
 
   if (sizeBad)
-    failures.push(`@plume/${cfg.pkg} gzip ${round(gzipKB)}KB > ${cfg.maxGzipKB}KB ceiling`)
+    failures.push(`@useplume/${cfg.pkg} gzip ${round(gzipKB)}KB > ${cfg.maxGzipKB}KB ceiling`)
   if (inlined.length)
-    failures.push(`@plume/${cfg.pkg} bundled deps that must stay external: ${inlined.join(', ')}`)
+    failures.push(`@useplume/${cfg.pkg} bundled deps that must stay external: ${inlined.join(', ')}`)
 }
 
 console.log('\nBundle size guard (gzip; tiptap/prosemirror/framework are external)\n')

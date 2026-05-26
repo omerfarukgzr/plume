@@ -87,7 +87,7 @@ varsayılanları kapatıp kendi setinizi verin.
 <PlumeEditor defaultExtensions={false} extensions={[/* eklentileriniz */]} />
 ```
 
-Plume kendi eklentilerini de `@plume/core`'dan dışa aktarır; böylece istediklerinizi tek
+Plume kendi eklentilerini de `@useplume/core`'dan dışa aktarır; böylece istediklerinizi tek
 tek seçip kullanabilirsiniz: `ResizableImage`, `ChangeCase`, `AutoCapitalize`,
 `CustomBlockquote`, dipnot eklentileri ve daha fazlası.
 

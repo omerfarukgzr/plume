@@ -2,8 +2,8 @@
 
 This folder is managed by [changesets](https://github.com/changesets/changesets).
 
-When you make a change to one of the published packages (`@plume/core`,
-`@plume/react`, `@plume/vue`), run:
+When you make a change to one of the published packages (`@useplume/core`,
+`@useplume/react`, `@useplume/vue`), run:
 
 ```bash
 pnpm changeset

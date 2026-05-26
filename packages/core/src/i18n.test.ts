@@ -38,7 +38,9 @@ describe('message catalogs', () => {
       .sort()
 
   it('tr and en expose an identical key structure', () => {
-    expect(leafPaths(messages.en)).toEqual(leafPaths(messages.tr))
+    expect(leafPaths(messages.en as unknown as Record<string, unknown>)).toEqual(
+      leafPaths(messages.tr as unknown as Record<string, unknown>),
+    )
   })
 
   it('formats the footnote backref label per locale', () => {

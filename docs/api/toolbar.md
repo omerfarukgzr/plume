@@ -34,7 +34,7 @@ controls (registered via `toolbarItems`) or custom blockquote variants by name.
 
 ## Resolving items programmatically
 
-`@plume/core` exposes the helpers the adapters use, in case you build a fully custom
+`@useplume/core` exposes the helpers the adapters use, in case you build a fully custom
 toolbar UI:
 
 - `defaultToolbar` — the default ordered list of names.
@@ -43,7 +43,7 @@ toolbar UI:
 - `defaultToolbarItems`, `createToolbarItems`, `defaultFonts`, `defaultColors`.
 
 ```ts
-import { resolveToolbarItems } from '@plume/core'
+import { resolveToolbarItems } from '@useplume/core'
 
 const items = resolveToolbarItems(['bold', 'italic', '|', 'link'], { locale: 'en' })
 ```

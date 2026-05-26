@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Editor } from '@tiptap/react'
-import { resolveMessages, type ToolbarItem } from '@plume/core'
+import { resolveMessages, type ToolbarItem } from '@useplume/core'
 import { ToolbarButton } from './ToolbarButton'
 import { ToolbarDropdown } from './ToolbarDropdown'
 import { ToolbarLink } from './ToolbarLink'

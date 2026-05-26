@@ -55,7 +55,7 @@ async function waitForServer(url, timeoutMs = 30000) {
 function startVite() {
   const child = spawn(
     'pnpm',
-    ['--filter', '@plume/playground-react', 'exec', 'vite', '--port', String(PORT), '--strictPort'],
+    ['--filter', '@useplume/playground-react', 'exec', 'vite', '--port', String(PORT), '--strictPort'],
     { cwd: ROOT, stdio: 'inherit' },
   )
   return child

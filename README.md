@@ -9,7 +9,7 @@
 
 <p align="center">Customizable, framework-agnostic rich text editor built on <a href="https://tiptap.dev">tiptap</a>.</p>
 
-Plume keeps all editor logic in one place (`@plume/core`) and ships thin
+Plume keeps all editor logic in one place (`@useplume/core`) and ships thin
 adapters for each UI framework. Today: **React** and **Vue 3**. Tomorrow:
 Svelte, Solid, vanilla — without rewriting the editor.
 
@@ -17,15 +17,15 @@ Svelte, Solid, vanilla — without rewriting the editor.
 
 | Package        | Description                                                       |
 | -------------- | ----------------------------------------------------------------- |
-| `@plume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS. |
-| `@plume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
-| `@plume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
+| `@useplume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS. |
+| `@useplume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
+| `@useplume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
 
 ## Quick start (React)
 
 ```tsx
-import { PlumeEditor } from '@plume/react'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/react'
+import '@useplume/core/styles.css'
 
 export function App() {
   return <PlumeEditor content="<p>Hello Plume 🪶</p>" />
@@ -36,8 +36,8 @@ export function App() {
 
 ```vue
 <script setup lang="ts">
-import { PlumeEditor } from '@plume/vue'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
 </script>
 
 <template>
@@ -72,7 +72,7 @@ By default — with no `uploadHandler` — picked, pasted and dropped images are
 `createUploadHandler` is the standard implementation: it POSTs the file as `multipart/form-data` and reads the result from the JSON response.
 
 ```tsx
-import { createUploadHandler } from '@plume/core'
+import { createUploadHandler } from '@useplume/core'
 ;<PlumeEditor
   image={{
     uploadHandler: createUploadHandler({

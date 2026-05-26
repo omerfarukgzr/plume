@@ -5,7 +5,7 @@ import {
   resolveMessages,
   resolveToolbarItems,
   type PlumeOptions,
-} from '@plume/core'
+} from '@useplume/core'
 import { usePlumeEditor } from './usePlumeEditor'
 import { Toolbar } from './Toolbar'
 

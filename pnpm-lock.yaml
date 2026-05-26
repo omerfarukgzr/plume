@@ -41,10 +41,10 @@ importers:
 
   apps/playground-react:
     dependencies:
-      '@plume/core':
+      '@useplume/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@plume/react':
+      '@useplume/react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -72,10 +72,10 @@ importers:
 
   apps/playground-vue:
     dependencies:
-      '@plume/core':
+      '@useplume/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@plume/vue':
+      '@useplume/vue':
         specifier: workspace:*
         version: link:../../packages/vue
       vue:
@@ -159,9 +159,6 @@ importers:
         specifier: ^3.23.6
         version: 3.23.6(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
     devDependencies:
-      '@plume/core':
-        specifier: workspace:*
-        version: link:../core
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.1
@@ -174,6 +171,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.15)
+      '@useplume/core':
+        specifier: workspace:*
+        version: link:../core
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1
@@ -205,12 +205,12 @@ importers:
         specifier: ^3.23.6
         version: 3.23.6(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)(vue@3.5.34(typescript@6.0.3))
     devDependencies:
-      '@plume/core':
-        specifier: workspace:*
-        version: link:../core
       '@testing-library/vue':
         specifier: ^8.1.0
         version: 8.1.0(@vue/compiler-dom@3.5.34)(@vue/compiler-sfc@3.5.34)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3))
+      '@useplume/core':
+        specifier: workspace:*
+        version: link:../core
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1

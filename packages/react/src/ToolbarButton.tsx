@@ -1,5 +1,5 @@
 import type { Editor } from '@tiptap/react'
-import type { ToolbarItem } from '@plume/core'
+import type { ToolbarItem } from '@useplume/core'
 
 export interface ToolbarButtonProps {
   editor: Editor

@@ -5,7 +5,7 @@ Plume's appearance is driven entirely by CSS custom properties prefixed with
 in your own CSS — or skip the stylesheet for a fully unstyled editor.
 
 ```ts
-import '@plume/core/styles.css'
+import '@useplume/core/styles.css'
 ```
 
 ## Overriding variables
@@ -40,5 +40,5 @@ enable it:
 ## Unstyled mode
 
 If you want to provide all the styling yourself, simply don't import
-`@plume/core/styles.css`. The editor still works; it just renders without Plume's
+`@useplume/core/styles.css`. The editor still works; it just renders without Plume's
 default theme, so you can style the `.plume*` class names from scratch.

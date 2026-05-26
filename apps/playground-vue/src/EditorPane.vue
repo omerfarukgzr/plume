@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { EditorContent, Toolbar, usePlumeEditor } from '@plume/vue'
-import { resolveToolbarItems, type CustomBlockquoteSpec, type ToolbarConfig } from '@plume/core'
+import { EditorContent, Toolbar, usePlumeEditor } from '@useplume/vue'
+import { resolveToolbarItems, type CustomBlockquoteSpec, type ToolbarConfig } from '@useplume/core'
 
 // The editor is created once on mount with the locale baked in (placeholder,
 // change-case locale, image labels). <App> keys this component by `lang`, so a

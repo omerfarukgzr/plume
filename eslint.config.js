@@ -25,6 +25,8 @@ export default tseslint.config(
       '**/.turbo/**',
       '**/node_modules/**',
       '**/coverage/**',
+      '**/.vitepress/cache/**',
+      '**/.vitepress/dist/**',
       '**/*.config.{js,ts,mjs,cjs}',
     ],
   },

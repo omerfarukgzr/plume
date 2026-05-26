@@ -2,17 +2,17 @@
 
 ## Installation
 
-Install the adapter for your framework. Each adapter pulls in `@plume/core` and the
+Install the adapter for your framework. Each adapter pulls in `@useplume/core` and the
 matching tiptap packages as dependencies.
 
 ::: code-group
 
 ```sh [React]
-pnpm add @plume/react
+pnpm add @useplume/react
 ```
 
 ```sh [Vue]
-pnpm add @plume/vue
+pnpm add @useplume/vue
 ```
 
 :::
@@ -25,8 +25,8 @@ toolbar and theme work out of the box.
 ::: code-group
 
 ```tsx [React]
-import { PlumeEditor } from '@plume/react'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/react'
+import '@useplume/core/styles.css'
 
 export function App() {
   return <PlumeEditor content="<p>Hello Plume 🪶</p>" />
@@ -35,8 +35,8 @@ export function App() {
 
 ```vue [Vue]
 <script setup lang="ts">
-import { PlumeEditor } from '@plume/vue'
-import '@plume/core/styles.css'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
 </script>
 
 <template>
@@ -79,8 +79,8 @@ For full control, drive the editor with the hook/composable and render
 ::: code-group
 
 ```tsx [React]
-import { usePlumeEditor, EditorContent, Toolbar } from '@plume/react'
-import '@plume/core/styles.css'
+import { usePlumeEditor, EditorContent, Toolbar } from '@useplume/react'
+import '@useplume/core/styles.css'
 
 export function MyEditor() {
   const editor = usePlumeEditor({ content: '<p>Hello</p>' })
@@ -95,8 +95,8 @@ export function MyEditor() {
 
 ```vue [Vue]
 <script setup lang="ts">
-import { usePlumeEditor, EditorContent, Toolbar } from '@plume/vue'
-import '@plume/core/styles.css'
+import { usePlumeEditor, EditorContent, Toolbar } from '@useplume/vue'
+import '@useplume/core/styles.css'
 
 const editor = usePlumeEditor({ content: '<p>Hello</p>' })
 </script>

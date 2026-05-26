@@ -1,5 +1,5 @@
 {
-  "name": "@plume/playground-vue",
+  "name": "@useplume/playground-vue",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@plume/core": "workspace:*",
-    "@plume/vue": "workspace:*",
+    "@useplume/core": "workspace:*",
+    "@useplume/vue": "workspace:*",
     "vue": "^3.5.34"
   },
   "devDependencies": {

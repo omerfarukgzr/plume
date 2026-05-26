@@ -2,7 +2,7 @@
 
 Her iki adaptör de aynı seçenekleri kabul eder. Bunları `<PlumeEditor>` üzerinde prop
 olarak, `usePlumeEditor`'a ise bir nesne olarak verirsiniz. Tipin adı `PlumeOptions` ve
-`@plume/core`'dan dışa aktarılır.
+`@useplume/core`'dan dışa aktarılır.
 
 ## İçerik ve davranış
 

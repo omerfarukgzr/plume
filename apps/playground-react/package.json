@@ -1,5 +1,5 @@
 {
-  "name": "@plume/playground-react",
+  "name": "@useplume/playground-react",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@plume/core": "workspace:*",
-    "@plume/react": "workspace:*",
+    "@useplume/core": "workspace:*",
+    "@useplume/react": "workspace:*",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

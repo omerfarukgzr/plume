@@ -9,9 +9,9 @@ export default defineConfig({
   resolve: {
     alias: {
       // Use the workspace source directly — no package build needed during dev.
-      '@plume/core/styles.css': fromHere('../../packages/core/src/styles.css'),
-      '@plume/core': fromHere('../../packages/core/src/index.ts'),
-      '@plume/vue': fromHere('../../packages/vue/src/index.ts'),
+      '@useplume/core/styles.css': fromHere('../../packages/core/src/styles.css'),
+      '@useplume/core': fromHere('../../packages/core/src/index.ts'),
+      '@useplume/vue': fromHere('../../packages/vue/src/index.ts'),
     },
   },
 })

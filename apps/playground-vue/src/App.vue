@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watchEffect } from 'vue'
-import { icons, type CustomBlockquoteSpec, type ToolbarConfig } from '@plume/core'
+import { icons, type CustomBlockquoteSpec, type ToolbarConfig } from '@useplume/core'
 import EditorPane from './EditorPane.vue'
-import '@plume/core/styles.css'
+import '@useplume/core/styles.css'
 import './index.css'
 
 type Lang = 'tr' | 'en'
@@ -101,7 +101,7 @@ const initialContent = `
 rich text editor built on <a href="https://tiptap.dev">tiptap</a> and licensed under <strong>MIT</strong>.</p>
 <p>Type markdown like <code>**bold**</code> or use shortcuts such as <code>⌘B</code>
 for <s>most</s> all common marks. ✨</p>
-<pre><code>npm install @plume/vue @plume/core</code></pre>
+<pre><code>npm install @useplume/vue @useplume/core</code></pre>
 <h2>Features</h2>
 <blockquote><p>A responsive rich text editor with one shared core and a thin adapter
 per framework — React and Vue today.</p></blockquote>

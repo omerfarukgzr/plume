@@ -15,9 +15,9 @@
  */
 import { createRoot } from 'react-dom/client'
 import { useEffect } from 'react'
-import { EditorContent, Toolbar, usePlumeEditor, type Editor } from '@plume/react'
-import { resolveMessages, resolveToolbarItems } from '@plume/core'
-import '@plume/core/styles.css'
+import { EditorContent, Toolbar, usePlumeEditor, type Editor } from '@useplume/react'
+import { resolveMessages, resolveToolbarItems } from '@useplume/core'
+import '@useplume/core/styles.css'
 // Dev-only generator, imported straight from core source (not from the package
 // entry point, which intentionally doesn't export it).
 import { generateDocHtml } from '../../../packages/core/src/bench/generate'

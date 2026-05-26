@@ -1,6 +1,6 @@
 /**
  * Micro-benchmarks for pure hot paths that run frequently (often per render or
- * per transaction). Run with `pnpm --filter @plume/core bench`.
+ * per transaction). Run with `pnpm --filter @useplume/core bench`.
  *
  * Editor-dependent paths (e.g. the toolbar signature, which needs a live tiptap
  * instance with `isActive` callbacks) are measured in the browser harness

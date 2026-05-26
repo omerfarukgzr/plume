@@ -6,4 +6,4 @@ export { usePlumeEditor } from './usePlumeEditor'
 
 export { EditorContent } from '@tiptap/vue-3'
 export type { Editor } from '@tiptap/vue-3'
-export type { PlumeOptions, ToolbarConfig, ToolbarItem, ToolbarItemName } from '@plume/core'
+export type { PlumeOptions, ToolbarConfig, ToolbarItem, ToolbarItemName } from '@useplume/core'

@@ -83,7 +83,7 @@ and supply your own set.
 <PlumeEditor defaultExtensions={false} extensions={[/* your extensions */]} />
 ```
 
-Plume also re-exports its own extensions from `@plume/core` so you can compose them
+Plume also re-exports its own extensions from `@useplume/core` so you can compose them
 selectively: `ResizableImage`, `ChangeCase`, `AutoCapitalize`, `CustomBlockquote`,
 footnote extensions, and more.
 

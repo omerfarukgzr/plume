@@ -12,7 +12,7 @@
 
 Plume; geliştiricilerin kendi uygulamalarına kolayca gömebileceği, derinlemesine
 özelleştirilebilir bir zengin metin (WYSIWYG) editörüdür. Editör mantığı bir kez
-yazılır (`@plume/core`), her framework için ince bir adaptör katmanı sunulur.
+yazılır (`@useplume/core`), her framework için ince bir adaptör katmanı sunulur.
 Bugün React ve Vue, yarın Svelte/Solid/vanilla kolayca eklenebilir.
 
 **Tasarım ilkeleri**
@@ -35,7 +35,7 @@ Bugün React ve Vue, yarın Svelte/Solid/vanilla kolayca eklenebilir.
 | Dil | TypeScript, tam tipli |
 | Stil | CSS değişkenleri + düz CSS (dark mode dahil) |
 | Lisans | MIT |
-| İsim / npm scope | `@plume/*` |
+| İsim / npm scope | `@useplume/*` |
 
 ---
 
@@ -44,17 +44,17 @@ Bugün React ve Vue, yarın Svelte/Solid/vanilla kolayca eklenebilir.
 ### Paketler (monorepo)
 
 ```
-@plume/core    → Saf TS. tiptap konfigürasyonu, extension kayıt sistemi,
+@useplume/core    → Saf TS. tiptap konfigürasyonu, extension kayıt sistemi,
                  toolbar komut tanımları, varsayılan extension seti, tema değişkenleri.
                  Framework bilmez.
 
-@plume/react   → React adaptörü. <PlumeEditor /> bileşeni + usePlumeEditor() hook'u.
+@useplume/react   → React adaptörü. <PlumeEditor /> bileşeni + usePlumeEditor() hook'u.
                  core'u sarar, React render döngüsüne bağlar.
 
-@plume/vue     → Vue adaptörü. <PlumeEditor /> bileşeni + usePlumeEditor() composable.
+@useplume/vue     → Vue adaptörü. <PlumeEditor /> bileşeni + usePlumeEditor() composable.
                  core'u sarar, Vue reaktivitesine bağlar.
 
-@plume/styles  → (opsiyonel ayrı paket veya core içinde) CSS değişkenleri + temel tema.
+@useplume/styles  → (opsiyonel ayrı paket veya core içinde) CSS değişkenleri + temel tema.
 ```
 
 Adaptörlerin görevi minimumdur: yaşam döngüsü (mount/unmount), reaktivite köprüsü ve
@@ -63,12 +63,12 @@ UI render. Tüm editör davranışı `core`'dadır.
 ### Bağımlılık yönü
 
 ```
-@plume/react ─┐
-              ├─→ @plume/core ─→ @tiptap/* , prosemirror-*
-@plume/vue  ──┘
+@useplume/react ─┐
+              ├─→ @useplume/core ─→ @tiptap/* , prosemirror-*
+@useplume/vue  ──┘
 ```
 
-`@plume/core` adaptörlerin `peerDependency`'sidir. React/Vue ise ilgili adaptörün
+`@useplume/core` adaptörlerin `peerDependency`'sidir. React/Vue ise ilgili adaptörün
 `peerDependency`'sidir (kullanıcının sürümüyle çakışmasın diye).
 
 ---
@@ -112,9 +112,9 @@ UI render. Tüm editör davranışı `core`'dadır.
 ```
 plume/
 ├─ packages/
-│  ├─ core/          # @plume/core
-│  ├─ react/         # @plume/react
-│  └─ vue/           # @plume/vue
+│  ├─ core/          # @useplume/core
+│  ├─ react/         # @useplume/react
+│  └─ vue/           # @useplume/vue
 ├─ apps/
 │  ├─ playground-react/   # Vite + React canlı deneme
 │  └─ playground-vue/     # Vite + Vue canlı deneme
@@ -134,9 +134,9 @@ plume/
 ## 7. Yol Haritası (öneri)
 
 - **M0 — İskelet:** monorepo, tooling, boş paketler, çalışan iki playground, CI.
-- **M1 — Çekirdek MVP:** `@plume/core` temel rich-text (bold, italic, heading, list, link),
+- **M1 — Çekirdek MVP:** `@useplume/core` temel rich-text (bold, italic, heading, list, link),
   varsayılan extension seti, tema değişkenleri.
-- **M2 — Adaptörler:** `@plume/react` ve `@plume/vue` ile çalışan editör + toolbar.
+- **M2 — Adaptörler:** `@useplume/react` ve `@useplume/vue` ile çalışan editör + toolbar.
 - **M3 — Özelleştirme:** toolbar config API, tema override, kullanıcı extension'ları.
 - **M4 — Olgunlaşma:** dokümantasyon, testler, ilk npm yayını (`0.1.0`).
 

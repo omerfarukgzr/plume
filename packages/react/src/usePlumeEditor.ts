@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useEditor, type Editor } from '@tiptap/react'
-import { resolveEditorOptions, type PlumeOptions } from '@plume/core'
+import { resolveEditorOptions, type PlumeOptions } from '@useplume/core'
 
 /**
  * Creates a Plume-configured tiptap editor bound to React's lifecycle.

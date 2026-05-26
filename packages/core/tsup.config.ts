@@ -9,6 +9,6 @@ export default defineConfig({
   treeshake: true,
   external: [/^@tiptap\//, /^prosemirror-/],
   // Ship the stylesheet alongside the build output so consumers can
-  // `import '@plume/core/styles.css'`.
+  // `import '@useplume/core/styles.css'`.
   onSuccess: 'cp src/styles.css dist/styles.css',
 })

@@ -1,7 +1,7 @@
 # PlumeOptions
 
 Every adapter accepts the same options, exposed as props on `<PlumeEditor>` and as the
-argument to `usePlumeEditor`. The type is exported from `@plume/core` as `PlumeOptions`.
+argument to `usePlumeEditor`. The type is exported from `@useplume/core` as `PlumeOptions`.
 
 ## Content & behaviour
 

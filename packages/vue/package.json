@@ -1,5 +1,5 @@
 {
-  "name": "@plume/vue",
+  "name": "@useplume/vue",
   "version": "0.0.0",
   "description": "Vue 3 adapter for Plume — a customizable rich text editor built on tiptap.",
   "license": "MIT",
@@ -29,11 +29,11 @@
     "@tiptap/vue-3": "^3.23.6"
   },
   "peerDependencies": {
-    "@plume/core": "workspace:^",
+    "@useplume/core": "workspace:^",
     "vue": "^3.4.0"
   },
   "devDependencies": {
-    "@plume/core": "workspace:*",
+    "@useplume/core": "workspace:*",
     "@testing-library/vue": "^8.1.0",
     "jsdom": "^29.1.1",
     "tsup": "^8.5.1",

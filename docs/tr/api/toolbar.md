@@ -36,7 +36,7 @@ alıntı türlerinizi adlarıyla çağırabilirsiniz.
 ## Öğeleri elle oluşturmak
 
 Tamamen kendi toolbar arayüzünüzü kuracaksanız, adaptörlerin kullandığı yardımcıları
-`@plume/core` doğrudan dışa aktarır:
+`@useplume/core` doğrudan dışa aktarır:
 
 - `defaultToolbar` — varsayılan ad listesi.
 - `resolveToolbarItems(toolbar, config)` — bir `ToolbarConfig`'i hazır `ToolbarItem[]`
@@ -44,7 +44,7 @@ Tamamen kendi toolbar arayüzünüzü kuracaksanız, adaptörlerin kullandığı
 - `defaultToolbarItems`, `createToolbarItems`, `defaultFonts`, `defaultColors`.
 
 ```ts
-import { resolveToolbarItems } from '@plume/core'
+import { resolveToolbarItems } from '@useplume/core'
 
 const items = resolveToolbarItems(['bold', 'italic', '|', 'link'], { locale: 'tr' })
 ```

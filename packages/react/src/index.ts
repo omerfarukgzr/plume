@@ -12,4 +12,4 @@ export { usePlumeEditor } from './usePlumeEditor'
 
 export { EditorContent } from '@tiptap/react'
 export type { Editor } from '@tiptap/react'
-export type { PlumeOptions, ToolbarConfig, ToolbarItem, ToolbarItemName } from '@plume/core'
+export type { PlumeOptions, ToolbarConfig, ToolbarItem, ToolbarItemName } from '@useplume/core'

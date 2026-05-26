@@ -2,7 +2,7 @@
 
 Plume, [tiptap](https://tiptap.dev) üzerine kurulu bir zengin metin (WYSIWYG)
 editörüdür; tiptap da ProseMirror'ın üzerine oturur. İşin püf noktası şu: editörün tüm
-mantığı tek bir pakette, `@plume/core`'da toplanır. Her framework içinse yalnızca ince
+mantığı tek bir pakette, `@useplume/core`'da toplanır. Her framework içinse yalnızca ince
 bir adaptör yazılır. Şimdilik **React** ve **Vue 3** var; ileride Svelte, Solid ve
 vanilla da editörü yeniden yazmaya gerek kalmadan eklenebilir.
 
@@ -30,9 +30,9 @@ yerinize vermiş ve hepsini tek bir bileşenin arkasına koymuştur:
 
 | Paket          | Ne işe yarar                                                       |
 | -------------- | ----------------------------------------------------------------- |
-| `@plume/core`  | Framework'ten bağımsız çekirdek: tiptap ayarları, eklentiler, toolbar, CSS. |
-| `@plume/react` | React adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.         |
-| `@plume/vue`   | Vue 3 adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.         |
+| `@useplume/core`  | Framework'ten bağımsız çekirdek: tiptap ayarları, eklentiler, toolbar, CSS. |
+| `@useplume/react` | React adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.         |
+| `@useplume/vue`   | Vue 3 adaptörü — `<PlumeEditor />` ve `usePlumeEditor()`.         |
 
 İlk editörünüzü kurup ekrana getirmek için [Hemen başla](/tr/guide/getting-started)
 sayfasına geçin.

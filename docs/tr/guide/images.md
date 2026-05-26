@@ -21,7 +21,7 @@ Bunun hazır yolu `createUploadHandler`. Dosyayı `multipart/form-data` olarak P
 sonucu dönen JSON yanıtından okur.
 
 ```tsx
-import { createUploadHandler } from '@plume/core'
+import { createUploadHandler } from '@useplume/core'
 ;<PlumeEditor
   image={{
     uploadHandler: createUploadHandler({
@@ -170,7 +170,7 @@ Sunucuda HTML parse etmek istemiyorsanız, `collectImageAssetIds` editörü gezi
 kullanılan kimlikleri doğrudan verir — kaydederken yanında gönderin:
 
 ```ts
-import { collectImageAssetIds } from '@plume/core'
+import { collectImageAssetIds } from '@useplume/core'
 
 async function save(editor) {
   await fetch('/api/save', {

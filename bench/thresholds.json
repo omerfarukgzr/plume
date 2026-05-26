@@ -6,7 +6,7 @@
   ],
   "bundle": [
     { "pkg": "core", "maxGzipKB": 22, "mustExternalize": ["@tiptap/", "tiptap-footnotes"] },
-    { "pkg": "react", "maxGzipKB": 5, "mustExternalize": ["@tiptap/", "@plume/core", "react"] },
-    { "pkg": "vue", "maxGzipKB": 6, "mustExternalize": ["@tiptap/", "@plume/core", "vue"] }
+    { "pkg": "react", "maxGzipKB": 5, "mustExternalize": ["@tiptap/", "@useplume/core", "react"] },
+    { "pkg": "vue", "maxGzipKB": 6, "mustExternalize": ["@tiptap/", "@useplume/core", "vue"] }
   ]
 }

@@ -18,7 +18,7 @@ upload to your own server instead.
 `multipart/form-data` and reads the result from the JSON response.
 
 ```tsx
-import { createUploadHandler } from '@plume/core'
+import { createUploadHandler } from '@useplume/core'
 ;<PlumeEditor
   image={{
     uploadHandler: createUploadHandler({
@@ -163,7 +163,7 @@ If you'd rather not parse HTML on the server, `collectImageAssetIds` walks the
 editor and hands you the used ids directly — send them alongside your save:
 
 ```ts
-import { collectImageAssetIds } from '@plume/core'
+import { collectImageAssetIds } from '@useplume/core'
 
 async function save(editor) {
   await fetch('/api/save', {

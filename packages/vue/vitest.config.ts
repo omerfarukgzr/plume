@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       // Resolve the workspace core from source so tests run without a build.
-      '@plume/core': fileURLToPath(new URL('../core/src/index.ts', import.meta.url)),
+      '@useplume/core': fileURLToPath(new URL('../core/src/index.ts', import.meta.url)),
     },
   },
 })

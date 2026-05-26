@@ -1,5 +1,5 @@
 {
-  "name": "@plume/core",
+  "name": "@useplume/core",
   "version": "0.0.0",
   "description": "Framework-agnostic core for Plume — a customizable rich text editor built on tiptap.",
   "license": "MIT",

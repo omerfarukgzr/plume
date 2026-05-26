@@ -7,7 +7,7 @@ import {
   type FontOption,
   type PlumeOptions,
   type ToolbarConfig,
-} from '@plume/core'
+} from '@useplume/core'
 import { usePlumeEditor } from './usePlumeEditor'
 import { Toolbar } from './Toolbar'
 

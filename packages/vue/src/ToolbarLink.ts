@@ -1,6 +1,6 @@
 import { defineComponent, h, nextTick, onBeforeUnmount, ref, type PropType } from 'vue'
 import type { Editor } from '@tiptap/vue-3'
-import { applyLink, getLinkState, removeLink, resolveMessages, type ToolbarItem } from '@plume/core'
+import { applyLink, getLinkState, removeLink, resolveMessages, type ToolbarItem } from '@useplume/core'
 
 const wrapIcon = (inner: string) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`

@@ -1,12 +1,12 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { EditorContent, Toolbar, usePlumeEditor, type Editor } from '@plume/react'
+import { EditorContent, Toolbar, usePlumeEditor, type Editor } from '@useplume/react'
 import {
   icons,
   resolveToolbarItems,
   type CustomBlockquoteSpec,
   type ToolbarConfig,
-} from '@plume/core'
-import '@plume/core/styles.css'
+} from '@useplume/core'
+import '@useplume/core/styles.css'
 import './index.css'
 
 // Custom blockquote variants — apps just give a name, label, color and (here)
@@ -108,7 +108,7 @@ const initialContent = `
 rich text editor built on <a href="https://tiptap.dev">tiptap</a> and licensed under <strong>MIT</strong>.</p>
 <p>Type markdown like <code>**bold**</code> or use shortcuts such as <code>⌘B</code>
 for <s>most</s> all common marks. ✨</p>
-<pre><code>npm install @plume/react @plume/core</code></pre>
+<pre><code>npm install @useplume/react @useplume/core</code></pre>
 <h2>Features</h2>
 <blockquote><p>A responsive rich text editor with one shared core and a thin adapter
 per framework — React and Vue today.</p></blockquote>

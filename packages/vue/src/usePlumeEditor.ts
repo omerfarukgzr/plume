@@ -1,5 +1,5 @@
 import { useEditor, type Editor } from '@tiptap/vue-3'
-import { resolveEditorOptions, type PlumeOptions } from '@plume/core'
+import { resolveEditorOptions, type PlumeOptions } from '@useplume/core'
 import type { Ref } from 'vue'
 
 /**
