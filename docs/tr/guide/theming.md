@@ -41,6 +41,7 @@ Editörü yeniden temalamak için `--plume-` değişkenlerini editörün herhang
 | `--plume-font-size`         | `1rem`                          | Temel içerik font boyutu            |
 | `--plume-line-height`       | `1.7`                           | İçerik satır yüksekliği             |
 | `--plume-content-max-width` | `680px`                         | Yazım sütununun maksimum genişliği  |
+| `--plume-content-padding`   | `3rem 1.5rem 6rem`              | İçerik etrafındaki iç boşluk        |
 | `--plume-radius`            | `16px`                          | Editör çerçevesi köşe yarıçapı      |
 | `--plume-radius-sm`         | `8px`                           | Düğmeler, açılır menüler, alanlar   |
 | `--plume-gap`               | `2px`                           | Toolbar düğmeleri arası boşluk      |
@@ -73,6 +74,38 @@ Birkaç değişkeni `.plume` kökünde geçersiz kılarak tüm editörü yeniden
   --plume-color-active-text: #be123c;
   --plume-radius: 10px;
   --plume-font: 'Inter', system-ui, sans-serif;
+}
+```
+
+## Gömülü / tam genişlik editörler
+
+Varsayılan içerik, ortalanmış bir okuma sütunu (`max-width: 680px`) ve cömert
+makale iç boşluğu kullanır — blog ve belge düzenleme için ideal, ancak bir form
+alanı veya admin panelinin içinde genelde fazla dar kalır.
+
+Tam genişlik (edge-to-edge) bir editör için **`fluid`** prop'unu geçin (ya da
+`plume--fluid` class'ını ekleyin). Bu, max-width'i kaldırır ve iç boşluğu
+daraltır:
+
+::: code-group
+
+```tsx [React]
+<PlumeEditor fluid content="<p>Kapsayıcısını doldurur</p>" />
+```
+
+```vue [Vue]
+<PlumeEditor fluid content="<p>Kapsayıcısını doldurur</p>" />
+```
+
+:::
+
+Tamamen akışkan yapmak yerine ince ayar için iki düzen değişkenini geçersiz
+kılın:
+
+```css
+.plume {
+  --plume-content-max-width: 100%; /* veya örn. 920px */
+  --plume-content-padding: 0.75rem 1rem; /* kompakt */
 }
 ```
 

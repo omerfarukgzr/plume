@@ -32,3 +32,63 @@ features:
     title: Type-safe
     details: Written in TypeScript end to end, shipping full .d.ts types for every package.
 ---
+
+## What is Plume?
+
+Plume is a customizable rich text editor built on [tiptap](https://tiptap.dev).
+All editor logic — extensions, toolbar, image pipeline, theme — lives in one
+framework-agnostic core (`@useplume/core`), with thin adapters per framework.
+Today: **React** and **Vue 3**.
+
+## Quick start
+
+Install the adapter for your framework plus the core (npm, pnpm or yarn):
+
+```sh
+npm install @useplume/react @useplume/core   # React
+npm install @useplume/vue @useplume/core     # Vue 3
+```
+
+Then render the editor — toolbar, theme and default extensions work out of the box:
+
+```tsx
+// React
+import { PlumeEditor } from '@useplume/react'
+import '@useplume/core/styles.css'
+
+export function App() {
+  return <PlumeEditor content="<p>Hello Plume 🪶</p>" />
+}
+```
+
+```vue
+<!-- Vue 3 -->
+<script setup lang="ts">
+import { ref } from 'vue'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
+
+const html = ref('<p>Hello Plume 🪶</p>')
+</script>
+
+<template>
+  <PlumeEditor v-model:content="html" />
+</template>
+```
+
+> Plume requires **tiptap v3**. `@tiptap/core` and `@tiptap/pm` are peer
+> dependencies, so your app and Plume share a single tiptap instance.
+
+## Highlights
+
+- **Batteries included** — toolbar, theming, resizable images with upload,
+  custom fonts, footnotes, paste manager and i18n (Turkish & English built in).
+- **Drop-in or composable** — use `<PlumeEditor>` for a ready editor, or
+  `usePlumeEditor()` + `<EditorContent>` for full control over layout.
+- **Themeable** — every value is a `--plume-*` CSS variable; ships a dark theme,
+  or go fully unstyled.
+- **Vue-native** — `v-model:content` (HTML or JSON), reactive content for async
+  data, and a `fluid` prop for edge-to-edge form/admin editors.
+
+Read the [getting-started guide](/guide/getting-started) or browse
+[examples & recipes](/examples).

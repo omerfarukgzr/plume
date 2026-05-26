@@ -83,6 +83,29 @@ serileştirmek, düzenleme başına en pahalı iştir; bu yüzden onu her tuşa 
 değil, ara ara çalıştırırız.
 :::
 
+## Adaptör propları
+
+Bu proplar `PlumeOptions`'ta değil doğrudan `<PlumeEditor>` üzerinde bulunur;
+dolayısıyla yalnızca bileşende vardır, `usePlumeEditor` ile kullanılamaz.
+
+| Prop        | Adaptör | Tip                | Varsayılan | Ne yapar                                                                                                                |
+| ----------- | ------- | ------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `fluid`     | her iki | `boolean`          | `false`    | Tam genişlik içerik (ortalanmış okuma sütununu kaldırır). Bkz. [tema](/tr/guide/theming#gomulu-tam-genislik-editorler). |
+| `className` | React   | `string`           | —          | Editör kök (`.plume`) elemanına ek class.                                                                               |
+| `output`    | Vue     | `'html' \| 'json'` | `'html'`   | `v-model:content` / `update:content`'in yayınladığı değer formatı.                                                      |
+
+### `v-model:content` (Vue)
+
+Vue adaptörü çift yönlü bağlamayı destekler. Bağlanan değer varsayılan olarak
+HTML, `output="json"` ile tiptap JSON belgesidir. Güncellemeler `updateDelay`
+ile debounce edilir. `content` prop'u tek başına da reaktiftir; bu, async/geç
+gelen veriyi kapsar.
+
+```vue
+<PlumeEditor v-model:content="html" />
+<PlumeEditor v-model:content="doc" output="json" />
+```
+
 ## Tam yapılandırılmış bir editör
 
 Her seçenek bağımsız ve isteğe bağlıdır — config'in ne kadar derine indiğini tek

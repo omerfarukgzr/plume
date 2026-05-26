@@ -19,11 +19,41 @@ Svelte, Solid, vanilla — without rewriting the editor.
 
 ## Packages
 
-| Package        | Description                                                       |
-| -------------- | ----------------------------------------------------------------- |
+| Package           | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
 | `@useplume/core`  | Framework-agnostic core: tiptap config, extensions, toolbar, CSS. |
 | `@useplume/react` | React adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
 | `@useplume/vue`   | Vue 3 adapter — `<PlumeEditor />` + `usePlumeEditor()`.           |
+
+## Installation
+
+Plume needs **tiptap v3** as a peer — `@tiptap/core` and `@tiptap/pm` are
+`peerDependencies`, so your app and Plume always share a **single** tiptap
+instance (no duplicate copies, no bundle bloat). Most package managers install
+peers automatically; if yours doesn't, add them yourself.
+
+> [!IMPORTANT]
+> Plume requires tiptap **v3**. It cannot coexist with tiptap **v2** in the same
+> app — a mixed v2/v3 tree breaks at runtime. If you already use tiptap, make
+> sure it's on v3.
+
+**React:**
+
+```sh
+npm install @useplume/react @useplume/core      # npm
+pnpm add @useplume/react @useplume/core          # pnpm
+yarn add @useplume/react @useplume/core          # yarn
+```
+
+**Vue 3:**
+
+```sh
+npm install @useplume/vue @useplume/core         # npm
+pnpm add @useplume/vue @useplume/core             # pnpm
+yarn add @useplume/vue @useplume/core             # yarn
+```
+
+If peers aren't auto-installed, also add `@tiptap/core @tiptap/pm` (any v3).
 
 ## Quick start (React)
 

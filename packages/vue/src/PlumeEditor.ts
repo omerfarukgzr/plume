@@ -1,9 +1,18 @@
-import { computed, defineComponent, h, onMounted, watch, type PropType } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  onMounted,
+  watch,
+  type PropType,
+} from 'vue'
 import { EditorContent } from '@tiptap/vue-3'
 import {
   injectFontFaces,
   resolveMessages,
   resolveToolbarItems,
+  type Editor,
   type FontOption,
   type PlumeOptions,
   type ToolbarConfig,
@@ -62,13 +71,42 @@ export const PlumeEditor = defineComponent({
       type: Array as PropType<PlumeOptions['toolbarItems']>,
       default: undefined,
     },
+    /**
+     * Make the content edge-to-edge instead of the default centered article
+     * column — drop the `max-width`/`margin` so the editor fills its container
+     * (form fields, admin panels). Equivalent to adding the `plume--fluid` class.
+     */
+    fluid: { type: Boolean, default: false },
+    /**
+     * Format emitted by `v-model:content` / `update:content`: `'html'`
+     * (default, `editor.getHTML()`) or `'json'` (the tiptap document).
+     */
+    output: { type: String as PropType<'html' | 'json'>, default: 'html' },
     onUpdate: {
       type: Function as PropType<PlumeOptions['onUpdate']>,
       default: undefined,
     },
     updateDelay: { type: Number as PropType<number | undefined>, default: undefined },
   },
-  setup(props) {
+  // `update:content` powers `v-model:content`.
+  emits: ['update:content'],
+  setup(props, { emit }) {
+    const serialize = (instance: Editor) =>
+      props.output === 'json' ? instance.getJSON() : instance.getHTML()
+
+    // Only attach an `onUpdate` (and pay the per-edit serialization cost) when
+    // something actually consumes the change: a `v-model`/`update:content`
+    // listener, or the `onUpdate` prop.
+    const instance = getCurrentInstance()
+    const hasModelListener = Boolean(instance?.vnode.props?.['onUpdate:content'])
+    const onUpdate: PlumeOptions['onUpdate'] =
+      hasModelListener || props.onUpdate
+        ? (ed) => {
+            if (hasModelListener) emit('update:content', serialize(ed))
+            props.onUpdate?.(ed)
+          }
+        : undefined
+
     const editor = usePlumeEditor({
       content: props.content,
       editable: props.editable,
@@ -84,7 +122,7 @@ export const PlumeEditor = defineComponent({
       image: props.image,
       blockquotes: props.blockquotes,
       pasteManager: props.pasteManager,
-      onUpdate: props.onUpdate,
+      onUpdate,
       updateDelay: props.updateDelay,
     })
 
@@ -95,6 +133,27 @@ export const PlumeEditor = defineComponent({
     watch(
       () => props.editable,
       (value) => editor.value?.setEditable(value),
+    )
+
+    // Keep `content` reactive (enables `v-model:content` and async/late data).
+    // Skip when the incoming value already matches the document — that's the
+    // echo from our own `update:content`, and re-setting would reset the cursor.
+    watch(
+      () => props.content,
+      (value) => {
+        const ed = editor.value
+        if (!ed) return
+        const incoming = value ?? (props.output === 'json' ? { type: 'doc', content: [] } : '')
+        const current = serialize(ed)
+        const same =
+          props.output === 'json'
+            ? JSON.stringify(incoming) === JSON.stringify(current)
+            : incoming === current
+        if (same) return
+        ed.commands.setContent(incoming as Parameters<typeof ed.commands.setContent>[0], {
+          emitUpdate: false,
+        })
+      },
     )
 
     const items = computed(() =>
@@ -109,17 +168,17 @@ export const PlumeEditor = defineComponent({
     const showToolbar = computed(() => props.toolbar !== false)
     const toolbarLabel = computed(() => resolveMessages(props.locale).toolbarLabel)
 
+    const rootClass = computed(() => ['plume', props.fluid && 'plume--fluid'].filter(Boolean))
+
     return () => {
-      const instance = editor.value
-      if (!instance) return null
-      return h('div', { class: 'plume' }, [
+      const ed = editor.value
+      if (!ed) return null
+      return h('div', { class: rootClass.value }, [
         showToolbar.value
-          ? h(Toolbar, { editor: instance, items: items.value, ariaLabel: toolbarLabel.value })
+          ? h(Toolbar, { editor: ed, items: items.value, ariaLabel: toolbarLabel.value })
           : null,
-        h(EditorContent, { editor: instance, class: 'plume-editor' }),
-        props.pasteManager
-          ? h(PasteModal, { editor: instance, locale: props.locale })
-          : null,
+        h(EditorContent, { editor: ed, class: 'plume-editor' }),
+        props.pasteManager ? h(PasteModal, { editor: ed, locale: props.locale }) : null,
       ])
     }
   },

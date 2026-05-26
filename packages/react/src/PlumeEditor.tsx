@@ -13,6 +13,12 @@ import { PasteModal } from './PasteModal'
 export interface PlumeEditorProps extends PlumeOptions {
   /** Extra class name(s) added to the editor root element. */
   className?: string
+  /**
+   * Make the content edge-to-edge instead of the default centered article
+   * column — drop the `max-width`/`margin` so the editor fills its container
+   * (form fields, admin panels). Equivalent to adding the `plume--fluid` class.
+   */
+  fluid?: boolean
 }
 
 /**
@@ -21,7 +27,7 @@ export interface PlumeEditorProps extends PlumeOptions {
  * For full control, compose {@link usePlumeEditor}, {@link Toolbar} and
  * tiptap's `EditorContent` yourself.
  */
-export function PlumeEditor({ className, ...options }: PlumeEditorProps) {
+export function PlumeEditor({ className, fluid, ...options }: PlumeEditorProps) {
   const editor = usePlumeEditor(options)
 
   useEffect(() => {
@@ -31,7 +37,7 @@ export function PlumeEditor({ className, ...options }: PlumeEditorProps) {
   if (!editor) return null
 
   return (
-    <div className={['plume', className].filter(Boolean).join(' ')}>
+    <div className={['plume', fluid && 'plume--fluid', className].filter(Boolean).join(' ')}>
       {options.toolbar !== false && (
         <Toolbar
           editor={editor}

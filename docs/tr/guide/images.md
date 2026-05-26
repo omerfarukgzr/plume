@@ -14,38 +14,116 @@ yükleme bitince de yerine son URL konur.
 ## Hiç ayar yapmadan
 
 `uploadHandler` vermezseniz; seçtiğiniz, yapıştırdığınız ya da bıraktığınız görseller
-base64 data URL olarak doğrudan belgeye gömülür. Yani hiçbir kurulum gerekmez. Demolar ve
-HTML'i olduğu gibi saklayan uygulamalar için pratik bir yoldur; ama görseli belgenin
-içine gömdüğü için kaydedilen içeriği şişirir. Gerçek projelerde görselleri kendi
-sunucunuza yüklemenizi öneririz.
+base64 data URL olarak doğrudan belgeye gömülür. Yani hiçbir kurulum gerekmez — demolar
+ve hızlı denemeler için idealdir.
+
+::: warning Üretimde mutlaka bir uploadHandler kullanın
+Base64 data URL'ler belgeye **gömülü** saklanır; her görsel, serileştirilen HTML/JSON'u
+şişirir (1 MB'lık bir fotoğraf her kayda ~1.3 MB metin ekler). İçerik saklayan her
+uygulamada bir `uploadHandler` tanımlayın ve görselleri kendi sunucunuzda ya da bir
+CDN'de saklayın.
+:::
 
 ## Kendi sunucunuza yükleme
 
 Bunun hazır yolu `createUploadHandler`. Dosyayı `multipart/form-data` olarak POST eder ve
-sonucu dönen JSON yanıtından okur.
+sonucu dönen JSON yanıtından okur. En temel durum tek satırdır:
 
 ```tsx
 import { createUploadHandler } from '@useplume/core'
-;<PlumeEditor
+;<PlumeEditor image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }) }} />
+```
+
+Bu, endpoint'iniz bir `file` alanı kabul edip `{ "src": "https://…" }` döndürdüğünde
+çalışır. Gerçek API'ler genelde birkaç seçenek daha ister — kimlik doğrulama, özel yanıt
+biçimi, boyut sınırı. Hepsi `createUploadHandler` üzerindedir:
+
+| Seçenek            | Tip                                                | Varsayılan  | Ne işe yarar                                                                                                            |
+| ------------------ | -------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `url`              | `string`                                           | —           | Yüklemeyi alan endpoint.                                                                                                |
+| `method`           | `string`                                           | `'POST'`    | HTTP metodu.                                                                                                            |
+| `fieldName`        | `string`                                           | `'file'`    | Dosyanın gönderildiği form alanı.                                                                                       |
+| `assetIdFieldName` | `string \| null`                                   | `'assetId'` | İstemci asset id'si için form alanı (bkz. [temizleme](#oksuz-orphan-kalan-gorselleri-temizleme)). `null` ile kapatılır. |
+| `headers`          | `Record<string, string>`                           | —           | Ek istek başlıkları (örn. `Authorization`). `Content-Type` vermeyin.                                                    |
+| `withCredentials`  | `boolean`                                          | `false`     | Cookie gönder (`credentials: 'include'`).                                                                               |
+| `parseResponse`    | `(json, response) => ImageUploadResult \| Promise` | birebir     | Kendi JSON'unuzu `{ src, width?, alt?, id? }`'e eşle.                                                                   |
+
+### Kimlik doğrulamalı yükleme (header / cookie)
+
+`headers` ile bir bearer token (JWT) ekleyin ya da `withCredentials` ile oturum
+cookie'sini gönderin:
+
+```ts
+createUploadHandler({
+  url: '/api/upload',
+  headers: { Authorization: `Bearer ${accessToken}` },
+  // ya da cookie tabanlı kimlik için:
+  // withCredentials: true,
+})
+```
+
+> `Content-Type`'ı kendiniz vermeyin — tarayıcı `multipart/form-data` sınırını otomatik
+> ekler. Elle vermek yüklemeyi bozar.
+
+### Özel yanıt biçimi (`parseResponse`)
+
+Plume, yanıt JSON'unun `{ src, width?, alt? }` olmasını bekler. API'niz sonucu bir
+zarfa sarıyorsa veya alanları farklı adlandırıyorsa, `parseResponse` ile eşleyin. Gerçek
+hayatta en sık gereken budur.
+
+Zarfı `{ "data": { "url", "width" }, "error_message", "error_code" }` olan bir API için:
+
+```ts
+createUploadHandler({
+  url: '/api/v1/upload',
+  headers: { Authorization: `Bearer ${accessToken}` },
+  parseResponse: (json: any) => {
+    // Zarf hatayı 2xx durum koduyla mı bildiriyor? Yüzeye çıkarmak için throw edin.
+    if (json.error_code) throw new Error(json.error_message || 'Yükleme başarısız')
+    return { src: json.data.url, width: json.data.width }
+  },
+})
+```
+
+`parseResponse` ikinci argüman olarak ham `Response`'u da alır (başlık okumak için) ve
+async olabilir. Bir `id` döndürmek, istemci tarafında üretilen asset id'sini geçersiz
+kılar — bkz. [kimliği sunucu üretsin](#kimligi-sunucu-uretsin).
+
+### Tam kontrol
+
+`createUploadHandler`'ın kapsamadığı her şey için (S3 imzalı URL, tRPC, GraphQL, parçalı
+yükleme…) kendi async fonksiyonunuzu verin. Dosyayı ve bir
+[`UploadContext`](#oksuz-orphan-kalan-gorselleri-temizleme) alır, sonuca çözülür:
+
+```ts
+uploadHandler: (file: File, ctx: { assetId: string }) =>
+  Promise<{ src: string; width?: number; alt?: string; id?: string }>
+```
+
+## Hata yönetimi
+
+Reddedilen bir dosya ya da başarısız bir yükleme, geçici önizlemeyi kaldırır ve
+`onError`'ı çağırır. Bir mesaj göstermek için kullanın (toast, satır içi uyarı…):
+
+```tsx
+<PlumeEditor
   image={{
-    uploadHandler: createUploadHandler({
-      url: '/api/upload',
-      // fieldName: 'file',           // form alanının adı (varsayılan 'file')
-      // headers: { Authorization },  // ek istek başlıkları
-      // maxSize: 5 * 1024 * 1024,    // büyük dosyaları daha istemcide reddet
-      // parseResponse: (json) => ({ src: json.url, width: json.width }),
-    }),
-    // accept, maxSize, labels (dil), bubbleMenu ve onError de ayarlanabilir.
+    uploadHandler: createUploadHandler({ url: '/api/upload' }),
+    maxSize: 5 * 1024 * 1024, // 5 MB — daha büyük dosyalar yüklemeden önce reddedilir
+    accept: 'image/png,image/jpeg,image/webp',
+    onError: (error) => toast.error(error.message),
   }}
 />
 ```
 
-Daha fazla kontrol isterseniz (S3 imzalı URL, tRPC vb.) kendi async fonksiyonunuzu
-verebilirsiniz:
+`onError` her iki ret yolunda da tetiklenir:
 
-```ts
-uploadHandler: (file: File) => Promise<{ src: string; width?: number; alt?: string }>
-```
+- **İstemci doğrulaması** — `maxSize` üstündeki veya `accept` dışındaki bir dosya
+  tarayıcıdan hiç çıkmaz; mesaj `validateImageFile`'dan gelir.
+- **Yükleme hatası** — 2xx dışı her durumda `createUploadHandler` throw eder. Gövde
+  `{ "error": "mesaj" }` alanlı bir JSON ise o mesaj kullanılır; değilse
+  `Upload failed (<status>)`'a düşülür. Throw eden bir `parseResponse` (örn. 2xx
+  yanıttaki zarf hata kodu) da aynı şekilde yüzeye çıkar.
 
 ## Sunucu tarafının uyması gerekenler
 

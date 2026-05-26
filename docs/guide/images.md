@@ -12,36 +12,116 @@ validation → optimistic placeholder → final URL.
 ## Zero-config default
 
 With no `uploadHandler`, picked, pasted and dropped images are embedded inline as
-**base64 data URLs**, so it works with no setup. That's convenient for demos and apps
-that store the HTML as-is, but it bloats the serialized document — for production,
-upload to your own server instead.
+**base64 data URLs**, so it works with no setup — ideal for demos and quick trials.
+
+::: warning Use a real upload handler in production
+Base64 data URLs are stored **inline** in the document, so every image bloats the
+serialized HTML/JSON (a 1 MB photo adds ~1.3 MB of text to every save). For any app
+that persists content, set an `uploadHandler` and store images on your own server
+or a CDN instead.
+:::
 
 ## Uploading to your server
 
 `createUploadHandler` is the standard implementation: it POSTs the file as
-`multipart/form-data` and reads the result from the JSON response.
+`multipart/form-data` and reads the result from the JSON response. The basic case
+is a single line:
 
 ```tsx
 import { createUploadHandler } from '@useplume/core'
-;<PlumeEditor
+;<PlumeEditor image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }) }} />
+```
+
+That works when your endpoint accepts a `file` field and replies with
+`{ "src": "https://…" }`. Real APIs usually need a few more options — auth, a
+custom response shape, size limits. They're all on `createUploadHandler`:
+
+| Option             | Type                                               | Default     | Purpose                                                                                             |
+| ------------------ | -------------------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------- |
+| `url`              | `string`                                           | —           | Endpoint that receives the upload.                                                                  |
+| `method`           | `string`                                           | `'POST'`    | HTTP method.                                                                                        |
+| `fieldName`        | `string`                                           | `'file'`    | Form field the file is sent under.                                                                  |
+| `assetIdFieldName` | `string \| null`                                   | `'assetId'` | Form field for the client asset id (see [cleanup](#cleaning-up-orphaned-uploads)). `null` omits it. |
+| `headers`          | `Record<string, string>`                           | —           | Extra request headers (e.g. `Authorization`). Don't set `Content-Type`.                             |
+| `withCredentials`  | `boolean`                                          | `false`     | Send cookies (`credentials: 'include'`).                                                            |
+| `parseResponse`    | `(json, response) => ImageUploadResult \| Promise` | identity    | Map your JSON onto `{ src, width?, alt?, id? }`.                                                    |
+
+### Authenticated uploads (headers / cookies)
+
+Add a bearer token (JWT) with `headers`, or send the session cookie with
+`withCredentials`:
+
+```ts
+createUploadHandler({
+  url: '/api/upload',
+  headers: { Authorization: `Bearer ${accessToken}` },
+  // or, for cookie-based auth:
+  // withCredentials: true,
+})
+```
+
+> Don't set `Content-Type` yourself — the browser adds the `multipart/form-data`
+> boundary automatically. Setting it by hand breaks the upload.
+
+### Custom response shape (`parseResponse`)
+
+Plume expects the response JSON to be `{ src, width?, alt? }`. If your API wraps
+results in an envelope or names fields differently, map them with `parseResponse`.
+This is the most common real-world need.
+
+For an API whose envelope is `{ "data": { "url", "width" }, "error_message", "error_code" }`:
+
+```ts
+createUploadHandler({
+  url: '/api/v1/upload',
+  headers: { Authorization: `Bearer ${accessToken}` },
+  parseResponse: (json: any) => {
+    // Envelope reports the failure with a 2xx status? Throw to surface it.
+    if (json.error_code) throw new Error(json.error_message || 'Upload failed')
+    return { src: json.data.url, width: json.data.width }
+  },
+})
+```
+
+`parseResponse` also receives the raw `Response` as a second argument (for reading
+headers), and may be async. Returning an `id` overrides the client-generated asset
+id — see [server generates the id](#server-generates-the-id-instead).
+
+### Full control
+
+For anything `createUploadHandler` doesn't cover (S3 presigned URLs, tRPC, GraphQL,
+chunked uploads…), pass your own async handler. It receives the file and an
+[`UploadContext`](#cleaning-up-orphaned-uploads) and resolves to the result:
+
+```ts
+uploadHandler: (file: File, ctx: { assetId: string }) =>
+  Promise<{ src: string; width?: number; alt?: string; id?: string }>
+```
+
+## Error handling
+
+A rejected file or a failed upload removes the optimistic placeholder and calls
+`onError`. Use it to surface a message (toast, inline notice…):
+
+```tsx
+<PlumeEditor
   image={{
-    uploadHandler: createUploadHandler({
-      url: '/api/upload',
-      // fieldName: 'file',           // form field name (default 'file')
-      // headers: { Authorization },  // extra request headers
-      // maxSize: 5 * 1024 * 1024,    // reject larger files client-side
-      // parseResponse: (json) => ({ src: json.url, width: json.width }),
-    }),
-    // accept, maxSize, labels (i18n), bubbleMenu and onError are configurable too.
+    uploadHandler: createUploadHandler({ url: '/api/upload' }),
+    maxSize: 5 * 1024 * 1024, // 5 MB — larger files are rejected before upload
+    accept: 'image/png,image/jpeg,image/webp',
+    onError: (error) => toast.error(error.message),
   }}
 />
 ```
 
-For full control (S3 presigned URLs, tRPC, …), pass any async handler:
+`onError` fires for both rejection paths:
 
-```ts
-uploadHandler: (file: File) => Promise<{ src: string; width?: number; alt?: string }>
-```
+- **Client-side validation** — a file over `maxSize` or outside `accept` never
+  leaves the browser; the message comes from `validateImageFile`.
+- **Upload failure** — on any non-2xx status, `createUploadHandler` throws. If the
+  body is JSON with an `{ "error": "message" }` field, that message is used;
+  otherwise it falls back to `Upload failed (<status>)`. A `parseResponse` that
+  throws (e.g. an envelope error code on a 2xx response) surfaces the same way.
 
 ## Server contract
 

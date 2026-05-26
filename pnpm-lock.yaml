@@ -100,9 +100,6 @@ importers:
 
   packages/core:
     dependencies:
-      '@tiptap/core':
-        specifier: ^3.23.6
-        version: 3.23.6(@tiptap/pm@3.23.6)
       '@tiptap/extension-document':
         specifier: ^3.23.6
         version: 3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))
@@ -130,9 +127,6 @@ importers:
       '@tiptap/extensions':
         specifier: ^3.23.6
         version: 3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)
-      '@tiptap/pm':
-        specifier: ^3.23.6
-        version: 3.23.6
       '@tiptap/starter-kit':
         specifier: ^3.23.6
         version: 3.23.6
@@ -140,6 +134,12 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/extension-list-item@3.23.6(@tiptap/extension-list@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)))(@tiptap/extension-ordered-list@3.23.6(@tiptap/extension-list@3.23.6(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)))(@tiptap/pm@3.23.6)
     devDependencies:
+      '@tiptap/core':
+        specifier: ^3.23.6
+        version: 3.23.6(@tiptap/pm@3.23.6)
+      '@tiptap/pm':
+        specifier: ^3.23.6
+        version: 3.23.6
       tsup:
         specifier: ^8.5.1
         version: 8.5.1(postcss@8.5.15)(typescript@6.0.3)
@@ -152,12 +152,6 @@ importers:
 
   packages/react:
     dependencies:
-      '@tiptap/core':
-        specifier: ^3.23.6
-        version: 3.23.6(@tiptap/pm@3.23.6)
-      '@tiptap/pm':
-        specifier: ^3.23.6
-        version: 3.23.6
       '@tiptap/react':
         specifier: ^3.23.6
         version: 3.23.6(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -168,6 +162,12 @@ importers:
       '@testing-library/react':
         specifier: ^16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.15))(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@tiptap/core':
+        specifier: ^3.23.6
+        version: 3.23.6(@tiptap/pm@3.23.6)
+      '@tiptap/pm':
+        specifier: ^3.23.6
+        version: 3.23.6
       '@types/react':
         specifier: ^19.2.15
         version: 19.2.15
@@ -198,12 +198,6 @@ importers:
 
   packages/vue:
     dependencies:
-      '@tiptap/core':
-        specifier: ^3.23.6
-        version: 3.23.6(@tiptap/pm@3.23.6)
-      '@tiptap/pm':
-        specifier: ^3.23.6
-        version: 3.23.6
       '@tiptap/vue-3':
         specifier: ^3.23.6
         version: 3.23.6(@floating-ui/dom@1.7.6)(@tiptap/core@3.23.6(@tiptap/pm@3.23.6))(@tiptap/pm@3.23.6)(vue@3.5.34(typescript@6.0.3))
@@ -211,6 +205,12 @@ importers:
       '@testing-library/vue':
         specifier: ^8.1.0
         version: 8.1.0(@vue/compiler-dom@3.5.34)(@vue/compiler-sfc@3.5.34)(@vue/server-renderer@3.5.34(vue@3.5.34(typescript@6.0.3)))(vue@3.5.34(typescript@6.0.3))
+      '@tiptap/core':
+        specifier: ^3.23.6
+        version: 3.23.6(@tiptap/pm@3.23.6)
+      '@tiptap/pm':
+        specifier: ^3.23.6
+        version: 3.23.6
       '@useplume/core':
         specifier: workspace:*
         version: link:../core

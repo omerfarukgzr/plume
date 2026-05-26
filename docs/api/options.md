@@ -81,6 +81,29 @@ yourself and pass an `onPaste` handler — return `true` to take over the paste,
 serialization is the dominant per-edit cost on large documents.
 :::
 
+## Adapter props
+
+These props live on `<PlumeEditor>` itself (not in `PlumeOptions`), so they're
+available only on the component, not via `usePlumeEditor`.
+
+| Prop        | Adapter | Type               | Default  | Description                                                                                                          |
+| ----------- | ------- | ------------------ | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `fluid`     | both    | `boolean`          | `false`  | Edge-to-edge content (drops the centered reading column). See [theming](/guide/theming#embedded-full-width-editors). |
+| `className` | React   | `string`           | —        | Extra class name(s) on the editor root (`.plume`) element.                                                           |
+| `output`    | Vue     | `'html' \| 'json'` | `'html'` | Value format emitted by `v-model:content` / `update:content`.                                                        |
+
+### `v-model:content` (Vue)
+
+The Vue adapter supports two-way binding. The bound value is HTML by default, or
+the tiptap JSON document with `output="json"`. Updates are debounced by
+`updateDelay`. The `content` prop is reactive on its own too, which covers
+async/late-loaded data.
+
+```vue
+<PlumeEditor v-model:content="html" />
+<PlumeEditor v-model:content="doc" output="json" />
+```
+
 ## A fully configured editor
 
 Every option is independent and optional — this shows them together so you can

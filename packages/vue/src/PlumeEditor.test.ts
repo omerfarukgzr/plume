@@ -59,4 +59,33 @@ describe('PlumeEditor (vue)', () => {
       )
     await waitFor(() => expect(queryByRole('dialog')).toBeNull())
   })
+
+  it('reacts to later `content` prop changes (enables v-model / async data)', async () => {
+    const { container, findByText, rerender } = render(PlumeEditor, {
+      props: { content: '<p>first</p>' },
+    })
+    await findByText('first')
+    await rerender({ content: '<p>second</p>' })
+    await waitFor(() => {
+      const text = container.querySelector('.plume-editor__content')!.textContent
+      expect(text).toContain('second')
+      expect(text).not.toContain('first')
+    })
+  })
+
+  it('adds the fluid modifier class when `fluid` is set', async () => {
+    const { container, findByRole } = render(PlumeEditor, {
+      props: { content: '<p>x</p>', fluid: true },
+    })
+    await findByRole('textbox')
+    expect(container.querySelector('.plume')!.classList.contains('plume--fluid')).toBe(true)
+  })
+
+  it('does not add the fluid class by default', async () => {
+    const { container, findByRole } = render(PlumeEditor, {
+      props: { content: '<p>x</p>' },
+    })
+    await findByRole('textbox')
+    expect(container.querySelector('.plume')!.classList.contains('plume--fluid')).toBe(false)
+  })
 })

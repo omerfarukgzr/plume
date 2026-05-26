@@ -42,15 +42,17 @@
     "clean": "rm -rf dist .turbo"
   },
   "dependencies": {
-    "@tiptap/core": "^3.23.6",
-    "@tiptap/pm": "^3.23.6",
     "@tiptap/vue-3": "^3.23.6"
   },
   "peerDependencies": {
+    "@tiptap/core": "^3.0.0",
+    "@tiptap/pm": "^3.0.0",
     "@useplume/core": "workspace:^",
     "vue": "^3.4.0"
   },
   "devDependencies": {
+    "@tiptap/core": "^3.23.6",
+    "@tiptap/pm": "^3.23.6",
     "@useplume/core": "workspace:*",
     "@testing-library/vue": "^8.1.0",
     "jsdom": "^29.1.1",

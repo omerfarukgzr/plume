@@ -6,19 +6,59 @@ description: 'Install Plume’s React or Vue adapter, import the stylesheet, and
 
 ## Installation
 
-Install the adapter for your framework. Each adapter pulls in `@useplume/core` and the
-matching tiptap packages as dependencies.
+Install the adapter for your framework along with `@useplume/core`.
+
+**React:**
 
 ::: code-group
 
-```sh [React]
-pnpm add @useplume/react
+```sh [npm]
+npm install @useplume/react @useplume/core
 ```
 
-```sh [Vue]
-pnpm add @useplume/vue
+```sh [pnpm]
+pnpm add @useplume/react @useplume/core
 ```
 
+```sh [yarn]
+yarn add @useplume/react @useplume/core
+```
+
+:::
+
+**Vue 3:**
+
+::: code-group
+
+```sh [npm]
+npm install @useplume/vue @useplume/core
+```
+
+```sh [pnpm]
+pnpm add @useplume/vue @useplume/core
+```
+
+```sh [yarn]
+yarn add @useplume/vue @useplume/core
+```
+
+:::
+
+### tiptap is a peer dependency
+
+Plume builds on **tiptap v3**. `@tiptap/core` and `@tiptap/pm` are declared as
+`peerDependencies`, so your app and Plume always share a **single** tiptap
+instance — no duplicate copies, no bundle bloat. Most package managers (npm 7+,
+pnpm, yarn) install peers automatically; if yours doesn't, add them explicitly:
+
+```sh
+npm install @tiptap/core @tiptap/pm
+```
+
+::: warning tiptap v2 conflict
+Plume requires tiptap **v3** and cannot coexist with tiptap **v2** in the same
+app — a mixed v2/v3 dependency tree breaks at runtime. If your project already
+uses tiptap, make sure it's on v3 before adding Plume.
 :::
 
 ## Quick start
@@ -68,6 +108,34 @@ keystroke — pass `updateDelay={0}` to fire synchronously.
 ```
 
 :::
+
+### Two-way binding with `v-model` (Vue)
+
+The Vue adapter supports `v-model:content`, so you can bind the document to a
+ref. By default the bound value is HTML; pass `output="json"` to get the tiptap
+JSON document instead. Emissions are debounced by `updateDelay` (300 ms), like
+`onUpdate`.
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
+
+const html = ref('<p>Edit me</p>')
+</script>
+
+<template>
+  <PlumeEditor v-model:content="html" />
+  <!-- JSON instead of HTML: -->
+  <!-- <PlumeEditor v-model:content="doc" output="json" /> -->
+</template>
+```
+
+The `content` prop is reactive, so this also covers **async data** — render the
+editor immediately and assign `content` (or the `v-model` ref) once your data
+arrives; the document updates in place without remounting. Re-assigning the same
+value the user just typed is a no-op, so the cursor isn't disturbed.
 
 ## Accessing the editor instance
 

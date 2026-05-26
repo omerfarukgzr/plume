@@ -39,6 +39,7 @@ These are the variables most apps touch. See `styles.css` for the complete set
 | `--plume-font-size`         | `1rem`                          | Base content font size          |
 | `--plume-line-height`       | `1.7`                           | Content line height             |
 | `--plume-content-max-width` | `680px`                         | Max width of the writing column |
+| `--plume-content-padding`   | `3rem 1.5rem 6rem`              | Padding around the content      |
 | `--plume-radius`            | `16px`                          | Editor frame corner radius      |
 | `--plume-radius-sm`         | `8px`                           | Buttons, dropdowns, inputs      |
 | `--plume-gap`               | `2px`                           | Spacing between toolbar buttons |
@@ -72,6 +73,36 @@ root:
   --plume-color-active-text: #be123c;
   --plume-radius: 10px;
   --plume-font: 'Inter', system-ui, sans-serif;
+}
+```
+
+## Embedded / full-width editors
+
+The default content uses a centered reading column (`max-width: 680px`) with
+generous article padding — great for blog and document editing, but usually too
+narrow inside a form field or admin panel.
+
+For an edge-to-edge editor, pass the **`fluid`** prop (or add the
+`plume--fluid` class). It drops the max-width and tightens the padding:
+
+::: code-group
+
+```tsx [React]
+<PlumeEditor fluid content="<p>Fills its container</p>" />
+```
+
+```vue [Vue]
+<PlumeEditor fluid content="<p>Fills its container</p>" />
+```
+
+:::
+
+To fine-tune instead of going fully fluid, override the two layout variables:
+
+```css
+.plume {
+  --plume-content-max-width: 100%; /* or e.g. 920px */
+  --plume-content-padding: 0.75rem 1rem; /* compact */
 }
 ```
 

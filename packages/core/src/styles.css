@@ -14,7 +14,12 @@
   --plume-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --plume-font-size: 1rem;
   --plume-line-height: 1.7;
+  /* Reading-column width for the content. Set to `none` (or add the
+     `plume--fluid` modifier / the `fluid` prop) for an edge-to-edge editor. */
   --plume-content-max-width: 680px;
+  /* Padding around the content. The generous default suits an article layout;
+     override it (e.g. `0.75rem 1rem`) for compact form/admin editors. */
+  --plume-content-padding: 3rem 1.5rem 6rem;
 
   /* Light palette */
   --plume-color-bg: #ffffff;
@@ -392,10 +397,18 @@
 .plume-editor__content {
   max-width: var(--plume-content-max-width);
   margin-inline: auto;
-  padding: 3rem 1.5rem 6rem;
+  padding: var(--plume-content-padding);
   font-size: var(--plume-font-size);
   line-height: var(--plume-line-height);
   outline: none;
+}
+
+/* Edge-to-edge: fill the container instead of the centered reading column.
+   Useful for editors embedded in forms or admin panels. Toggle via the
+   `fluid` prop, or add this class yourself. */
+.plume--fluid {
+  --plume-content-max-width: none;
+  --plume-content-padding: 1rem 1.25rem;
 }
 
 /* Locked / read-only: tiptap sets contenteditable="false". Fade the content
