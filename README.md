@@ -9,6 +9,10 @@
 
 <p align="center">Customizable, framework-agnostic rich text editor built on <a href="https://tiptap.dev">tiptap</a>.</p>
 
+<p align="center">
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+</p>
+
 Plume keeps all editor logic in one place (`@useplume/core`) and ships thin
 adapters for each UI framework. Today: **React** and **Vue 3**. Tomorrow:
 Svelte, Solid, vanilla — without rewriting the editor.
@@ -198,4 +202,4 @@ pnpm play:vue       # run the Vue playground
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](./LICENSE) © Ömer Faruk Gezer
