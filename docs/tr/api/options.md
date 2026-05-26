@@ -136,8 +136,10 @@ import { createUploadHandler } from '@useplume/core'
   locale="tr"
   autoCapitalize={{ locale: 'tr' }}
   fonts={[
-    { label: 'Varsayılan', value: null },
-    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' },
+    { label: 'Varsayılan', value: null }, // sistem varsayılanı; value zorunlu
+    { label: 'Serif', value: 'Georgia, serif' }, // sistem fontu; value zorunlu
+    { label: 'Ekalem', src: '/fonts/ekalem.ttf' }, // özel font; aile adı label'dan türetilir
+    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' }, // özel font, açık aile adıyla
   ]}
   colors={['#111827', '#dc2626', '#2563eb']}
   image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }), maxSize: 5_000_000 }}

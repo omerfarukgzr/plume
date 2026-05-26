@@ -456,56 +456,30 @@
   margin: 0;
 }
 
-.plume-editor__content :where(blockquote) {
-  position: relative;
-  margin: 1.2em 0;
-  padding-left: 1.1em;
-  border-left: 3px solid var(--plume-color-border);
-  color: var(--plume-color-muted);
-  font-style: italic;
-}
-
-/* Plain blockquotes (the toolbar "quote" action) get the same double-quote mark
-   as the toolbar icon, on the left, instead of the bar. Custom blockquote
-   variants (.plume-blockquote) keep their colored bar. The SVG below mirrors
-   `icons.blockquote`; keep the two in sync. */
-.plume-editor__content :where(blockquote:not(.plume-blockquote)) {
-  padding-left: 2.4em;
-  border-left: none;
-}
-.plume-editor__content blockquote:not(.plume-blockquote)::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.2em;
-  width: 1.5em;
-  height: 1.5em;
-  background-color: var(--plume-color-muted);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 11H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.667-1.333 4.333-4 5'/%3E%3Cpath d='M19 11h-4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.667-1.333 4.333-4 5'/%3E%3C/svg%3E")
-    no-repeat center / contain;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 11H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.667-1.333 4.333-4 5'/%3E%3Cpath d='M19 11h-4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v6c0 2.667-1.333 4.333-4 5'/%3E%3C/svg%3E")
-    no-repeat center / contain;
-}
-
 /*
- * Custom blockquote variants (Plume's `blockquotes` option). The accent color
- * comes from each variant's spec, set inline as `--plume-quote-color`; it tints
- * the left border and a faint background while keeping the text upright.
+ * Blockquotes share one look: a tinted left bar with a faint matching wash,
+ * just like the Kuran / ayet citation variants. Plain quotes (the toolbar
+ * "quote" action) fall back to a neutral gray accent; custom variants
+ * (.plume-blockquote) override the accent via the inline `--plume-quote-color`.
  */
-.plume-editor__content :where(blockquote.plume-blockquote) {
+.plume-editor__content :where(blockquote) {
+  margin: 1.2em 0;
   padding: 0.6em 1.1em;
-  border-left: 3px solid var(--plume-quote-color, var(--plume-color-border));
+  border-left: 3px solid var(--plume-quote-color, var(--plume-color-muted));
   border-radius: 0 6px 6px 0;
-  background: color-mix(in srgb, var(--plume-quote-color, transparent) 8%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--plume-quote-color, var(--plume-color-muted)) 8%,
+    transparent
+  );
   color: var(--plume-color-text);
-  font-style: normal;
 }
 
-.plume-editor__content :where(blockquote.plume-blockquote > :first-child) {
+.plume-editor__content :where(blockquote > :first-child) {
   margin-top: 0;
 }
 
-.plume-editor__content :where(blockquote.plume-blockquote > :last-child) {
+.plume-editor__content :where(blockquote > :last-child) {
   margin-bottom: 0;
 }
 

@@ -49,6 +49,8 @@ const toolbarGroups: { name: string; label: string }[][] = [
   ],
   [
     { name: 'blockquote', label: 'Alıntı' },
+    { name: 'kuran', label: 'Kuran alıntısı' },
+    { name: 'hadis', label: 'Hadis alıntısı' },
     { name: 'codeBlock', label: 'Kod bloğu' },
   ],
   [
@@ -58,10 +60,6 @@ const toolbarGroups: { name: string; label: string }[][] = [
     { name: 'superscript', label: 'Üst simge' },
     { name: 'subscript', label: 'Alt simge' },
     { name: 'horizontalRule', label: 'Yatay çizgi' },
-  ],
-  [
-    { name: 'kuran', label: 'Kuran alıntısı' },
-    { name: 'hadis', label: 'Hadis alıntısı' },
   ],
   [
     { name: 'undo', label: 'Geri al' },

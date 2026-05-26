@@ -13,7 +13,7 @@ export { defaultExtensions } from './extensions'
 export type { DefaultExtensionOptions } from './extensions'
 export { messages, resolveLocale, resolveMessages } from './i18n'
 export type { PlumeMessages, SupportedLocale } from './i18n'
-export { injectFontFaces, primaryFontFamily } from './fonts'
+export { injectFontFaces, primaryFontFamily, resolveFontValue } from './fonts'
 export { resolveEditorOptions } from './options'
 export type { PlumeEditorOptions } from './options'
 export {

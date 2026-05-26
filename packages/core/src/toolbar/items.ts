@@ -10,6 +10,7 @@ import type {
 } from '../types'
 import { resolveMessages, type PlumeMessages } from '../i18n'
 import { insertImageFromFile, type ResizableImageOptions } from '../resizable-image'
+import { resolveFontValue } from '../fonts'
 
 function button(
   name: string,
@@ -66,17 +67,23 @@ export const defaultColors: string[] = [
 ]
 
 function fontFamilyItem(fonts: FontOption[], m: PlumeMessages): ToolbarItem {
-  const options: ToolbarMenuOption[] = fonts.map((font) => ({
-    label: font.label,
-    value: font.value ?? undefined,
-    run: (e) =>
-      font.value
-        ? e.chain().focus().setFontFamily(font.value).run()
-        : e.chain().focus().unsetFontFamily().run(),
-    isActive: font.value ? (e) => e.isActive('textStyle', { fontFamily: font.value }) : undefined,
-  }))
+  const options: ToolbarMenuOption[] = fonts.map((font) => {
+    const value = resolveFontValue(font)
+    return {
+      label: font.label,
+      value: value ?? undefined,
+      run: (e) =>
+        value
+          ? e.chain().focus().setFontFamily(value).run()
+          : e.chain().focus().unsetFontFamily().run(),
+      isActive: value ? (e) => e.isActive('textStyle', { fontFamily: value }) : undefined,
+    }
+  })
   return dropdown('fontFamily', m.toolbar.fontFamily, icons.fontFamily, 'select', options, (e) =>
-    fonts.some((f) => f.value != null && e.isActive('textStyle', { fontFamily: f.value })),
+    fonts.some((f) => {
+      const value = resolveFontValue(f)
+      return value != null && e.isActive('textStyle', { fontFamily: value })
+    }),
   )
 }
 

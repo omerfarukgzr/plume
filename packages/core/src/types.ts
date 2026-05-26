@@ -110,16 +110,20 @@ export interface FontOption {
    * CSS `font-family` value to apply, or `null` to clear the font (use the
    * editor default). The first option is treated as the default.
    *
-   * When {@link FontOption.src} is set, the first family in this stack is the
-   * name the loaded font file registers under, so it must match (e.g.
-   * `value: 'Inter'` with `src: '/fonts/Inter.woff2'`).
+   * Required for system fonts (no {@link FontOption.src}). When `src` is set,
+   * `value` is optional: omit it and Plume uses {@link FontOption.label} as the
+   * family name. Provide it only when the loaded file registers under a
+   * different name than the label (e.g. `value: 'Inter'` with
+   * `src: '/fonts/Inter.woff2'`); the first family in the stack must match that
+   * name.
    */
-  value: string | null
+  value?: string | null
   /**
    * Optional font file to load for this option. Pass a URL/path string
    * (e.g. `'/fonts/Inter.woff2'`) or a `File`/`Blob` (e.g. a user upload).
    * Plume injects a matching `@font-face` rule so the font renders without the
-   * app declaring it manually. Ignored when {@link FontOption.value} is `null`.
+   * app declaring it manually. When set, {@link FontOption.value} may be
+   * omitted — the family name is then derived from the label.
    */
   src?: string | Blob
 }

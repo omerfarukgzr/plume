@@ -15,6 +15,18 @@ function cssFamily(family: string): string {
   return /^[A-Za-z][\w-]*$/.test(family) ? family : `"${family.replace(/"/g, '\\"')}"`
 }
 
+/**
+ * Resolves the effective CSS `font-family` value for an option. An explicit
+ * {@link FontOption.value} (including `null`, which clears the font) always
+ * wins. Otherwise, when a {@link FontOption.src} is present, the family name is
+ * derived from the label so custom fonts only need `{ label, src }`. A plain
+ * option with neither resolves to `null` (the editor default).
+ */
+export function resolveFontValue(font: FontOption): string | null {
+  if (font.value !== undefined) return font.value
+  return font.src ? font.label : null
+}
+
 /** Tracks already-injected fonts so repeated mounts don't duplicate rules. */
 const injected = new Set<string>()
 
@@ -32,8 +44,9 @@ export function injectFontFaces(fonts: FontOption[] | undefined): string[] {
 
   const registered: string[] = []
   for (const font of fonts) {
-    if (!font.src || !font.value) continue
-    const family = primaryFontFamily(font.value)
+    const value = resolveFontValue(font)
+    if (!font.src || !value) continue
+    const family = primaryFontFamily(value)
     const key = `${family}::${typeof font.src === 'string' ? font.src : objectUrlKey(font.src)}`
     if (injected.has(key)) {
       registered.push(family)

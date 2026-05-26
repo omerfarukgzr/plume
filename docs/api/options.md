@@ -134,8 +134,10 @@ import { createUploadHandler } from '@useplume/core'
   locale="en"
   autoCapitalize={{ locale: 'en' }}
   fonts={[
-    { label: 'Default', value: null },
-    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' },
+    { label: 'Default', value: null }, // system default; value required
+    { label: 'Serif', value: 'Georgia, serif' }, // system font; value required
+    { label: 'Ekalem', src: '/fonts/ekalem.ttf' }, // custom font; family derived from label
+    { label: 'Inter', value: 'Inter', src: '/fonts/Inter.woff2' }, // custom font with explicit family
   ]}
   colors={['#111827', '#dc2626', '#2563eb']}
   image={{ uploadHandler: createUploadHandler({ url: '/api/upload' }), maxSize: 5_000_000 }}
