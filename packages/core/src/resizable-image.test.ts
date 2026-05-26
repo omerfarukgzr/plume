@@ -33,6 +33,24 @@ function imagePos(editor: Editor): number {
 
 const flush = () => new Promise((resolve) => setTimeout(resolve, 0))
 
+/**
+ * Minimal `FileReader` stand-in for the zero-config base64 path. jsdom's real
+ * `readAsDataURL` resolves asynchronously and, in some environments, throws from
+ * its internal base64 step after the test has torn down — surfacing as an
+ * unhandled error. The base64 assertion here only cares about the synchronous
+ * node attributes, so a deterministic stub keeps it from leaking a dangling read.
+ */
+class StubFileReader {
+  result: string | null = null
+  error: unknown = null
+  onload: (() => void) | null = null
+  onerror: (() => void) | null = null
+  readAsDataURL() {
+    this.result = 'data:image/png;base64,AQID'
+    queueMicrotask(() => this.onload?.())
+  }
+}
+
 describe('ResizableImage commands & serialization', () => {
   let editor: Editor | undefined
 
@@ -153,6 +171,7 @@ describe('insertImageFromFile pipeline', () => {
     editor?.destroy()
     editor = undefined
     vi.restoreAllMocks()
+    vi.unstubAllGlobals()
   })
 
   it('inserts an optimistic placeholder, then swaps in the uploaded URL', async () => {
@@ -230,10 +249,12 @@ describe('insertImageFromFile pipeline', () => {
     expect(imageNode(ed)?.attrs.assetId).toBe('server-id')
   })
 
-  it('does not stamp an assetId for the zero-config base64 default', () => {
+  it('does not stamp an assetId for the zero-config base64 default', async () => {
+    vi.stubGlobal('FileReader', StubFileReader)
     const ed = make({}) // no uploadHandler → base64, nothing on a server to track
     insertImageFromFile(ed, png())
     expect(imageNode(ed)?.attrs.assetId).toBeNull()
+    await flush() // drain the base64 read so it completes inside the test
   })
 
   it('rejects an invalid file before inserting anything', () => {
