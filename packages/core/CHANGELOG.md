@@ -1,5 +1,12 @@
 # @useplume/core
 
+## 0.2.2
+
+### Patch Changes
+
+- Blockquote toolbar button now uses a double-quotation-mark icon (two quote marks)
+  instead of the indented-lines glyph, so the "quote" action reads more clearly.
+
 ## 0.2.1
 
 ### Patch Changes
