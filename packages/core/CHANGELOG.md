@@ -1,5 +1,11 @@
 # @useplume/core
 
+## 0.2.3
+
+### Patch Changes
+
+- optional font value (derive family from label) + unified blockquote styling
+
 ## 0.2.2
 
 ### Patch Changes
