@@ -21,6 +21,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter=./packages/* && changeset publish",
+    "ship": "bash scripts/release.sh",
     "play:react": "pnpm --filter @useplume/playground-react dev",
     "play:vue": "pnpm --filter @useplume/playground-vue dev",
     "docs:dev": "vitepress dev docs",

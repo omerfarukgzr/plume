@@ -28,12 +28,12 @@ jobs:
         with:
           fetch-depth: 0 # lastUpdated needs full git history
 
-      - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+
+      # pnpm via corepack (bundled with Node) — no marketplace action to fetch.
+      - run: corepack enable
 
       - run: pnpm install --frozen-lockfile
 

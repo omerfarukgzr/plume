@@ -6,6 +6,8 @@
 
 - Blockquote toolbar button now uses a double-quotation-mark icon (two quote marks)
   instead of the indented-lines glyph, so the "quote" action reads more clearly.
+  Rendered blockquotes show the same quote mark on the left in place of the plain
+  bar (custom blockquote variants keep their colored bar).
 
 ## 0.2.1
 

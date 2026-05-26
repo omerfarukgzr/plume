@@ -231,6 +231,33 @@ pnpm play:react     # run the React playground
 pnpm play:vue       # run the Vue playground
 ```
 
+### Releasing
+
+Two ways to publish — both bump `@useplume/{core,react,vue}` together (they're a
+changesets `fixed` group):
+
+**1. Standard (CI).** Run `pnpm changeset` to record your change, commit, and push
+to `main`. The Release workflow opens a "Version Packages" PR; merging it bumps
+versions and publishes to npm with provenance via the `NPM_TOKEN` secret. Nothing
+else to do.
+
+**2. One command, locally (`pnpm ship`).** When you just want a change live —
+or GitHub Actions is having a bad day — `pnpm ship` does the whole release
+end-to-end: changeset → version bump → build → publish → commit → tag → push.
+
+```bash
+pnpm ship "Short summary of the change"        # patch bump (default)
+pnpm ship "New v-model API" minor              # minor / major also accepted
+```
+
+Publishing needs an npm token that bypasses 2FA. Store one once in `~/.npmrc`
+(`//registry.npmjs.org/:_authToken=npm_XXXX`), or pass it inline:
+`NPM_TOKEN=npm_XXXX pnpm ship "msg"`. The script refuses to run on a dirty tree
+and skips versions already on the registry, so re-running is safe.
+
+> CI uses **corepack** (bundled with Node) instead of a marketplace action to set
+> up pnpm, so releases don't break when the Actions marketplace/codeload is flaky.
+
 ## License
 
 [MIT](./LICENSE) © Ömer Faruk Gezer
