@@ -1,5 +1,13 @@
 # @useplume/react
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [33e7cb1]
+- Updated dependencies [33e7cb1]
+  - @useplume/core@0.2.4
+
 ## 0.2.3
 
 ### Patch Changes
