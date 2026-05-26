@@ -1,10 +1,28 @@
 {
   "name": "@useplume/vue",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vue 3 adapter for Plume — a customizable rich text editor built on tiptap.",
   "license": "MIT",
   "type": "module",
-  "files": ["dist"],
+  "author": "Ömer Faruk Gezer",
+  "keywords": [
+    "editor",
+    "rich-text",
+    "wysiwyg",
+    "tiptap",
+    "vue",
+    "plume"
+  ],
+  "homepage": "https://github.com/omerfarukgzr/plume#readme",
+  "bugs": "https://github.com/omerfarukgzr/plume/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omerfarukgzr/plume.git",
+    "directory": "packages/vue"
+  },
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

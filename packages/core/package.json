@@ -1,11 +1,31 @@
 {
   "name": "@useplume/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Framework-agnostic core for Plume — a customizable rich text editor built on tiptap.",
   "license": "MIT",
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["dist"],
+  "author": "Ömer Faruk Gezer",
+  "keywords": [
+    "editor",
+    "rich-text",
+    "wysiwyg",
+    "tiptap",
+    "prosemirror",
+    "plume"
+  ],
+  "homepage": "https://github.com/omerfarukgzr/plume#readme",
+  "bugs": "https://github.com/omerfarukgzr/plume/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omerfarukgzr/plume.git",
+    "directory": "packages/core"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",

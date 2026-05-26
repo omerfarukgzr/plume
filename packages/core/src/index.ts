@@ -55,4 +55,4 @@ export { base64UploadHandler, createUploadHandler, validateImageFile } from './u
 export type { FileValidationOptions, UploadHandlerConfig } from './upload'
 
 /** Current Plume version. */
-export const version = '0.0.0'
+export const version = '0.1.0'
