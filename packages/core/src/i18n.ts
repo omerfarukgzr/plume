@@ -67,6 +67,19 @@ export interface PlumeMessages {
     label: string
     backref: (number: number) => string
   }
+  /** Labels for the paste-mode chooser modal. */
+  paste: {
+    /** Modal title. */
+    title: string
+    /** Prompt shown under the title. */
+    description: string
+    /** Button that pastes plain text (strips formatting). */
+    plainText: string
+    /** Button that keeps the source formatting. */
+    styled: string
+    /** Button that dismisses the modal without pasting. */
+    cancel: string
+  }
 }
 
 const tr: PlumeMessages = {
@@ -134,6 +147,13 @@ const tr: PlumeMessages = {
     label: 'Dipnotlar',
     backref: (number) => `${number}. referansa dön`,
   },
+  paste: {
+    title: 'Yapıştırma seçeneği',
+    description: 'Panodaki metni nasıl yapıştırmak istersiniz?',
+    plainText: 'Sadece metin',
+    styled: 'Biçimli',
+    cancel: 'İptal',
+  },
 }
 
 const en: PlumeMessages = {
@@ -200,6 +220,13 @@ const en: PlumeMessages = {
   footnote: {
     label: 'Footnotes',
     backref: (number) => `Back to reference ${number}`,
+  },
+  paste: {
+    title: 'Paste option',
+    description: 'How would you like to paste the clipboard content?',
+    plainText: 'Plain text',
+    styled: 'Keep formatting',
+    cancel: 'Cancel',
   },
 }
 

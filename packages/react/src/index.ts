@@ -8,6 +8,8 @@ export { ToolbarDropdown } from './ToolbarDropdown'
 export type { ToolbarDropdownProps } from './ToolbarDropdown'
 export { ToolbarLink } from './ToolbarLink'
 export type { ToolbarLinkProps } from './ToolbarLink'
+export { PasteModal } from './PasteModal'
+export type { PasteModalProps } from './PasteModal'
 export { usePlumeEditor } from './usePlumeEditor'
 
 export { EditorContent } from '@tiptap/react'

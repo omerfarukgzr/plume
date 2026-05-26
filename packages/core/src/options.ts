@@ -56,12 +56,21 @@ export function resolveEditorOptions(options: PlumeOptions = {}): PlumeEditorOpt
     image,
     footnote,
     blockquotes,
+    pasteManager,
     onUpdate,
     updateDelay = DEFAULT_UPDATE_DELAY,
   } = options
 
   const base: Extensions = useDefaults
-    ? defaultExtensions({ placeholder, locale, autoCapitalize, image, footnote, blockquotes })
+    ? defaultExtensions({
+        placeholder,
+        locale,
+        autoCapitalize,
+        image,
+        footnote,
+        blockquotes,
+        pasteManager,
+      })
     : []
   const className = ['plume-editor__content', editorClass].filter(Boolean).join(' ')
 

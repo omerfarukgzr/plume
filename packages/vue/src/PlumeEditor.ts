@@ -10,6 +10,7 @@ import {
 } from '@useplume/core'
 import { usePlumeEditor } from './usePlumeEditor'
 import { Toolbar } from './Toolbar'
+import { PasteModal } from './PasteModal'
 
 /**
  * Drop-in rich text editor: a toolbar plus the editable surface.
@@ -56,6 +57,7 @@ export const PlumeEditor = defineComponent({
       type: Array as PropType<PlumeOptions['blockquotes']>,
       default: undefined,
     },
+    pasteManager: { type: Boolean, default: false },
     toolbarItems: {
       type: Array as PropType<PlumeOptions['toolbarItems']>,
       default: undefined,
@@ -81,6 +83,7 @@ export const PlumeEditor = defineComponent({
       autoCapitalize: props.autoCapitalize,
       image: props.image,
       blockquotes: props.blockquotes,
+      pasteManager: props.pasteManager,
       onUpdate: props.onUpdate,
       updateDelay: props.updateDelay,
     })
@@ -114,6 +117,9 @@ export const PlumeEditor = defineComponent({
           ? h(Toolbar, { editor: instance, items: items.value, ariaLabel: toolbarLabel.value })
           : null,
         h(EditorContent, { editor: instance, class: 'plume-editor' }),
+        props.pasteManager
+          ? h(PasteModal, { editor: instance, locale: props.locale })
+          : null,
       ])
     }
   },

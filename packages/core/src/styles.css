@@ -789,6 +789,125 @@
   color: var(--plume-color-muted);
 }
 
+/* ---------- Paste modal ---------- */
+
+/*
+ * Centered, full-screen overlay shown by the paste manager. The backdrop closes
+ * the modal on click; the card stops propagation so clicks inside keep it open.
+ */
+.plume-paste-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgb(0 0 0 / 40%);
+  animation: plume-paste-fade 140ms ease-out;
+}
+
+.plume-paste-modal__card {
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--plume-color-bg);
+  color: var(--plume-color-text);
+  border: 1px solid var(--plume-color-border);
+  border-radius: var(--plume-radius-sm);
+  box-shadow: 0 16px 48px rgb(0 0 0 / 24%);
+  animation: plume-paste-pop 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes plume-paste-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes plume-paste-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plume-paste-modal,
+  .plume-paste-modal__card {
+    animation: none;
+  }
+}
+
+.plume-paste-modal__title {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.plume-paste-modal__description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--plume-color-muted);
+}
+
+.plume-paste-modal__actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.plume-paste-modal__button {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.plume-paste-modal__button--ghost {
+  margin-right: auto;
+  background: transparent;
+  color: var(--plume-color-muted);
+}
+
+.plume-paste-modal__button--ghost:hover {
+  background: var(--plume-color-button-hover-bg);
+  color: var(--plume-color-button-hover);
+}
+
+.plume-paste-modal__button--secondary {
+  background: var(--plume-color-button-hover-bg);
+  color: var(--plume-color-text);
+  border-color: var(--plume-color-border);
+}
+
+.plume-paste-modal__button--secondary:hover {
+  border-color: var(--plume-color-primary);
+}
+
+.plume-paste-modal__button--primary {
+  background: var(--plume-color-primary);
+  color: #ffffff;
+}
+
+.plume-paste-modal__button--primary:hover {
+  filter: brightness(1.05);
+}
+
+.plume-paste-modal__button:focus-visible {
+  outline: 2px solid var(--plume-color-primary);
+  outline-offset: 2px;
+}
+
 /* ---------- Dark theme ---------- */
 
 :where([data-theme='dark']) .plume,

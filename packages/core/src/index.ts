@@ -42,6 +42,8 @@ export {
 export type { CustomBlockquoteOptions, CustomBlockquoteSpec } from './custom-blockquote'
 export { footnoteExtensions, PlumeDocument } from './footnotes'
 export type { FootnoteExtensionOptions } from './footnotes'
+export { insertPaste, PasteManager, PASTE_EVENT } from './paste-manager'
+export type { PasteManagerOptions, PasteMode, PendingPaste } from './paste-manager'
 export { ResizableImage, insertImageFromFile, collectImageAssetIds } from './resizable-image'
 export type {
   ImageAlign,

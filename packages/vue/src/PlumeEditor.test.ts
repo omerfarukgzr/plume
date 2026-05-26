@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { render } from '@testing-library/vue'
+import { render, waitFor } from '@testing-library/vue'
+import { PASTE_EVENT } from '@useplume/core'
 import { PlumeEditor } from './PlumeEditor'
 
 // tiptap's Vue editor is created in onMounted, so the toolbar and content
@@ -29,5 +30,33 @@ describe('PlumeEditor (vue)', () => {
     // Wait until the editor has mounted (the editable region has role=textbox).
     await findByRole('textbox')
     expect(queryByRole('toolbar')).toBeNull()
+  })
+
+  it('opens the paste chooser on a paste event when pasteManager is on', async () => {
+    const { container, findByRole, getByText } = render(PlumeEditor, {
+      props: { content: '<p>x</p>', pasteManager: true },
+    })
+    // Wait for the editor to mount, then simulate the PasteManager hand-off.
+    await findByRole('textbox')
+    const dom = container.querySelector('.plume-editor__content')!
+    dom.dispatchEvent(
+      new CustomEvent(PASTE_EVENT, { detail: { html: '<b>hi</b>', text: 'hi' }, bubbles: true }),
+    )
+    const dialog = await findByRole('dialog', { name: 'Yapıştırma seçeneği' })
+    expect(dialog).toBeTruthy()
+    expect(getByText('Sadece metin')).toBeTruthy()
+  })
+
+  it('ignores paste events when pasteManager is off', async () => {
+    const { container, findByRole, queryByRole } = render(PlumeEditor, {
+      props: { content: '<p>x</p>' },
+    })
+    await findByRole('textbox')
+    container
+      .querySelector('.plume-editor__content')!
+      .dispatchEvent(
+        new CustomEvent(PASTE_EVENT, { detail: { html: '', text: 'hi' }, bubbles: true }),
+      )
+    await waitFor(() => expect(queryByRole('dialog')).toBeNull())
   })
 })

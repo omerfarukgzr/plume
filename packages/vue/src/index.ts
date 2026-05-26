@@ -2,6 +2,7 @@ export { PlumeEditor } from './PlumeEditor'
 export { Toolbar } from './Toolbar'
 export { ToolbarDropdown } from './ToolbarDropdown'
 export { ToolbarLink } from './ToolbarLink'
+export { PasteModal } from './PasteModal'
 export { usePlumeEditor } from './usePlumeEditor'
 
 export { EditorContent } from '@tiptap/vue-3'

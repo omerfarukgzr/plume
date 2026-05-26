@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { EditorContent, Toolbar, usePlumeEditor, type Editor } from '@useplume/react'
+import { EditorContent, PasteModal, Toolbar, usePlumeEditor, type Editor } from '@useplume/react'
 import {
   icons,
   resolveToolbarItems,
@@ -195,6 +195,8 @@ function EditorPane({
     // config). To store on your own server instead, pass:
     //   uploadHandler: createUploadHandler({ url: '/api/upload' })
     // The bubble-menu/caption labels follow `locale` automatically.
+    // Intercept paste and ask plain-text vs. keep-formatting via a modal.
+    pasteManager: true,
   })
   const items = useMemo(
     () => resolveToolbarItems(buildToolbar(enabled), { locale: lang, blockquotes: quotes }),
@@ -216,6 +218,9 @@ function EditorPane({
       <div className="plume" data-theme={dark ? 'dark' : undefined}>
         <Toolbar editor={editor} items={items} />
         <EditorContent editor={editor} className="plume-editor" />
+        {/* `<PlumeEditor />` renders this for you; with the composable API we
+            add the paste chooser ourselves since `pasteManager` is enabled. */}
+        <PasteModal editor={editor} locale={lang} />
       </div>
       <HtmlOutput editor={editor} />
     </>

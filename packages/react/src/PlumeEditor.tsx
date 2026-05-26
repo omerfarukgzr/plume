@@ -8,6 +8,7 @@ import {
 } from '@useplume/core'
 import { usePlumeEditor } from './usePlumeEditor'
 import { Toolbar } from './Toolbar'
+import { PasteModal } from './PasteModal'
 
 export interface PlumeEditorProps extends PlumeOptions {
   /** Extra class name(s) added to the editor root element. */
@@ -45,6 +46,7 @@ export function PlumeEditor({ className, ...options }: PlumeEditorProps) {
         />
       )}
       <EditorContent editor={editor} className="plume-editor" />
+      {options.pasteManager && <PasteModal editor={editor} locale={options.locale} />}
     </div>
   )
 }

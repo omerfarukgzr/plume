@@ -191,6 +191,13 @@ export interface PlumeOptions {
   /** Configure footnotes (label), or pass `false` to omit them. */
   footnote?: boolean | FootnoteExtensionOptions
   /**
+   * Enable the paste manager: intercept paste (Ctrl/Cmd+V, context menu, …) and
+   * let the user choose between pasting plain text or keeping the source
+   * formatting through a modal. Off by default. The React and Vue `PlumeEditor`
+   * render the chooser modal automatically when this is `true`.
+   */
+  pasteManager?: boolean
+  /**
    * Custom blockquote variants (e.g. Kuran / Hadis citations). Each becomes a
    * styled blockquote node; reference the same name in {@link PlumeOptions.toolbar}
    * (and in {@link ToolbarBuildConfig.blockquotes} when resolving toolbar items)

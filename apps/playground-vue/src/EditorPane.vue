@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { EditorContent, Toolbar, usePlumeEditor } from '@useplume/vue'
+import { EditorContent, PasteModal, Toolbar, usePlumeEditor } from '@useplume/vue'
 import { resolveToolbarItems, type CustomBlockquoteSpec, type ToolbarConfig } from '@useplume/core'
 
 // The editor is created once on mount with the locale baked in (placeholder,
@@ -36,6 +36,8 @@ const editor = usePlumeEditor({
   locale: props.lang,
   autoCapitalize: true,
   blockquotes: props.blockquotes,
+  // Intercept paste and ask plain-text vs. keep-formatting via a modal.
+  pasteManager: true,
   // No `uploadHandler` → images embed as base64 (zero config). The bubble-menu/
   // caption labels follow `locale` automatically.
   onUpdate: (instance) => {
@@ -53,6 +55,9 @@ const items = computed(() =>
   <div v-if="editor" class="plume" :data-theme="dark ? 'dark' : undefined">
     <Toolbar :editor="editor" :items="items" />
     <EditorContent :editor="editor" class="plume-editor" />
+    <!-- `<PlumeEditor />` renders this for you; with the composable API we add
+         the paste chooser ourselves since `pasteManager` is enabled. -->
+    <PasteModal :editor="editor" :locale="lang" />
   </div>
 
   <details class="output">

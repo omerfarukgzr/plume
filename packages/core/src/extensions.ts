@@ -12,6 +12,7 @@ import { resolveMessages } from './i18n'
 import { customBlockquoteExtensions, type CustomBlockquoteSpec } from './custom-blockquote'
 import { footnoteExtensions, type FootnoteExtensionOptions } from './footnotes'
 import { ResizableImage, type ResizableImageOptions } from './resizable-image'
+import { PasteManager } from './paste-manager'
 
 export interface DefaultExtensionOptions {
   /** Placeholder text shown while the document is empty. */
@@ -43,6 +44,11 @@ export interface DefaultExtensionOptions {
    * toolbar layout to get a matching button.
    */
   blockquotes?: CustomBlockquoteSpec[]
+  /**
+   * Add the {@link PasteManager} extension so paste is intercepted and the
+   * adapter can offer a plain-text vs. formatted choice. Off by default.
+   */
+  pasteManager?: boolean
 }
 
 /**
@@ -55,7 +61,8 @@ export interface DefaultExtensionOptions {
  * (font family + color), case tools and a resizable image node.
  */
 export function defaultExtensions(options: DefaultExtensionOptions = {}): Extensions {
-  const { placeholder, locale, autoCapitalize, image, footnote, blockquotes } = options
+  const { placeholder, locale, autoCapitalize, image, footnote, blockquotes, pasteManager } =
+    options
   const m = resolveMessages(locale)
   const footnoteEnabled = footnote !== false
 
@@ -117,6 +124,10 @@ export function defaultExtensions(options: DefaultExtensionOptions = {}): Extens
 
   if (blockquotes?.length) {
     extensions.push(...customBlockquoteExtensions(blockquotes))
+  }
+
+  if (pasteManager) {
+    extensions.push(PasteManager)
   }
 
   return extensions
