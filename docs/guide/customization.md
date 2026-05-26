@@ -1,3 +1,7 @@
+---
+description: 'Customize the Plume editor through props: configure the toolbar, register custom toolbar items, and pass your own tiptap extensions.'
+---
+
 # Customization
 
 All customization is driven by props on `<PlumeEditor>` (or the options object passed
@@ -73,14 +77,21 @@ Append your own tiptap nodes, marks or extensions. They run after Plume's defaul
 ```tsx
 import { Mention } from '@tiptap/extension-mention'
 
-<PlumeEditor extensions={[Mention]} />
+;<PlumeEditor extensions={[Mention]} />
 ```
 
 To start from a blank slate, turn off the defaults with `defaultExtensions={false}`
 and supply your own set.
 
 ```tsx
-<PlumeEditor defaultExtensions={false} extensions={[/* your extensions */]} />
+<PlumeEditor
+  defaultExtensions={false}
+  extensions={
+    [
+      /* your extensions */
+    ]
+  }
+/>
 ```
 
 Plume also re-exports its own extensions from `@useplume/core` so you can compose them
@@ -102,6 +113,20 @@ reference the variant's `name` in the toolbar layout.
   ]}
 />
 ```
+
+## Paste manager
+
+Let users choose how pasted content lands. With `pasteManager`, every paste opens a
+modal offering **plain text** (formatting stripped) or **keep formatting** (the source
+HTML, parsed through the editor's schema). It's off by default.
+
+```tsx
+<PlumeEditor content="<p></p>" pasteManager />
+```
+
+The modal closes on <kbd>Esc</kbd>, a backdrop click, or after a choice, and its labels
+follow `locale`. See [`pasteManager`](/api/options#paste-manager) for handling paste
+yourself via the `PasteManager` extension and `insertPaste` helper.
 
 ## Locale
 

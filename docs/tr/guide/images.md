@@ -1,3 +1,7 @@
+---
+description: 'Plume’un görsel hattı: toolbar, yapıştırma ve sürükle-bırak ile yeniden boyutlandırılabilir, hizalanabilir, açıklamalı görseller; geçici önizleme ve asenkron yükleme.'
+---
+
 # Görseller ve yükleme
 
 Görseller yeniden boyutlandırılabilir (köşedeki tutamacı sürükleyin), hizalanabilir,

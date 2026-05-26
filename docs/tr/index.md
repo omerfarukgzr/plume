@@ -1,5 +1,6 @@
 ---
 layout: home
+description: 'Plume; tiptap üzerine kurulu, özelleştirilebilir, framework’ten bağımsız bir zengin metin editörüdür. Tek çekirdek; ince React ve Vue adaptörleri.'
 
 hero:
   name: Plume

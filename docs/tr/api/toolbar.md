@@ -1,3 +1,7 @@
+---
+description: 'Plume’un hazır toolbar öğe adları (ToolbarItemName) referansı; sıralayın, çıkarın veya kendi özel düğmelerinizle birleştirin.'
+---
+
 # Toolbar öğeleri
 
 `toolbar` seçeneği, öğe adlarından oluşan sıralı bir liste alır. Aşağıda hazır
@@ -7,28 +11,38 @@ alıntı türlerinizi adlarıyla çağırabilirsiniz.
 
 ## Hazır adlar
 
-| Kategori    | Adlar                                                            |
-| ----------- | ---------------------------------------------------------------- |
-| Biçimler    | `bold`, `italic`, `underline`, `strike`, `code`, `highlight`     |
-| Başlıklar   | `heading1`, `heading2`, `heading3`                               |
-| Bloklar     | `bulletList`, `orderedList`, `blockquote`, `codeBlock`, `horizontalRule` |
-| Ekleme      | `link`, `image`, `footnote`                                      |
-| Üst/alt simge | `superscript`, `subscript`                                     |
-| Açılır menü | `fontFamily`, `textColor`, `changeCase`                          |
-| Hizalama    | `alignLeft`, `alignCenter`, `alignRight`, `alignJustify`         |
-| Geçmiş      | `undo`, `redo`                                                   |
-| Ayraç       | `'|'`                                                            |
+| Kategori      | Adlar                                                                    |
+| ------------- | ------------------------------------------------------------------------ | --- |
+| Biçimler      | `bold`, `italic`, `underline`, `strike`, `code`, `highlight`             |
+| Başlıklar     | `heading1`, `heading2`, `heading3`                                       |
+| Bloklar       | `bulletList`, `orderedList`, `blockquote`, `codeBlock`, `horizontalRule` |
+| Ekleme        | `link`, `image`, `footnote`                                              |
+| Üst/alt simge | `superscript`, `subscript`                                               |
+| Açılır menü   | `fontFamily`, `textColor`, `changeCase`                                  |
+| Hizalama      | `alignLeft`, `alignCenter`, `alignRight`, `alignJustify`                 |
+| Geçmiş        | `undo`, `redo`                                                           |
+| Ayraç         | `'                                                                       | '`  |
 
 ## Örnek
 
 ```tsx
 <PlumeEditor
   toolbar={[
-    'bold', 'italic', 'underline', '|',
-    'heading1', 'heading2', '|',
-    'bulletList', 'orderedList', '|',
-    'link', 'image', '|',
-    'undo', 'redo',
+    'bold',
+    'italic',
+    'underline',
+    '|',
+    'heading1',
+    'heading2',
+    '|',
+    'bulletList',
+    'orderedList',
+    '|',
+    'link',
+    'image',
+    '|',
+    'undo',
+    'redo',
   ]}
 />
 ```

@@ -1,3 +1,7 @@
+---
+description: 'Plume’un React veya Vue adaptörünü kurun, stil dosyasını içe aktarın ve birkaç satırda tiptap tabanlı zengin metin editörünü ekranda görün.'
+---
+
 # Hemen başla
 
 ## Kurulum
@@ -57,17 +61,11 @@ isterseniz `updateDelay={0}` verin.
 ::: code-group
 
 ```tsx [React]
-<PlumeEditor
-  content="<p>Beni düzenle</p>"
-  onUpdate={(editor) => console.log(editor.getHTML())}
-/>
+<PlumeEditor content="<p>Beni düzenle</p>" onUpdate={(editor) => console.log(editor.getHTML())} />
 ```
 
 ```vue [Vue]
-<PlumeEditor
-  content="<p>Beni düzenle</p>"
-  :on-update="(editor) => console.log(editor.getHTML())"
-/>
+<PlumeEditor content="<p>Beni düzenle</p>" :on-update="(editor) => console.log(editor.getHTML())" />
 ```
 
 :::

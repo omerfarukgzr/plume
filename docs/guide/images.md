@@ -1,3 +1,7 @@
+---
+description: 'Plume’s image pipeline: resizable, alignable, captioned images via toolbar, paste and drag-and-drop, with optimistic placeholders and async uploads.'
+---
+
 # Images & uploads
 
 Images are resizable (drag the corner handle), alignable, captioned and deletable. A

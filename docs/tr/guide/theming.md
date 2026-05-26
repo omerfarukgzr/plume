@@ -1,3 +1,7 @@
+---
+description: 'Plume editörünü --plume-* önekli CSS değişkenleriyle temalandırın, varsayılan görünümü değiştirin veya tamamen stilsiz bir editör kullanın.'
+---
+
 # Tema
 
 Plume'un görünümü baştan sona `--plume-` ön ekli CSS değişkenleriyle yönetilir.

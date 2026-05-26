@@ -1,5 +1,6 @@
 ---
 layout: home
+description: 'Plume is a customizable, framework-agnostic rich text editor built on tiptap. One core, thin React and Vue adapters; Svelte, Solid and vanilla without rewriting the editor.'
 
 hero:
   name: Plume

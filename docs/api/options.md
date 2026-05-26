@@ -1,3 +1,7 @@
+---
+description: 'Full reference for PlumeOptions — every prop accepted by Plume’s React and Vue editors, covering content, behaviour, toolbar, images and more.'
+---
+
 # PlumeOptions
 
 Every adapter accepts the same options, exposed as props on `<PlumeEditor>` and as the
@@ -5,49 +9,71 @@ argument to `usePlumeEditor`. The type is exported from `@useplume/core` as `Plu
 
 ## Content & behaviour
 
-| Option              | Type                                            | Default | Description                                                              |
-| ------------------- | ----------------------------------------------- | ------- | ------------------------------------------------------------------------ |
-| `content`           | `string \| object \| null`                      | `''`    | Initial content as an HTML string or a tiptap JSON document.             |
-| `editable`          | `boolean`                                       | `true`  | Whether the document can be edited.                                      |
-| `placeholder`       | `string`                                        | —       | Placeholder shown while the document is empty.                           |
-| `autofocus`         | `boolean \| 'start' \| 'end' \| number`         | `false` | Autofocus behaviour on mount.                                            |
-| `editorClass`       | `string`                                        | —       | Extra class name(s) added to the editable content element.              |
-| `immediatelyRender` | `boolean`                                       | `true`  | Render synchronously on first paint. Set `false` for SSR.                |
+| Option              | Type                                    | Default | Description                                                  |
+| ------------------- | --------------------------------------- | ------- | ------------------------------------------------------------ |
+| `content`           | `string \| object \| null`              | `''`    | Initial content as an HTML string or a tiptap JSON document. |
+| `editable`          | `boolean`                               | `true`  | Whether the document can be edited.                          |
+| `placeholder`       | `string`                                | —       | Placeholder shown while the document is empty.               |
+| `autofocus`         | `boolean \| 'start' \| 'end' \| number` | `false` | Autofocus behaviour on mount.                                |
+| `editorClass`       | `string`                                | —       | Extra class name(s) added to the editable content element.   |
+| `immediatelyRender` | `boolean`                               | `true`  | Render synchronously on first paint. Set `false` for SSR.    |
 
 ## Toolbar
 
-| Option         | Type                          | Default   | Description                                                       |
-| -------------- | ----------------------------- | --------- | ----------------------------------------------------------------- |
-| `toolbar`      | `ToolbarConfig` (`string[] \| false`) | default set | Ordered list of item names, or `false` to hide the toolbar. |
-| `toolbarItems` | `ToolbarItem[]`               | —         | Custom controls / overrides, referenced by `name` in `toolbar`.   |
+| Option         | Type                                  | Default     | Description                                                     |
+| -------------- | ------------------------------------- | ----------- | --------------------------------------------------------------- |
+| `toolbar`      | `ToolbarConfig` (`string[] \| false`) | default set | Ordered list of item names, or `false` to hide the toolbar.     |
+| `toolbarItems` | `ToolbarItem[]`                       | —           | Custom controls / overrides, referenced by `name` in `toolbar`. |
 
 See [Toolbar items](/api/toolbar) for the built-in names.
 
 ## Extensions
 
-| Option              | Type         | Default | Description                                            |
-| ------------------- | ------------ | ------- | ------------------------------------------------------ |
-| `extensions`        | `Extensions` | `[]`    | Additional tiptap extensions appended after defaults.  |
-| `defaultExtensions` | `boolean`    | `true`  | Include Plume's default extension set.                 |
+| Option              | Type         | Default | Description                                           |
+| ------------------- | ------------ | ------- | ----------------------------------------------------- |
+| `extensions`        | `Extensions` | `[]`    | Additional tiptap extensions appended after defaults. |
+| `defaultExtensions` | `boolean`    | `true`  | Include Plume's default extension set.                |
 
 ## Features
 
-| Option           | Type                                     | Default | Description                                                  |
-| ---------------- | ---------------------------------------- | ------- | ------------------------------------------------------------ |
-| `fonts`          | `FontOption[]`                           | —       | Fonts offered by the font-family dropdown.                   |
-| `colors`         | `string[]`                               | —       | Hex colors offered by the text-color dropdown.               |
-| `locale`         | `string`                                 | `'tr'`  | BCP-47 locale for UI strings and case features.              |
-| `autoCapitalize` | `boolean \| { locale?: string }`         | `false` | Enable automatic sentence capitalization.                    |
+| Option           | Type                                        | Default | Description                                                |
+| ---------------- | ------------------------------------------- | ------- | ---------------------------------------------------------- |
+| `fonts`          | `FontOption[]`                              | —       | Fonts offered by the font-family dropdown.                 |
+| `colors`         | `string[]`                                  | —       | Hex colors offered by the text-color dropdown.             |
+| `locale`         | `string`                                    | `'tr'`  | BCP-47 locale for UI strings and case features.            |
+| `autoCapitalize` | `boolean \| { locale?: string }`            | `false` | Enable automatic sentence capitalization.                  |
 | `image`          | `boolean \| Partial<ResizableImageOptions>` | enabled | Configure the resizable image node, or `false` to omit it. |
-| `footnote`       | `boolean \| FootnoteExtensionOptions`    | enabled | Configure footnotes, or `false` to omit them.                |
-| `blockquotes`    | `CustomBlockquoteSpec[]`                 | —       | Custom blockquote variants (callouts).                       |
+| `footnote`       | `boolean \| FootnoteExtensionOptions`       | enabled | Configure footnotes, or `false` to omit them.              |
+| `blockquotes`    | `CustomBlockquoteSpec[]`                    | —       | Custom blockquote variants (callouts).                     |
+| `pasteManager`   | `boolean`                                   | `false` | Ask how to paste (plain text vs. keep formatting) via a modal. |
+
+### Paste manager
+
+With `pasteManager` enabled, Plume intercepts every paste (`Ctrl`/`Cmd`+`V`,
+the context menu, …) and opens a modal asking how to insert the clipboard:
+
+- **Plain text** — strips all formatting and pastes the text only.
+- **Keep formatting** — preserves the source HTML (bold, links, lists …),
+  parsed through the editor's own schema so only marks Plume understands survive.
+
+The modal closes on <kbd>Esc</kbd>, on a backdrop click, or after a choice. The
+React and Vue `<PlumeEditor>` render it automatically; its labels follow `locale`.
+
+```tsx
+<PlumeEditor content="<p></p>" pasteManager />
+```
+
+For full control over paste without the modal, add the `PasteManager` extension
+yourself and pass an `onPaste` handler — return `true` to take over the paste,
+`false` to let tiptap proceed. Insert captured content with the shared
+`insertPaste(editor, data, mode)` helper. Both are exported from `@useplume/core`.
 
 ## Change handling
 
-| Option        | Type                        | Default | Description                                                                    |
-| ------------- | --------------------------- | ------- | ------------------------------------------------------------------------------ |
-| `onUpdate`    | `(editor: Editor) => void`  | —       | Called after the document changes (debounced by `updateDelay`).                |
-| `updateDelay` | `number`                    | `300`   | Debounce in ms for `onUpdate`. `0` fires synchronously on every change.        |
+| Option        | Type                       | Default | Description                                                             |
+| ------------- | -------------------------- | ------- | ----------------------------------------------------------------------- |
+| `onUpdate`    | `(editor: Editor) => void` | —       | Called after the document changes (debounced by `updateDelay`).         |
+| `updateDelay` | `number`                   | `300`   | Debounce in ms for `onUpdate`. `0` fires synchronously on every change. |
 
 ::: tip
 `onUpdate` receives the underlying tiptap `Editor`, so serialize with

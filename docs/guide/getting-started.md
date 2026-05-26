@@ -1,3 +1,7 @@
+---
+description: 'Install Plume’s React or Vue adapter, import the stylesheet, and render a fully featured tiptap-based rich text editor in a few lines.'
+---
+
 # Getting started
 
 ## Installation
@@ -56,17 +60,11 @@ keystroke — pass `updateDelay={0}` to fire synchronously.
 ::: code-group
 
 ```tsx [React]
-<PlumeEditor
-  content="<p>Edit me</p>"
-  onUpdate={(editor) => console.log(editor.getHTML())}
-/>
+<PlumeEditor content="<p>Edit me</p>" onUpdate={(editor) => console.log(editor.getHTML())} />
 ```
 
 ```vue [Vue]
-<PlumeEditor
-  content="<p>Edit me</p>"
-  :on-update="(editor) => console.log(editor.getHTML())"
-/>
+<PlumeEditor content="<p>Edit me</p>" :on-update="(editor) => console.log(editor.getHTML())" />
 ```
 
 :::

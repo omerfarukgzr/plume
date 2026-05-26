@@ -1,3 +1,7 @@
+---
+description: 'Plume editörünü prop’larla özelleştirin: toolbar’ı yapılandırın, kendi toolbar öğelerinizi ekleyin ve kendi tiptap eklentilerinizi geçin.'
+---
+
 # Özelleştirme
 
 Özelleştirmenin tamamı `<PlumeEditor>` üzerindeki prop'larla (ya da `usePlumeEditor`'a
@@ -77,14 +81,21 @@ varsayılanlarının ardından devreye girer.
 ```tsx
 import { Mention } from '@tiptap/extension-mention'
 
-<PlumeEditor extensions={[Mention]} />
+;<PlumeEditor extensions={[Mention]} />
 ```
 
 Sıfırdan, boş bir editörle başlamak isterseniz `defaultExtensions={false}` ile
 varsayılanları kapatıp kendi setinizi verin.
 
 ```tsx
-<PlumeEditor defaultExtensions={false} extensions={[/* eklentileriniz */]} />
+<PlumeEditor
+  defaultExtensions={false}
+  extensions={
+    [
+      /* eklentileriniz */
+    ]
+  }
+/>
 ```
 
 Plume kendi eklentilerini de `@useplume/core`'dan dışa aktarır; böylece istediklerinizi tek
@@ -107,6 +118,20 @@ listesinde de kullanmak:
   ]}
 />
 ```
+
+## Yapıştırma yöneticisi
+
+Yapıştırılan içeriğin nasıl ekleneceğini kullanıcıya seçtirin. `pasteManager` ile her
+yapıştırma, **sadece metin** (biçimlendirme atılır) veya **biçimli** (kaynak HTML,
+editörün şemasından çözümlenir) sunan bir modal açar. Varsayılan olarak kapalıdır.
+
+```tsx
+<PlumeEditor content="<p></p>" pasteManager />
+```
+
+Modal <kbd>Esc</kbd>, dışına tıklama veya bir seçimle kapanır; etiketleri `locale`'i
+izler. Yapıştırmayı `PasteManager` eklentisi ve `insertPaste` yardımcısıyla kendiniz
+yönetmek için bkz. [`pasteManager`](/tr/api/options#yapıştırma-yöneticisi).
 
 ## Dil (locale)
 

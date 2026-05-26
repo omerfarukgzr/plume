@@ -1,3 +1,7 @@
+---
+description: 'Theme the Plume editor with --plume-* CSS custom properties, override the default look, or ship a fully unstyled editor.'
+---
+
 # Theming
 
 Plume's appearance is driven entirely by CSS custom properties prefixed with

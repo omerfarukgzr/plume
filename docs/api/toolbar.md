@@ -1,3 +1,7 @@
+---
+description: 'Reference of built-in Plume toolbar item names (ToolbarItemName) you can order, omit or mix with your own custom controls.'
+---
+
 # Toolbar items
 
 The `toolbar` option takes an ordered list of item names. Below are the built-in
@@ -6,28 +10,38 @@ controls (registered via `toolbarItems`) or custom blockquote variants by name.
 
 ## Built-in names
 
-| Category    | Names                                                            |
-| ----------- | ---------------------------------------------------------------- |
-| Marks       | `bold`, `italic`, `underline`, `strike`, `code`, `highlight`     |
-| Headings    | `heading1`, `heading2`, `heading3`                               |
-| Blocks      | `bulletList`, `orderedList`, `blockquote`, `codeBlock`, `horizontalRule` |
-| Insert      | `link`, `image`, `footnote`                                      |
-| Script      | `superscript`, `subscript`                                       |
-| Dropdowns   | `fontFamily`, `textColor`, `changeCase`                          |
-| Alignment   | `alignLeft`, `alignCenter`, `alignRight`, `alignJustify`         |
-| History     | `undo`, `redo`                                                   |
-| Separator   | `'|'`                                                            |
+| Category  | Names                                                                    |
+| --------- | ------------------------------------------------------------------------ | --- |
+| Marks     | `bold`, `italic`, `underline`, `strike`, `code`, `highlight`             |
+| Headings  | `heading1`, `heading2`, `heading3`                                       |
+| Blocks    | `bulletList`, `orderedList`, `blockquote`, `codeBlock`, `horizontalRule` |
+| Insert    | `link`, `image`, `footnote`                                              |
+| Script    | `superscript`, `subscript`                                               |
+| Dropdowns | `fontFamily`, `textColor`, `changeCase`                                  |
+| Alignment | `alignLeft`, `alignCenter`, `alignRight`, `alignJustify`                 |
+| History   | `undo`, `redo`                                                           |
+| Separator | `'                                                                       | '`  |
 
 ## Example
 
 ```tsx
 <PlumeEditor
   toolbar={[
-    'bold', 'italic', 'underline', '|',
-    'heading1', 'heading2', '|',
-    'bulletList', 'orderedList', '|',
-    'link', 'image', '|',
-    'undo', 'redo',
+    'bold',
+    'italic',
+    'underline',
+    '|',
+    'heading1',
+    'heading2',
+    '|',
+    'bulletList',
+    'orderedList',
+    '|',
+    'link',
+    'image',
+    '|',
+    'undo',
+    'redo',
   ]}
 />
 ```
