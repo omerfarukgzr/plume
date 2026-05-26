@@ -33,3 +33,23 @@
   background-color: var(--vp-c-brand-soft);
 }
 
+/* ---------------------------------------------------------------------------
+ * Brand color: align the docs accent with Plume's own `--plume-color-primary`
+ * (#6c5ce7) so the site, the logo and the embedded editor read as one product.
+ * Overrides VitePress's default green across links, buttons and active nav.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --vp-c-brand-1: #5b4ddb;
+  --vp-c-brand-2: #6c5ce7;
+  --vp-c-brand-3: #6c5ce7;
+  --vp-c-brand-soft: rgb(108 92 231 / 14%);
+}
+
+.dark {
+  --vp-c-brand-1: #b9adff;
+  --vp-c-brand-2: #9b8cff;
+  --vp-c-brand-3: #6c5ce7;
+  --vp-c-brand-soft: rgb(155 140 255 / 16%);
+}
+

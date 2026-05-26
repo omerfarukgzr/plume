@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-label="A calm sunrise over layered hills">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3a6b"/>
+      <stop offset="0.42" stop-color="#7c6f9e"/>
+      <stop offset="0.72" stop-color="#e9a17c"/>
+      <stop offset="1" stop-color="#f6d7a8"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff7e6"/>
+      <stop offset="0.45" stop-color="#ffd27a"/>
+      <stop offset="1" stop-color="#ffb24d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="600" fill="url(#sky)"/>
+
+  <!-- sun + glow -->
+  <circle cx="620" cy="378" r="240" fill="url(#sun)"/>
+  <circle cx="620" cy="378" r="74" fill="#fff2d6"/>
+
+  <!-- stars in the upper night sky -->
+  <g fill="#ffffff" opacity="0.7">
+    <circle cx="120" cy="60" r="1.6"/>
+    <circle cx="240" cy="110" r="1.2"/>
+    <circle cx="360" cy="48" r="1.4"/>
+    <circle cx="900" cy="70" r="1.3"/>
+    <circle cx="1040" cy="120" r="1.6"/>
+    <circle cx="1120" cy="52" r="1.1"/>
+  </g>
+
+  <!-- distant birds -->
+  <g stroke="#3a2f4d" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55">
+    <path d="M300 150 q 14 -12 28 0 q 14 -12 28 0"/>
+    <path d="M380 185 q 11 -9 22 0 q 11 -9 22 0"/>
+  </g>
+
+  <!-- layered hills -->
+  <path d="M0 430 C 200 380 380 470 600 430 C 820 390 1000 470 1200 420 L1200 600 L0 600 Z" fill="#caa0a8" opacity="0.9"/>
+  <path d="M0 480 C 220 440 420 520 660 480 C 880 444 1040 520 1200 478 L1200 600 L0 600 Z" fill="#8f6f8d"/>
+  <path d="M0 535 C 260 505 520 560 780 530 C 980 508 1100 552 1200 535 L1200 600 L0 600 Z" fill="#523f5e"/>
+</svg>

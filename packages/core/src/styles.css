@@ -767,8 +767,13 @@
   font-size: 0.9em;
   color: var(--plume-color-muted);
 }
-/* When the number is a clickable back-link, hide the native list marker. */
-.plume-editor__content :where(ol.footnotes.footnotes--linked) {
+/* When the number is a clickable back-link, hide the native list marker —
+ * otherwise it shows *next to* the back-link, doubling the number. This is a
+ * correctness rule, so it deliberately skips the `:where()` wrapper used
+ * elsewhere: at real (class) specificity it survives a host's own `ol`
+ * list-style rules (e.g. a framework's `.content ol { list-style: decimal }`)
+ * that would otherwise re-show the native marker. */
+.plume-editor__content ol.footnotes.footnotes--linked {
   list-style: none;
   padding-left: 0;
 }

@@ -10,12 +10,24 @@
 <p align="center">Customizable, framework-agnostic rich text editor built on <a href="https://tiptap.dev">tiptap</a>.</p>
 
 <p align="center">
+  <a href="https://omerfarukgzr.github.io/plume/"><img src="https://img.shields.io/badge/docs-plume-6c5ce7.svg" alt="Documentation" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+</p>
+
+<p align="center">
+  <strong><a href="https://omerfarukgzr.github.io/plume/">Documentation</a></strong> ·
+  <strong><a href="https://omerfarukgzr.github.io/plume/demo">Live demo</a></strong> ·
+  <strong><a href="https://omerfarukgzr.github.io/plume/examples">Examples</a></strong>
 </p>
 
 Plume keeps all editor logic in one place (`@useplume/core`) and ships thin
 adapters for each UI framework. Today: **React** and **Vue 3**. Tomorrow:
 Svelte, Solid, vanilla — without rewriting the editor.
+
+> 📚 **Full docs & an interactive, customizable editor** live at
+> **[omerfarukgzr.github.io/plume](https://omerfarukgzr.github.io/plume/)** —
+> try the [live demo](https://omerfarukgzr.github.io/plume/demo) to reshape the
+> toolbar, theme and brand color in the browser.
 
 ## Packages
 

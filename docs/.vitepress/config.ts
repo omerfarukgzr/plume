@@ -39,7 +39,10 @@ const enGuideSidebar = [
   },
   {
     text: 'Cookbook',
-    items: [{ text: 'Examples & recipes', link: '/examples' }],
+    items: [
+      { text: 'Examples & recipes', link: '/examples' },
+      { text: 'Live demo', link: '/demo' },
+    ],
   },
 ]
 
@@ -67,7 +70,10 @@ const trGuideSidebar = [
   },
   {
     text: 'Tarifler',
-    items: [{ text: 'Örnekler & tarifler', link: '/tr/examples' }],
+    items: [
+      { text: 'Örnekler & tarifler', link: '/tr/examples' },
+      { text: 'Canlı demo', link: '/tr/demo' },
+    ],
   },
 ]
 
@@ -181,10 +187,12 @@ export default defineConfig({
           { text: 'Guide', link: '/guide/getting-started' },
           { text: 'API', link: '/api/options' },
           { text: 'Examples', link: '/examples' },
+          { text: 'Demo', link: '/demo' },
         ],
         sidebar: {
           '/guide/': enGuideSidebar,
           '/examples': enGuideSidebar,
+          '/demo': enGuideSidebar,
           '/api/': [
             {
               text: 'Reference',
@@ -207,10 +215,12 @@ export default defineConfig({
           { text: 'Rehber', link: '/tr/guide/getting-started' },
           { text: 'API', link: '/tr/api/options' },
           { text: 'Örnekler', link: '/tr/examples' },
+          { text: 'Demo', link: '/tr/demo' },
         ],
         sidebar: {
           '/tr/guide/': trGuideSidebar,
           '/tr/examples': trGuideSidebar,
+          '/tr/demo': trGuideSidebar,
           '/tr/api/': [
             {
               text: 'Referans',

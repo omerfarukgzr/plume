@@ -88,26 +88,66 @@ function targetSelection(
   return { selection, targetPos: target.pos }
 }
 
+/** The nearest ancestor of `el` that actually scrolls (the editor's own scroll
+ * area, when the host caps its height), or `null` for a free-growing editor. */
+function scrollableAncestor(el: HTMLElement): HTMLElement | null {
+  let node = el.parentElement
+  while (node) {
+    const overflowY = getComputedStyle(node).overflowY
+    if ((overflowY === 'auto' || overflowY === 'scroll') && node.scrollHeight > node.clientHeight) {
+      return node
+    }
+    node = node.parentElement
+  }
+  return null
+}
+
 /**
- * Focuses the editor and *smoothly* scrolls the target node to center. We scroll
+ * Smoothly brings `element` to the centre of the view. When the editor has its
+ * own scroll area (the host capped its height), scroll *only that container* —
+ * never the page. `element.scrollIntoView()` would scroll every scrollable
+ * ancestor, so footnote navigation would drag the surrounding page along with
+ * the editor, and the two simultaneous animations read as a jump. With no inner
+ * scroll area (a full-page editor) we fall back to scrolling the page itself.
+ */
+function smoothScrollToCenter(element: HTMLElement): void {
+  const scroller = scrollableAncestor(element)
+  if (!scroller) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    return
+  }
+  const el = element.getBoundingClientRect()
+  const box = scroller.getBoundingClientRect()
+  const delta = el.top + el.height / 2 - (box.top + box.height / 2)
+  scroller.scrollBy({ top: delta, behavior: 'smooth' })
+}
+
+/**
+ * Focuses the editor and *smoothly* scrolls the target node to centre. We scroll
  * the DOM node ourselves (rather than the transaction's instant `scrollIntoView`)
  * and focus without the browser's default jump so the animation isn't fought.
  * Deferred to the next frame so it runs after the selection transaction has been
  * applied and written to the DOM.
+ *
+ * Crucially, `view.focus()` (and the contenteditable focus underneath it) would
+ * make the browser *instantly* scroll the caret into view — a hard jump that
+ * fights our smooth scroll and, when the editor sits inside a scrollable page,
+ * yanks the whole page to the caret before easing back. We focus the editor DOM
+ * with `preventScroll` so only our own smooth scroll moves anything.
  */
 function focusAndScroll(editor: Editor, targetPos: number): void {
   if (typeof requestAnimationFrame === 'undefined') {
-    editor.view.focus()
+    editor.view.dom.focus({ preventScroll: true })
     return
   }
   requestAnimationFrame(() => {
     // The editor may have unmounted between scheduling and this frame.
     if (editor.isDestroyed) return
     const { view } = editor
-    view.focus()
+    view.dom.focus({ preventScroll: true })
     const dom = view.nodeDOM(targetPos)
     const element = dom instanceof HTMLElement ? dom : (dom?.parentElement ?? null)
-    element?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (element) smoothScrollToCenter(element)
   })
 }
 
@@ -124,6 +164,13 @@ function navigateDirect(
 ): boolean {
   const found = targetSelection(editor.state.doc, typeName, id, mode)
   if (!found) return false
+  // Blur before writing the new selection: in a focused contenteditable the
+  // browser instantly scrolls the caret into view when the DOM selection moves,
+  // which hard-jumps a scrollable page to the far-away target before our smooth
+  // scroll can run. With the editor blurred there is no focused selection to
+  // chase; `focusAndScroll` re-focuses with `preventScroll` and does the one
+  // smooth scroll itself.
+  editor.view.dom.blur()
   editor.view.dispatch(editor.state.tr.setSelection(found.selection))
   focusAndScroll(editor, found.targetPos)
   return true
@@ -250,12 +297,12 @@ export function footnoteExtensions(options: FootnoteExtensionOptions = {}): Exte
       const editor = this.editor
       const plugins = [...(this.parent?.() ?? [])]
 
-      // Marker (reference) → footnote navigation. The package renders each marker
-      // as `<a href="#fn:N">`, so a plain click triggers the browser's *native*
-      // anchor jump — an instant scroll that bypasses our smooth `focusFootnote`
-      // (which is why forward navigation looked like a hard jump while the
-      // back-link, having no `href`, scrolled smoothly). Intercept the click,
-      // cancel the native jump, and route through the same smooth path.
+      // Marker (reference) → footnote navigation, routed through the same smooth
+      // path as everything else. The native `href="#fn:N"` jump is removed at the
+      // source (see QuietFootnoteReference below) — inside a contenteditable that
+      // fragment jump fires even when the click is `preventDefault`-ed, so the
+      // only reliable fix is not rendering the href. We still preventDefault to
+      // suppress the atom node's default click handling.
       plugins.push(
         new Plugin({
           key: new PluginKey('plumeFootnoteMarkerNav'),
@@ -266,7 +313,6 @@ export function footnoteExtensions(options: FootnoteExtensionOptions = {}): Exte
                 const link = target?.closest('a.footnote-ref') as HTMLElement | null
                 const id = link?.getAttribute('data-id')
                 if (!id) return false
-                // Cancel the `href="#fn:N"` jump, then smooth-scroll to the footnote.
                 event.preventDefault()
                 return navigateDirect(editor, 'footnote', id, 'caret')
               },
@@ -298,5 +344,22 @@ export function footnoteExtensions(options: FootnoteExtensionOptions = {}): Exte
     },
   })
 
-  return [PlumeDocument, LabeledFootnotes, EnhancedFootnote, FootnoteReference]
+  // The package renders each marker as `<a href="#fn:N">`. Inside a
+  // contenteditable, that fragment link's native jump fires even when the click
+  // is `preventDefault`-ed (a Chromium quirk), instantly yanking a scrollable
+  // page to the footnote before our smooth scroll runs. The only reliable fix is
+  // to not render the href: the marker stays a clickable `a.footnote-ref` (the
+  // plugin above drives navigation) but no longer triggers a native jump. The
+  // footnote item keeps its `id`, so deep links and no-JS readers still reach it.
+  const QuietFootnoteReference = FootnoteReference.extend({
+    addAttributes() {
+      const attrs = (this.parent?.() ?? {}) as Record<string, object>
+      return {
+        ...attrs,
+        href: { ...attrs.href, renderHTML: () => ({}) },
+      }
+    },
+  })
+
+  return [PlumeDocument, LabeledFootnotes, EnhancedFootnote, QuietFootnoteReference]
 }
