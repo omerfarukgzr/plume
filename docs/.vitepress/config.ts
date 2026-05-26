@@ -4,14 +4,16 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'Plume',
   description: 'Customizable, framework-agnostic rich text editor built on tiptap.',
+  // Project Pages site is served under https://omerfarukgzr.github.io/plume/
+  base: '/plume/',
   cleanUrls: true,
   lastUpdated: true,
 
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/plume/favicon.svg' }]],
 
   themeConfig: {
     logo: { light: '/logo.svg', dark: '/logo-dark.svg', alt: 'Plume' },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/plume' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/omerfarukgzr/plume' }],
     search: { provider: 'local' },
   },
 
