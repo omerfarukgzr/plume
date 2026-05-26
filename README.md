@@ -29,31 +29,32 @@ Svelte, Solid, vanilla — without rewriting the editor.
 
 Plume needs **tiptap v3** as a peer — `@tiptap/core` and `@tiptap/pm` are
 `peerDependencies`, so your app and Plume always share a **single** tiptap
-instance (no duplicate copies, no bundle bloat). Most package managers install
-peers automatically; if yours doesn't, add them yourself.
-
-> [!IMPORTANT]
-> Plume requires tiptap **v3**. It cannot coexist with tiptap **v2** in the same
-> app — a mixed v2/v3 tree breaks at runtime. If you already use tiptap, make
-> sure it's on v3.
+instance (no duplicate copies, no bundle bloat). **Install them explicitly**
+(at `^3`) so you don't depend on your package manager's auto-install-peers
+behavior:
 
 **React:**
 
 ```sh
-npm install @useplume/react @useplume/core      # npm
-pnpm add @useplume/react @useplume/core          # pnpm
-yarn add @useplume/react @useplume/core          # yarn
+npm install @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3   # npm
+pnpm add @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3       # pnpm
+yarn add @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3       # yarn
 ```
 
 **Vue 3:**
 
 ```sh
-npm install @useplume/vue @useplume/core         # npm
-pnpm add @useplume/vue @useplume/core             # pnpm
-yarn add @useplume/vue @useplume/core             # yarn
+npm install @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3   # npm
+pnpm add @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3       # pnpm
+yarn add @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3       # yarn
 ```
 
-If peers aren't auto-installed, also add `@tiptap/core @tiptap/pm` (any v3).
+> [!IMPORTANT]
+> Plume requires tiptap **v3**. If your project is on tiptap v3 (or doesn't use
+> tiptap yet) the command above is all you need. If you're **still on tiptap v2**
+> elsewhere in the app, see [Already using tiptap v2?](./docs/guide/getting-started.md#already-using-tiptap-v2)
+> — that's a two-major coexistence problem (true of any package manager), and
+> there's a `.pnpmfile.cjs` recipe to isolate Plume on v3.
 
 ## Quick start (React)
 

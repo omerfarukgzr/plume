@@ -6,22 +6,26 @@ description: 'Install Plume’s React or Vue adapter, import the stylesheet, and
 
 ## Installation
 
-Install the adapter for your framework along with `@useplume/core`.
+Install the adapter for your framework, `@useplume/core`, and the two tiptap
+peers. Plume builds on **tiptap v3**: `@tiptap/core` and `@tiptap/pm` are
+declared as `peerDependencies` so your app and Plume share a **single** tiptap
+instance — no duplicate copies, no bundle bloat. **Install them yourself** at
+`^3` rather than relying on your package manager's auto-install-peers behavior.
 
 **React:**
 
 ::: code-group
 
 ```sh [npm]
-npm install @useplume/react @useplume/core
+npm install @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 ```sh [pnpm]
-pnpm add @useplume/react @useplume/core
+pnpm add @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 ```sh [yarn]
-yarn add @useplume/react @useplume/core
+yarn add @useplume/react @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 :::
@@ -31,35 +35,83 @@ yarn add @useplume/react @useplume/core
 ::: code-group
 
 ```sh [npm]
-npm install @useplume/vue @useplume/core
+npm install @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 ```sh [pnpm]
-pnpm add @useplume/vue @useplume/core
+pnpm add @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 ```sh [yarn]
-yarn add @useplume/vue @useplume/core
+yarn add @useplume/vue @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 :::
 
-### tiptap is a peer dependency
+::: tip Why install the peers yourself?
+Most package managers (npm 7+, pnpm, yarn) _can_ install peers automatically, but
+the behavior is configurable and easy to disable. Adding `@tiptap/core@^3` and
+`@tiptap/pm@^3` to your own `dependencies` makes the requirement explicit and the
+resolution deterministic.
+:::
 
-Plume builds on **tiptap v3**. `@tiptap/core` and `@tiptap/pm` are declared as
-`peerDependencies`, so your app and Plume always share a **single** tiptap
-instance — no duplicate copies, no bundle bloat. Most package managers (npm 7+,
-pnpm, yarn) install peers automatically; if yours doesn't, add them explicitly:
+### Already using tiptap v2?
 
-```sh
-npm install @tiptap/core @tiptap/pm
+Plume requires tiptap **v3**. The cases:
+
+- **You're on tiptap v3, or don't use tiptap yet** → the install above is all you
+  need. Nothing more to do.
+- **You're still on tiptap v2 elsewhere in the app** → this is the hard part, and
+  it isn't specific to Plume: no package manager can cleanly run two majors of the
+  same package in one import graph. `peerDependencies` can't fix it either — Plume
+  asks for v3, your app provides v2. You have two options.
+
+**Option A — migrate to tiptap v3 (recommended).** Bump your own
+`@tiptap/*` packages to v3 and follow tiptap's
+[v2 → v3 migration guide](https://tiptap.dev/docs/resources/upgrade-tiptap-v2-to-v3).
+Then everything shares one v3 instance and the plain install just works.
+
+**Option B — isolate Plume on v3 (pnpm).** If you can't migrate yet, pin the
+tiptap v3 family for the Plume subtree with a `.pnpmfile.cjs` at your repo root,
+and turn off peer de-duplication so pnpm doesn't drag Plume's deps back onto your
+app's v2:
+
+```js
+// .pnpmfile.cjs
+// Keep @useplume/* (and the tiptap packages they pull in) on tiptap v3, even
+// though the rest of the app is still on tiptap v2.
+const V3 = '^3'
+const TIPTAP_V3 = new Set([
+  '@tiptap/core',
+  '@tiptap/pm',
+  '@tiptap/extensions',
+  '@tiptap/extension-list',
+  '@tiptap/extension-list-item',
+])
+
+function readPackage(pkg) {
+  if (pkg.name?.startsWith('@useplume/')) {
+    for (const field of ['dependencies', 'peerDependencies']) {
+      for (const dep of Object.keys(pkg[field] ?? {})) {
+        if (TIPTAP_V3.has(dep)) pkg[field][dep] = V3
+      }
+    }
+  }
+  return pkg
+}
+
+module.exports = { hooks: { readPackage } }
 ```
 
-::: warning tiptap v2 conflict
-Plume requires tiptap **v3** and cannot coexist with tiptap **v2** in the same
-app — a mixed v2/v3 dependency tree breaks at runtime. If your project already
-uses tiptap, make sure it's on v3 before adding Plume.
-:::
+```ini
+# .npmrc
+auto-install-peers=true
+dedupe-peer-dependents=false
+```
+
+Then reinstall (`pnpm install`). This keeps Plume on its own v3 copy of tiptap
+while your existing v2 code keeps working. It's a workaround for living with two
+majors at once — migrating to v3 (Option A) is still the clean end state.
 
 ## Quick start
 

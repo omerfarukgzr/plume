@@ -6,9 +6,11 @@ This package contains the editor extensions, options, i18n, toolbar logic, and s
 
 ## Install
 
+Plume builds on **tiptap v3** — install the `@tiptap/core` and `@tiptap/pm` peers explicitly at `^3`:
+
 ```bash
-npm install @useplume/core
-# or: pnpm add @useplume/core
+npm install @useplume/core @tiptap/core@^3 @tiptap/pm@^3
+# or: pnpm add @useplume/core @tiptap/core@^3 @tiptap/pm@^3
 ```
 
 ## Usage

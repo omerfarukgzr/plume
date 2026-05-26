@@ -1,5 +1,22 @@
 # @useplume/vue
 
+## 0.2.1
+
+### Patch Changes
+
+- Edge-to-edge content by default. `--plume-content-max-width` now defaults to
+  `none` and `--plume-content-padding` to `0.75rem 1rem`, so text fills the editor
+  and sits close to the edges out of the box. Opt into the old centered reading
+  column by setting `--plume-content-max-width: 680px` (and roomier padding); the
+  `fluid` prop now only forces edge-to-edge when an ancestor sets a column.
+
+  Docs: explicit `@tiptap/core@^3` / `@tiptap/pm@^3` install step, a "Already using
+  tiptap v2?" guide with a `.pnpmfile.cjs` isolation recipe, and `v-model`/`output`
+  examples on the docs site.
+
+- Updated dependencies
+  - @useplume/core@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes

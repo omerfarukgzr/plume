@@ -14,9 +14,10 @@ export interface PlumeEditorProps extends PlumeOptions {
   /** Extra class name(s) added to the editor root element. */
   className?: string
   /**
-   * Make the content edge-to-edge instead of the default centered article
-   * column — drop the `max-width`/`margin` so the editor fills its container
-   * (form fields, admin panels). Equivalent to adding the `plume--fluid` class.
+   * Force edge-to-edge content (drop any `--plume-content-max-width`). The
+   * editor is already edge-to-edge by default, so this only matters when an
+   * ancestor has opted into a centered reading column. Equivalent to adding the
+   * `plume--fluid` class.
    */
   fluid?: boolean
 }

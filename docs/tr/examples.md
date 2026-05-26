@@ -77,6 +77,28 @@ Minik bir toolbar, görsel yok, dipnot yok — sadece satır içi işaretler ve 
 />
 ```
 
+## Tam genişlik mi, okuma sütunu mu?
+
+İçerik **varsayılan olarak tam genişliktir** (edge-to-edge) — kapsayıcısını dar
+bir iç boşlukla doldurur, böylece metin kenarlara yakın durur (formlar ve tam
+sayfa editörler için ideal). Bunun yerine ortalanmış bir makale/blog sütunu için
+`.plume` kökünde bir maksimum genişlik ve daha ferah iç boşluk verin:
+
+```css
+/* Blog tarzı okuma sütunu */
+.plume {
+  --plume-content-max-width: 680px; /* bir genişlik verilince otomatik ortalanır */
+  --plume-content-padding: 3rem 1.5rem 6rem;
+}
+```
+
+Bir üst öğe okuma sütununa geçtiyse ama bir editörün tam genişlikte kalmasını
+istiyorsanız, edge-to-edge'i tekrar zorlamak için `fluid` geçin:
+
+```tsx
+<PlumeEditor fluid content="<p>Kapsayıcısını doldurur</p>" />
+```
+
 ## Salt-okunur görüntüleyici
 
 Saklanan içeriği toolbar olmadan ve düzenlenemez şekilde render edin.
@@ -283,6 +305,31 @@ sağlayın.
 
 ```tsx
 <PlumeEditor content="<p></p>" pasteManager />
+```
+
+## `v-model` ile çift yönlü bağlama (Vue)
+
+Belgeyi `v-model:content` ile bir ref'e bağlayın. Bağlanan değer varsayılan
+olarak HTML'dir; tiptap JSON belgesini senkronlamak için `output="json"` geçin.
+Yayınlar `updateDelay` ile debounce edilir.
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
+
+const html = ref('<p>Beni düzenle</p>')
+const doc = ref({ type: 'doc', content: [] })
+</script>
+
+<template>
+  <!-- HTML (varsayılan) -->
+  <PlumeEditor v-model:content="html" />
+
+  <!-- tiptap JSON -->
+  <PlumeEditor v-model:content="doc" output="json" />
+</template>
 ```
 
 ## Vue karşılıkları

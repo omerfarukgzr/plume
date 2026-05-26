@@ -88,7 +88,7 @@ available only on the component, not via `usePlumeEditor`.
 
 | Prop        | Adapter | Type               | Default  | Description                                                                                                          |
 | ----------- | ------- | ------------------ | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `fluid`     | both    | `boolean`          | `false`  | Edge-to-edge content (drops the centered reading column). See [theming](/guide/theming#embedded-full-width-editors). |
+| `fluid`     | both    | `boolean`          | `false`  | Force edge-to-edge content (drops any `--plume-content-max-width`). Content is edge-to-edge by default, so this only matters when an ancestor sets a reading column. See [theming](/guide/theming#content-width-padding). |
 | `className` | React   | `string`           | —        | Extra class name(s) on the editor root (`.plume`) element.                                                           |
 | `output`    | Vue     | `'html' \| 'json'` | `'html'` | Value format emitted by `v-model:content` / `update:content`.                                                        |
 

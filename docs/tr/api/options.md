@@ -90,7 +90,7 @@ dolayısıyla yalnızca bileşende vardır, `usePlumeEditor` ile kullanılamaz.
 
 | Prop        | Adaptör | Tip                | Varsayılan | Ne yapar                                                                                                                |
 | ----------- | ------- | ------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `fluid`     | her iki | `boolean`          | `false`    | Tam genişlik içerik (ortalanmış okuma sütununu kaldırır). Bkz. [tema](/tr/guide/theming#gomulu-tam-genislik-editorler). |
+| `fluid`     | her iki | `boolean`          | `false`    | Edge-to-edge içeriği zorlar (her `--plume-content-max-width`'i kaldırır). İçerik zaten varsayılan olarak tam genişliktir; bu yalnızca bir üst öğe okuma sütunu tanımladığında işe yarar. Bkz. [tema](/tr/guide/theming#icerik-genisligi-ic-bosluk). |
 | `className` | React   | `string`           | —          | Editör kök (`.plume`) elemanına ek class.                                                                               |
 | `output`    | Vue     | `'html' \| 'json'` | `'html'`   | `v-model:content` / `update:content`'in yayınladığı değer formatı.                                                      |
 

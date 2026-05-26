@@ -1,6 +1,6 @@
 {
   "name": "@useplume/react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React adapter for Plume — a customizable rich text editor built on tiptap.",
   "license": "MIT",
   "type": "module",

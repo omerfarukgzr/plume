@@ -87,8 +87,11 @@ const html = ref('<p>Merhaba Plume 🪶</p>')
   tam kontrol için `usePlumeEditor()` + `<EditorContent>`.
 - **Temalanabilir** — her değer bir `--plume-*` CSS değişkeni; koyu tema gelir,
   ya da tamamen stilsiz kullanın.
-- **Vue-yerlisi** — `v-model:content` (HTML veya JSON), async veri için reaktif
-  içerik ve form/admin editörleri için tam genişlik `fluid` prop'u.
+- **Vue-yerlisi** — `v-model:content` (HTML veya JSON) ve async veri için
+  reaktif içerik.
+- **Varsayılan tam genişlik** — içerik kapsayıcısını dar bir iç boşlukla
+  doldurur; tek bir CSS değişkeniyle ortalanmış okuma sütununa (veya istediğiniz
+  iç boşluğa) geçin.
 
 [Hemen başla rehberini](/tr/guide/getting-started) okuyun ya da
 [örnekler & tariflere](/tr/examples) göz atın.

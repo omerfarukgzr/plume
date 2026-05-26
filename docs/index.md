@@ -87,8 +87,10 @@ const html = ref('<p>Hello Plume 🪶</p>')
   `usePlumeEditor()` + `<EditorContent>` for full control over layout.
 - **Themeable** — every value is a `--plume-*` CSS variable; ships a dark theme,
   or go fully unstyled.
-- **Vue-native** — `v-model:content` (HTML or JSON), reactive content for async
-  data, and a `fluid` prop for edge-to-edge form/admin editors.
+- **Vue-native** — `v-model:content` (HTML or JSON) and reactive content for
+  async data.
+- **Edge-to-edge by default** — content fills its container with tight padding;
+  opt into a centered reading column (or any padding) with one CSS variable.
 
 Read the [getting-started guide](/guide/getting-started) or browse
 [examples & recipes](/examples).

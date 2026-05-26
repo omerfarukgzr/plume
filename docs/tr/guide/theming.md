@@ -40,8 +40,8 @@ Editörü yeniden temalamak için `--plume-` değişkenlerini editörün herhang
 | `--plume-font-mono`         | JetBrains Mono, ui-monospace, … | Kod / kod-bloğu fontu               |
 | `--plume-font-size`         | `1rem`                          | Temel içerik font boyutu            |
 | `--plume-line-height`       | `1.7`                           | İçerik satır yüksekliği             |
-| `--plume-content-max-width` | `680px`                         | Yazım sütununun maksimum genişliği  |
-| `--plume-content-padding`   | `3rem 1.5rem 6rem`              | İçerik etrafındaki iç boşluk        |
+| `--plume-content-max-width` | `none`                          | Yazım sütununun genişliği (`none` = tam genişlik) |
+| `--plume-content-padding`   | `0.75rem 1rem`                  | İçerik etrafındaki iç boşluk        |
 | `--plume-radius`            | `16px`                          | Editör çerçevesi köşe yarıçapı      |
 | `--plume-radius-sm`         | `8px`                           | Düğmeler, açılır menüler, alanlar   |
 | `--plume-gap`               | `2px`                           | Toolbar düğmeleri arası boşluk      |
@@ -77,15 +77,36 @@ Birkaç değişkeni `.plume` kökünde geçersiz kılarak tüm editörü yeniden
 }
 ```
 
-## Gömülü / tam genişlik editörler
+## İçerik genişliği & iç boşluk
 
-Varsayılan içerik, ortalanmış bir okuma sütunu (`max-width: 680px`) ve cömert
-makale iç boşluğu kullanır — blog ve belge düzenleme için ideal, ancak bir form
-alanı veya admin panelinin içinde genelde fazla dar kalır.
+Varsayılan olarak içerik **tam genişliktir** (edge-to-edge): kapsayıcısını
+doldurur (`--plume-content-max-width: none`) ve dar bir iç boşluk kullanır
+(`--plume-content-padding: 0.75rem 1rem`), böylece metin editörün kenarlarına
+yakın durur. Bu; formlar, admin panelleri ve tam sayfa editörler için idealdir.
+İç boşluğu zevkinize göre ayarlayın:
 
-Tam genişlik (edge-to-edge) bir editör için **`fluid`** prop'unu geçin (ya da
-`plume--fluid` class'ını ekleyin). Bu, max-width'i kaldırır ve iç boşluğu
-daraltır:
+```css
+.plume {
+  --plume-content-padding: 1.5rem 2rem; /* daha ferah */
+  /* veya kenar kenar, CSS kısayolu gibi: üst sağ alt sol */
+}
+```
+
+### Ortalanmış okuma sütunu
+
+Blog/belge düzeni için içeriğe bir maksimum genişlik verin — bir genişlik
+verildiğinde otomatik ortalanır — ve cömert makale iç boşluğunu ekleyin:
+
+```css
+.plume {
+  --plume-content-max-width: 680px;
+  --plume-content-padding: 3rem 1.5rem 6rem;
+}
+```
+
+Bir üst öğe böyle bir okuma sütununa geçtiyse ama belirli bir editörün tam
+genişlikte kalmasını istiyorsanız, edge-to-edge'i zorlamak için **`fluid`**
+prop'unu geçin (ya da `plume--fluid` class'ını ekleyin):
 
 ::: code-group
 
@@ -98,16 +119,6 @@ daraltır:
 ```
 
 :::
-
-Tamamen akışkan yapmak yerine ince ayar için iki düzen değişkenini geçersiz
-kılın:
-
-```css
-.plume {
-  --plume-content-max-width: 100%; /* veya örn. 920px */
-  --plume-content-padding: 0.75rem 1rem; /* kompakt */
-}
-```
 
 ## Koyu tema
 

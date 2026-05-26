@@ -78,6 +78,28 @@ A tiny toolbar, no images, no footnotes — just inline marks and a link.
 />
 ```
 
+## Full-width vs. a reading column
+
+Content is **edge-to-edge by default** — it fills its container with tight
+padding, so the text sits close to the edges (ideal for forms and full-page
+editors). To get a centered article/blog column instead, set a max width and
+roomier padding on the `.plume` root:
+
+```css
+/* A blog-style reading column */
+.plume {
+  --plume-content-max-width: 680px; /* auto-centered once a width is set */
+  --plume-content-padding: 3rem 1.5rem 6rem;
+}
+```
+
+If an ancestor opts into a reading column but one editor should stay full width,
+pass `fluid` to force edge-to-edge again:
+
+```tsx
+<PlumeEditor fluid content="<p>Fills its container</p>" />
+```
+
 ## Read-only viewer
 
 Render stored content with no toolbar and no editing.
@@ -284,6 +306,31 @@ Let authors choose plain text vs. keeping formatting on every paste.
 
 ```tsx
 <PlumeEditor content="<p></p>" pasteManager />
+```
+
+## Two-way binding with `v-model` (Vue)
+
+Bind the document to a ref with `v-model:content`. The bound value is HTML by
+default; pass `output="json"` to sync the tiptap JSON document instead.
+Emissions are debounced by `updateDelay`.
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { PlumeEditor } from '@useplume/vue'
+import '@useplume/core/styles.css'
+
+const html = ref('<p>Edit me</p>')
+const doc = ref({ type: 'doc', content: [] })
+</script>
+
+<template>
+  <!-- HTML (default) -->
+  <PlumeEditor v-model:content="html" />
+
+  <!-- tiptap JSON -->
+  <PlumeEditor v-model:content="doc" output="json" />
+</template>
 ```
 
 ## Vue equivalents
