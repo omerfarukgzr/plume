@@ -602,13 +602,35 @@ function setLocale(next: 'tr' | 'en') {
   font-size: 1.2em;
 }
 
+/* On phones the fixed-width segmented pills (e.g. "Full Blog Comment Minimal")
+   don't fit beside their label and force the controls box wider than the
+   viewport — pushing everything right and clipping the color picker. Stack the
+   label above a full-width pill whose chips share the row equally, so each group
+   always fits and the panel stays centered. */
 @media (max-width: 640px) {
   .demo__controls {
-    gap: 10px 14px;
+    gap: 12px;
   }
   .demo__group {
     width: 100%;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .demo__segmented {
+    width: 100%;
+  }
+  .demo__chip {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+  }
+  /* The compact hero demo keeps its larger chip padding by default; on phones
+     that overflows the narrow column, so let its chips shrink and share the
+     pill like the full demo's do. */
+  .demo--compact .demo__chip {
+    padding: 9px 6px;
+    font-size: 13px;
   }
 }
 </style>
